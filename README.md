@@ -15,7 +15,7 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv), snackables is 
 
 [Config Method](#config-method)
 
-- [Config Options](#options)
+- [Config Options](#config-options)
   - [Path](#path)
   - [Encoding](#encoding)
   - [Debug](#debug)
