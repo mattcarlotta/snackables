@@ -283,7 +283,7 @@ PORT=3000
 
 snackables will parse the files and append the ENVs in order of how they were defined in `ENV_LOAD`; however, snackables will **NEVER** modify any predefined environment variables that have already been set to the node process on start up or there after. In short, if there is an ENV variable in your one of your `.env` files that attempts to overwrite an `process.env.XXXX` variable that has already been set to the process (either by node or by you), then that variable won't be appended.
 
-Although its **NOT** recommended, any ENV variables that haven't been set to the process yet can be overwritten according to their import order, where the last `.env` import takes precendence over any previous ENVs.
+Although it's **NOT** recommended, any ENV variables that haven't been set to the process yet can be overwritten according to their import order, where the last `.env` import takes precendence over any previous ENVs.
 
 ### Is the ENV_LOAD variable required?
 
