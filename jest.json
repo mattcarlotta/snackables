@@ -1,14 +1,13 @@
 {
   "testEnvironment": "node",
-  "moduleDirectories": ["<rootDir>/tests", "node_modules"],
+  "moduleDirectories": ["<rootDir>", "<rootDir>tests", "node_modules"],
   "transform": {
-    "^.+\\.[t|j]s?$": "ts-jest"
+    "^.+\\.ts?$": "ts-jest"
   },
   "testPathIgnorePatterns": [
     "<rootDir>/coverage",
-    "<rootDir>/lib",
     "<rootDir>/node_modules",
     "<rootDir>/types"
   ],
-  "collectCoverageFrom": ["src/**/*.ts"]
+  "collectCoverageFrom": ["lib/**/*.ts", "register.ts"]
 }

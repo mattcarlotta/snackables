@@ -11,13 +11,19 @@
     "noEmitOnError": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "outDir": "lib",
-    "rootDir": "src",
+    "rootDir": ".",
     "removeComments": true,
     "strict": true,
     "sourceMap": false,
     "target": "es6"
   },
-  "include": ["src/**/*.ts"],
-  "exclude": [".github", "coverage", "node_modules", "lib", "*.config.js"]
+  "include": ["src/**/*.ts", "register.ts"],
+  "exclude": [
+    ".github",
+    "coverage",
+    "node_modules",
+    "lib",
+    "example.ts",
+    "preload.ts"
+  ]
 }
