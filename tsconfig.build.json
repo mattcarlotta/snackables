@@ -17,7 +17,7 @@
     "sourceMap": false,
     "target": "es6"
   },
-  "include": ["src/**/*.ts", "register.ts"],
+  "include": ["lib/**/*.ts"],
   "exclude": [
     ".github",
     "coverage",

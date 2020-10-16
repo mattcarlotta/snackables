@@ -1,5 +1,5 @@
 import fs from "fs";
-import { config } from "../src";
+import { config } from "../lib";
 
 jest.spyOn(fs, "readFileSync");
 jest.spyOn(global.console, "log").mockImplementation();

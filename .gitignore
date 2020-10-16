@@ -5,4 +5,3 @@ example.ts
 preload.ts
 lib/*.js
 .cc_token
-.env.*

@@ -1,6 +1,6 @@
-import set from "./src/set";
-import extract from "./src/extract";
-import { logInfo } from "./src/log";
+import set from "./lib/set";
+import extract from "./lib/extract";
+import { logInfo } from "./lib/log";
 import { Encoding } from "./types";
 
 const { ENV_LOAD, ENV_DEBUG, ENV_ENCODE } = process.env;
