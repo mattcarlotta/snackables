@@ -8,5 +8,5 @@ All notable changes to this project will be documented in this file. See [SemVer
 
 - Typescript support
 - Jest and enzyme test suites
-- README
+- Added README
 - Published to [npmjs](https://www.npmjs.com/package/snackables)
