@@ -17,19 +17,19 @@ describe("Register", () => {
     require("../src");
 
     expect(global.console.log.mock.calls[0][0]).toContain(
-      "[craftenv] Extracted 'env.base' environment variables"
+      "Extracted 'env.base' environment variables"
     );
 
     expect(global.console.log.mock.calls[1][0]).toContain(
-      "[craftenv] Extracted 'env.test' environment variables"
+      "Extracted 'env.test' environment variables"
     );
 
     expect(global.console.warn.mock.calls[0][0]).toContain(
-      "[craftenv] Unable to extract 'env.invalid' because the file was not found"
+      "Unable to extract 'env.invalid' because the file was not found"
     );
 
     expect(global.console.log.mock.calls[2][0]).toContain(
-      '[craftenv] Assigned {"MESSAGE":"hello","TESTING":"true"} to process.env'
+      'Assigned {"MESSAGE":"hello","TESTING":"true"} to process.env'
     );
 
     expect(process.env.MESSAGE).toEqual("hello");
