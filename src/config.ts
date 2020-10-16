@@ -44,6 +44,6 @@ export default function config({
       logWarning(
         `Failed to load '${path}' environment variables: ${e.toString()}`
       );
-    return { error: e };
+    return { error: e.toString() };
   }
 }

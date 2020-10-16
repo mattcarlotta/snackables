@@ -7,22 +7,18 @@
   "homepage": "https://github.com/mattcarlotta/snackables",
   "files": [
     "lib",
-    "types"
+    "types/index.d.ts",
+    "types/test.ts",
+    "types/tsconfig.json",
+    "types/tslint.json"
   ],
-  "types": "types",
+  "types": "types/index.d.ts",
   "scripts": {
-    "base:js": "ENV_LOAD=base,local,dev ENV_DEBUG=true node tests/baseTest.js",
-    "base:ts": "ENV_LOAD=base,local,dev ENV_DEBUG=true ts-node tests/baseTest.ts",
-    "preload:js": "ENV_LOAD=base,local,dev node -r ./lib/register tests/preloadTest.js",
-    "preload:ts": "ENV_LOAD=base,local,dev ts-node -r ./lib/register tests/preloadTest.ts",
-    "configtest": "ts-node tests/configTest.ts",
-    "invalid": "ts-node tests/invalidFile.ts",
     "build": "rimraf lib && tsc -p tsconfig.build.json",
     "dtslint": "dtslint types",
-    "test": "NODE_ENV=testing jest --config ./jest.json",
-    "test:cov": "NODE_ENV=testing jest --config ./jest.json --coverage",
-    "test:watch": "NODE_ENV=testing jest --config ./jest.json --watch --onlyChanged",
-    "test:watchall": "NODE_ENV=testing jest --config ./jest.json --watchAll",
+    "test": "jest --config ./jest.json",
+    "test:cov": "jest --config ./jest.json --coverage",
+    "test:watch": "jest --config ./jest.json --watchAll",
     "tsc": "tsc"
   },
   "repository": {
@@ -55,7 +51,6 @@
     "prettier": "^2.1.1",
     "rimraf": "^3.0.2",
     "ts-jest": "^26.3.0",
-    "ts-node": "^9.0.0",
     "tslib": "^2.0.1",
     "typescript": "^4.0.2"
   },

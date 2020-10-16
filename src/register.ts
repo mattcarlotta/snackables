@@ -4,7 +4,6 @@ import { logInfo } from "./log";
 import { Encoding } from "../types";
 
 const { ENV_LOAD, ENV_DEBUG, ENV_ENCODE } = process.env;
-
 /**
  * Loads a single or multiple `.env` file contents into {@link https://nodejs.org/api/process.html#process_process_env | `process.env`}.
  *
@@ -24,6 +23,7 @@ const { ENV_LOAD, ENV_DEBUG, ENV_ENCODE } = process.env;
     // sets ENVS to process.env
     set(parsedENVs);
 
+    /* istanbul ignore else */
     if (debug) logInfo(`Assigned ${JSON.stringify(parsedENVs)} to process.env`);
   }
 })();

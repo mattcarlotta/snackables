@@ -3,6 +3,6 @@
  *
  * @param parsedENVs - single object of envs: { "DB_USER": "root", "DB_PASS": "password", ...etc }
  */
-export default function set(parsedENVs = {}): void {
+export default function set(parsedENVs: {}): void {
   process.env = Object.assign({}, parsedENVs, process.env);
 }

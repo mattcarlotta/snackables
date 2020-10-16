@@ -1,16 +1,14 @@
 {
   "testEnvironment": "node",
-  "moduleDirectories": ["<rootDir>/src", "node_modules"],
+  "moduleDirectories": ["<rootDir>/tests", "node_modules"],
   "transform": {
-    "^.+\\.[t|j]sx?$": "babel-jest"
+    "^.+\\.[t|j]s?$": "ts-jest"
   },
   "testPathIgnorePatterns": [
     "<rootDir>/coverage",
-    "<rootDir>/dist",
+    "<rootDir>/lib",
     "<rootDir>/node_modules",
-    "<rootDir>/utils",
-    "<rootDir>/babel.config.js"
+    "<rootDir>/types"
   ],
-  "collectCoverageFrom": ["src/**/*.{ts}"],
-  "setupFilesAfterEnv": ["<rootDir>/lib/utils/setupTests/index.ts"]
+  "collectCoverageFrom": ["src/**/*.ts"]
 }

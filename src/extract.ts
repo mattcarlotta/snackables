@@ -36,20 +36,21 @@ export default function extract({
       const envPath = resolve(root, `.env.${config}`);
 
       // checks if "envPath" is a file that exists
-      if (statSync(envPath).isFile()) {
-        // parses ENVS from path
-        const parsed = parse(readFileSync(envPath, { encoding }));
+      statSync(envPath).isFile();
 
-        // assigns ENVs to ENV object
-        parsedENVs = Object.assign(parsedENVs, parsed);
+      // parses ENVS from path
+      const parsed = parse(readFileSync(envPath, { encoding }));
 
-        if (debug)
-          logInfo(
-            `Extracted 'env.${config}' environment variables: ${JSON.stringify(
-              parsed
-            )}`
-          );
-      }
+      // assigns ENVs to ENV object
+      parsedENVs = Object.assign(parsedENVs, parsed);
+
+      /* istanbul ignore else */
+      if (debug)
+        logInfo(
+          `Extracted 'env.${config}' environment variables: ${JSON.stringify(
+            parsed
+          )}`
+        );
     } catch (e) {
       logWarning(
         `Unable to extract 'env.${config}' because the file was not found within the '${root}' directory.`
