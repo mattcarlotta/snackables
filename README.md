@@ -291,6 +291,8 @@ To be as flexible as possible, the `ENV_LOAD` variable is not required to set EN
 
 ```js
 const { config } = require("snackables");
+// import { config } from "snackables";
+
 config({ ... });
 ```
 
