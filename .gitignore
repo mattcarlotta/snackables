@@ -3,6 +3,4 @@ node_modules
 coverage
 example.ts
 preload.ts
-*.js
 .cc_token
-
