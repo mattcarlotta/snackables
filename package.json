@@ -1,6 +1,6 @@
 {
   "name": "snackables",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Loading byte sized ENVs made simple.",
   "main": "lib/index.js",
   "sideEffects": false,
@@ -19,6 +19,9 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "dtslint": "dtslint types",
+    "ex:basic": "ENV_LOAD=test ts-node examples/basic.ts",
+    "ex:custom": "ts-node examples/custom.ts",
+    "ex:preload": "ENV_LOAD=test ts-node -r snackables/register examples/preload.ts",
     "lint": "eslint ./ --ext .ts,.js",
     "test": "jest --config ./jest.json",
     "test:cov": "jest --config ./jest.json --coverage",
@@ -60,7 +63,7 @@
     "jest": "^26.4.2",
     "prettier": "^2.1.1",
     "rimraf": "^3.0.2",
-    "snackables": "^0.0.2",
+    "snackables": "latest",
     "ts-jest": "^26.3.0",
     "ts-node": "^9.0.0",
     "typescript": "^4.0.2"

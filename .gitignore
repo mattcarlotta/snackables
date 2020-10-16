@@ -1,6 +1,4 @@
 *.log*
 node_modules
 coverage
-example.ts
-preload.ts
 .cc_token

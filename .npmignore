@@ -1,5 +1,6 @@
 .github
 coverage
+examples
 tests
 .env.base
 .env.test
