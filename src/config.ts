@@ -2,8 +2,7 @@ import { readFileSync } from "fs";
 import { resolve } from "path";
 import parse from "./parse";
 import setENVs from "./set";
-import { logInfo } from "./log";
-import { ConfigOptions, ConfigOutput } from "./types";
+import { logInfo, logWarning } from "./log";
 
 const defaultPath = resolve(process.cwd(), ".env");
 
@@ -20,10 +19,32 @@ export default function config({
   debug = false,
   encoding = "utf-8",
   path = defaultPath
-}: ConfigOptions): ConfigOutput {
+}: {
+  path?: string; // path to .env file
+  encoding?:
+    | "ascii"
+    | "utf8"
+    | "utf-8"
+    | "utf16le"
+    | "ucs2"
+    | "ucs-2"
+    | "base64"
+    | "latin1"
+    | "binary"
+    | "hex"; // encoding of .env file
+  debug?: string | boolean; // turn on logging for debugging purposes
+}): {
+  error?: Error; // parsed error
+  parsed?: { [name: string]: string }; // parsed ENVs
+} {
   try {
     // parses ENVS from file
     const parsed = parse(readFileSync(path, { encoding }));
+
+    if (debug)
+      logInfo(
+        `Extracted '${path}' environment variables: ${JSON.stringify(parsed)}`
+      );
 
     // assigns ENVS to process.env
     setENVs(parsed);
@@ -35,6 +56,10 @@ export default function config({
 
     return { parsed };
   } catch (e) {
+    if (debug)
+      logWarning(
+        `Failed to load '${path}' environment variables: ${e.toString()}`
+      );
     return { error: e };
   }
 }

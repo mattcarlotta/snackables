@@ -15,6 +15,7 @@
     "preload:js": "ENV_LOAD=base,local,dev node -r ./lib/register tests/preloadTest.js",
     "preload:ts": "ENV_LOAD=base,local,dev ts-node -r ./lib/register tests/preloadTest.ts",
     "configtest": "ts-node tests/configTest.ts",
+    "invalid": "ts-node tests/invalidFile.ts",
     "build": "rimraf lib && tsc -p tsconfig.build.json",
     "test": "NODE_ENV=testing jest --config ./jest.json",
     "test:cov": "NODE_ENV=testing jest --config ./jest.json --coverage",

@@ -24,8 +24,6 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-import { ParsedOutput } from "./types";
-
 const NEWLINE = "\n";
 const RE_INI_KEY_VAL = /^\s*([\w.-]+)\s*=\s*(.*)?\s*$/;
 const RE_NEWLINES = /\\n/g;
@@ -37,7 +35,9 @@ const NEWLINES_MATCH = /\n|\r|\r\n/;
  * @param src - contents to be parsed
  * @returns an object with keys and values based on `src`
  */
-export default function parse(src: string | Buffer): ParsedOutput {
+export default function parse(
+  src: string | Buffer
+): { [name: string]: string } {
   const obj: any = {};
 
   // convert Buffers before splitting into lines and processing
