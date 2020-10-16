@@ -1,4 +1,4 @@
-import "../lib";
+import "snackable";
 import chalk from "chalk";
 
 console.log(chalk.cyan(`process.env.PORT: ${process.env.PORT}`));

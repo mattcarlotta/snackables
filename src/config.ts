@@ -3,6 +3,7 @@ import { resolve } from "path";
 import parse from "./parse";
 import setENVs from "./set";
 import { logInfo, logWarning } from "./log";
+import { ConfigOptions, ConfigOutput } from "../types";
 
 const defaultPath = resolve(process.cwd(), ".env");
 
@@ -19,24 +20,7 @@ export default function config({
   debug = false,
   encoding = "utf-8",
   path = defaultPath
-}: {
-  path?: string; // path to .env file
-  encoding?:
-    | "ascii"
-    | "utf8"
-    | "utf-8"
-    | "utf16le"
-    | "ucs2"
-    | "ucs-2"
-    | "base64"
-    | "latin1"
-    | "binary"
-    | "hex"; // encoding of .env file
-  debug?: string | boolean; // turn on logging for debugging purposes
-}): {
-  error?: Error; // parsed error
-  parsed?: { [name: string]: string }; // parsed ENVs
-} {
+}: ConfigOptions): ConfigOutput {
   try {
     // parses ENVS from file
     const parsed = parse(readFileSync(path, { encoding }));

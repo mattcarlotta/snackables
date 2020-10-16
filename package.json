@@ -6,9 +6,10 @@
   "sideEffects": false,
   "homepage": "https://github.com/mattcarlotta/snackables",
   "files": [
-    "lib"
+    "lib",
+    "types"
   ],
-  "types": "lib/index.d.ts",
+  "types": "types",
   "scripts": {
     "base:js": "ENV_LOAD=base,local,dev ENV_DEBUG=true node tests/baseTest.js",
     "base:ts": "ENV_LOAD=base,local,dev ENV_DEBUG=true ts-node tests/baseTest.ts",
@@ -17,6 +18,7 @@
     "configtest": "ts-node tests/configTest.ts",
     "invalid": "ts-node tests/invalidFile.ts",
     "build": "rimraf lib && tsc -p tsconfig.build.json",
+    "dtslint": "dtslint types",
     "test": "NODE_ENV=testing jest --config ./jest.json",
     "test:cov": "NODE_ENV=testing jest --config ./jest.json --coverage",
     "test:watch": "NODE_ENV=testing jest --config ./jest.json --watch --onlyChanged",
@@ -46,6 +48,7 @@
     "@types/jest": "^26.0.12",
     "@types/node": "^14.6.4",
     "browserslist": "^4.14.0",
+    "dtslint": "^4.0.4",
     "enzyme": "^3.11.0",
     "jest": "^26.4.2",
     "jest-resolve": "^26.4.0",

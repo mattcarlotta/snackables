@@ -1,4 +1,4 @@
-import { config } from "../lib";
+import { config } from "snackable";
 config({ path: ".env.test", debug: true });
 import chalk from "chalk";
 

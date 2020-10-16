@@ -3,8 +3,6 @@
     "alwaysStrict": true,
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
-    "declaration": true,
-    "declarationDir": "lib",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "lib": ["es5"],

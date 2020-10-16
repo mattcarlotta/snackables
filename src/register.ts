@@ -1,18 +1,7 @@
 import set from "./set";
 import extract from "./extract";
 import { logInfo } from "./log";
-
-export type Encoding =
-  | "ascii"
-  | "utf8"
-  | "utf-8"
-  | "utf16le"
-  | "ucs2"
-  | "ucs-2"
-  | "base64"
-  | "latin1"
-  | "binary"
-  | "hex";
+import { Encoding } from "../types";
 
 const { ENV_LOAD, ENV_DEBUG, ENV_ENCODE } = process.env;
 

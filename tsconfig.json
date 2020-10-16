@@ -6,6 +6,11 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
-  }
+    "baseUrl": ".",
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "snackable": ["lib"]
+    }
+  },
+  "include": ["tests/**/*.ts", "types/index.d.ts"]
 }

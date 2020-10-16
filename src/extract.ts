@@ -2,6 +2,7 @@ import { readFileSync, statSync } from "fs";
 import { resolve } from "path";
 import parse from "./parse";
 import { logInfo, logWarning } from "./log";
+import { ExtractOptions, ParsedOutput } from "../types";
 
 /**
  * Extracts multiple .env files into an object.
@@ -15,21 +16,7 @@ export default function extract({
   configs,
   debug,
   encoding = "utf-8"
-}: {
-  configs: string[]; // .env.* files as an array of strings [".env.a", ".env.b"]
-  debug: boolean; // ouputs extract/assigned ENVs to console
-  encoding:
-    | "ascii"
-    | "utf8"
-    | "utf-8"
-    | "utf16le"
-    | "ucs2"
-    | "ucs-2"
-    | "base64"
-    | "latin1"
-    | "binary"
-    | "hex"; // specifies the file encoding type
-}): { [name: string]: string } {
+}: ExtractOptions): ParsedOutput {
   // grabs root directory
   const root = process.cwd();
 
