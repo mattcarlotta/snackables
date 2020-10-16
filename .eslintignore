@@ -1,0 +1,4 @@
+*.json
+lib
+node_modules
+**/coverage

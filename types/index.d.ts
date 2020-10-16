@@ -54,7 +54,7 @@ export interface ConfigOutput {
 export function config(options?: ConfigOptions): ConfigOutput;
 
 /** snackables library interface */
-export interface Env {
+export interface SnackableEnv {
   config: typeof config;
   parse: typeof parse;
 }

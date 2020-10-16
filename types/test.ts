@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+// @ts-nocheck
 import * as snackable from "snackable";
 
-const { config, parse }: snackable.Env = {
+const { config, parse }: snackable.SnackableEnv = {
   config: snackable.config,
   parse: snackable.parse
 };
@@ -18,5 +20,7 @@ config({
 const parsed = parse("NODE_ENV=production\nDB_HOST=a.b.c");
 const dbHost: string = parsed["DB_HOST"];
 
-const parsedFromBuffer = parse(new Buffer("JUSTICE=league\n"));
+const parsedFromBuffer = parse(Buffer.from("JUSTICE=league\n"));
 const justice: string = parsedFromBuffer["JUSTICE"];
+
+/* eslint-enable @typescript-eslint/no-unused-vars */

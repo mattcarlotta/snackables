@@ -1,0 +1,65 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "extends": [
+    "airbnb-base",
+    "plugin:prettier/recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "env": {
+    "es6": true,
+    "browser": true,
+    "node": true
+  },
+  "rules": {
+    "quotes": [
+      "error",
+      "double",
+      {
+        "avoidEscape": true,
+        "allowTemplateLiterals": true
+      }
+    ],
+    "@typescript-eslint/explicit-function-return-type": 0,
+    "@typescript-eslint/no-var-requires": 0,
+    "@typescript-eslint/ban-ts-comment": 0,
+    "@typescript-eslint/no-explicit-any": 0,
+    "prefer-object-spread": 0,
+    "no-async-promise-executor": 0,
+    "arrow-parens": ["warn", "as-needed"],
+    "indent": 0,
+    "class-methods-use-this": 0,
+    "import/no-named-as-default": 0,
+    "no-param-reassign": 0,
+    "no-return-assign": 0,
+    "no-shadow": 0,
+    "array-callback-return": 0,
+    "no-nested-ternary": 0,
+    "consistent-return": 0,
+    "default-case": 0,
+    "no-underscore-dangle": 0,
+    "dot-notation": 0,
+    "no-trailing-spaces": [
+      2,
+      {
+        "skipBlankLines": true
+      }
+    ],
+    "prefer-template": 0,
+    "prefer-promise-reject-errors": 0,
+    "import/prefer-default-export": 0,
+    "import/no-unresolved": 0,
+    "import/no-extraneous-dependencies": 0,
+    "import/extensions": 0,
+    "babel/object-curly-spacing": 0,
+    "prefer-destructuring": [
+      "error",
+      {
+        "AssignmentExpression": {
+          "array": false,
+          "object": false
+        }
+      }
+    ]
+  }
+}

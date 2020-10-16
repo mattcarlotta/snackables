@@ -1,5 +1,5 @@
-import { parse } from "../src";
 import fs from "fs";
+import { parse } from "../src";
 
 const parsed = parse(fs.readFileSync("tests/.env", { encoding: "utf8" }));
 

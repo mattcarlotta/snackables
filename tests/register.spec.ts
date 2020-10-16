@@ -1,7 +1,7 @@
 // @ts-nocheck
 
-jest.spyOn(global.console, "log").mockImplementation(() => {});
-jest.spyOn(global.console, "warn").mockImplementation(() => {});
+jest.spyOn(global.console, "log").mockImplementation();
+jest.spyOn(global.console, "warn").mockImplementation();
 
 describe("Register", () => {
   afterAll(() => {
@@ -14,6 +14,7 @@ describe("Register", () => {
     process.env.ENV_LOAD = "base,test,invalid";
     process.env.ENV_DEBUG = "true";
 
+    /* eslint-disable-next-line */
     require("../src");
 
     expect(global.console.log.mock.calls[0][0]).toContain(
