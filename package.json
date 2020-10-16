@@ -6,13 +6,18 @@
   "sideEffects": false,
   "homepage": "https://github.com/mattcarlotta/snackables",
   "files": [
-    "lib",
+    "lib/config.js",
+    "lib/extract.js",
+    "lib/index.js",
+    "lib/log.js",
+    "lib/parse.js",
+    "lib/set.js",
     "register.js",
     "types"
   ],
   "types": "types/index.d.ts",
   "scripts": {
-    "build": "rimraf lib && tsc -p tsconfig.build.json",
+    "build": "tsc -p tsconfig.build.json",
     "dtslint": "dtslint types",
     "lint": "eslint ./ --ext .ts,.js",
     "test": "jest --config ./jest.json",
