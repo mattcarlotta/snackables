@@ -4,6 +4,8 @@
   "transform": {
     "^.+\\.ts?$": "ts-jest"
   },
+  "testMatch": ["**/tests/**/*.spec.ts"],
+  "transformIgnorePatterns": ["^.+\\.js$"],
   "testPathIgnorePatterns": [
     "<rootDir>/coverage",
     "<rootDir>/node_modules",
