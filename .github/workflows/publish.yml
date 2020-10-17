@@ -1,0 +1,49 @@
+name: Publish Workflow
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  publish:
+    if: "!contains(github.event.commits[0].message, '[skip-ci]')"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Yarn Cache Directory
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Utilize Yarn Cache Directory
+        uses: actions/cache@v2
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - run: yarn install --frozen-lockfile --check-files
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
+
+      - name: Run Lint
+        id: lint
+        run: yarn lint
+
+      - name: Run Tests
+        id: tests
+        if: steps.lint.exit_code == 0
+        run: yarn test
+
+      - name: Create Local Build
+        id: build
+        if: steps.tests.exit_code == 0
+        run: yarn build
+
+      - name: Publish to NPM
+        uses: JS-DevTools/npm-publish@v1
+        if: steps.tests.build == 0
+        with:
+          token: ${{ secrets.TOKEN }}
