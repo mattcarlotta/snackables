@@ -12,9 +12,6 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv), snackables is 
   <a href="https://codecov.io/gh/mattcarlotta/snackables/branch/main">
     <img src="https://img.shields.io/codecov/c/github/mattcarlotta/snackables?style=for-the-badge&labelColor=000000">
   </a>
-  <a href="https://github.com/mattcarlotta/snackables/issues">
-    <img src="https://img.shields.io/github/issues-raw/mattcarlotta/snackables?style=for-the-badge&labelColor=000000">
-  </a>
   <a href="https://github.com/mattcarlotta/snackables/blob/master/LICENSE">
     <img src="https://img.shields.io/github/license/mattcarlotta/snackables?style=for-the-badge&labelColor=000000">
   </a>
