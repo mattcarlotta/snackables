@@ -2,6 +2,8 @@
 
 Heavily inspired by [dotenv](https://github.com/motdotla/dotenv), snackables is a simple, zero-dependency package module that automatically loads agnostic environment variables from a predefined `ENV_LOAD` variable. When it comes to ENV naming, snackables is unopinionated, so you can name your ENVs anything or follow the [The Twelve-Factor App](https://12factor.net/config) methodology.
 
+<img src="https://img.shields.io/github/package-json/v/mattcarlotta/snackables?style=for-the-badge"></img> [![Codecov](https://img.shields.io/codecov/c/github/mattcarlotta/snackables?style=for-the-badge)](https://codecov.io/gh/mattcarlotta/snackables) [![Open Issues](https://img.shields.io/github/issues-raw/mattcarlotta/snackables?style=for-the-badge)](https://github.com/mattcarlotta/snackables/issues) [![Dependencies](https://img.shields.io/david/mattcarlotta/snackables.svg?style=for-the-badge)](https://david-dm.org/mattcarlotta/snackables) [![License](https://img.shields.io/github/license/mattcarlotta/snackables?style=for-the-badge)](https://github.com/mattcarlotta/snackables/blob/master/LICENSE)
+
 [Installation](#installation)
 
 [Usage](#usage)
