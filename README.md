@@ -1,8 +1,24 @@
 # snackables
 
-Heavily inspired by [dotenv](https://github.com/motdotla/dotenv), snackables is a simple, zero-dependency package module that automatically loads agnostic environment variables from a predefined `ENV_LOAD` variable. When it comes to ENV naming, snackables is unopinionated, so you can name your ENVs anything or follow the [The Twelve-Factor App](https://12factor.net/config) methodology.
+Heavily inspired by [dotenv](https://github.com/motdotla/dotenv), snackables is a simple, [zero-dependency](https://bundlephobia.com/result?p=snackables@0.0.6) package module that automatically loads agnostic environment variables from a predefined `ENV_LOAD` variable. When it comes to ENV naming, snackables is unopinionated, so you can name your ENVs anything or follow the [The Twelve-Factor App](https://12factor.net/config) methodology.
 
-![npm version](https://img.shields.io/npm/v/snackables.svg?style=for-the-badge&labelColor=000000) ![Build](https://img.shields.io/github/workflow/status/mattcarlotta/snackables/Publish%20Workflow?style=for-the-badge&labelColor=000000) [![Codecov](https://img.shields.io/codecov/c/github/mattcarlotta/snackables?style=for-the-badge&labelColor=000000)](https://codecov.io/gh/mattcarlotta/snackables/branch/main) [![Open Issues](https://img.shields.io/github/issues-raw/mattcarlotta/snackables?style=for-the-badge&labelColor=000000)](https://github.com/mattcarlotta/snackables/issues) [![Dependencies](https://img.shields.io/david/mattcarlotta/snackables.svg?style=for-the-badge&labelColor=000000)](https://david-dm.org/mattcarlotta/snackables) [![License](https://img.shields.io/github/license/mattcarlotta/snackables?style=for-the-badge&labelColor=000000)](https://github.com/mattcarlotta/snackables/blob/master/LICENSE)
+<p align="center">
+  <a href="https://www.npmjs.com/package/snackables">
+    <img src="https://img.shields.io/npm/v/snackables.svg?style=for-the-badge&labelColor=000000">
+  </a>
+  <a href="https://github.com/mattcarlotta/snackables/actions?query=workflow%3A%22Publish+Workflow%22">
+    <img src="https://img.shields.io/github/workflow/status/mattcarlotta/snackables/Publish%20Workflow?style=for-the-badge&labelColor=000000">
+  </a>
+  <a href="https://codecov.io/gh/mattcarlotta/snackables/branch/main">
+    <img src="https://img.shields.io/codecov/c/github/mattcarlotta/snackables?style=for-the-badge&labelColor=000000">
+  </a>
+  <a href="https://github.com/mattcarlotta/snackables/issues">
+    <img src="https://img.shields.io/github/issues-raw/mattcarlotta/snackables?style=for-the-badge&labelColor=000000">
+  </a>
+  <a href="https://github.com/mattcarlotta/snackables/blob/master/LICENSE">
+    <img src="https://img.shields.io/github/license/mattcarlotta/snackables?style=for-the-badge&labelColor=000000">
+  </a>
+</p>
 
 [Installation](#installation)
 
