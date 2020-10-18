@@ -19,9 +19,10 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "dtslint": "dtslint types",
-    "ex:basic": "ENV_LOAD=test ts-node examples/basic.ts",
+    "ex:basic": "ENV_LOAD=test ENV_DEBUG=true ts-node examples/basic.ts",
     "ex:custom": "ts-node examples/custom.ts",
-    "ex:preload": "ENV_LOAD=test ts-node -r snackables/register examples/preload.ts",
+    "ex:preload": "ENV_LOAD=test ENV_DEBUG=true ts-node -r snackables/register examples/preload.ts",
+    "ex:snackable": "ENV_LOAD=base,test ENV_DEBUG=true ts-node examples/snackable.ts",
     "lint": "eslint ./ --ext .ts,.js",
     "test": "jest --config ./jest.json",
     "test:cov": "jest --config ./jest.json --coverage",

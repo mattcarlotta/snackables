@@ -1,20 +1,8 @@
 {
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "alwaysStrict": true,
-    "allowSyntheticDefaultImports": true,
-    "baseUrl": ".",
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
     "lib": ["es5"],
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "rootDir": "./",
-    "removeComments": true,
-    "strict": true,
-    "sourceMap": false,
-    "target": "es6"
+    "noEmit": false
   },
   "files": ["./types/index.d.ts", "./lib/index.ts"],
   "include": ["lib/**/*.ts", "register.ts"],
