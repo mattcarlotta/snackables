@@ -18,7 +18,6 @@
   "types": "types/index.d.ts",
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "dtslint": "dtslint types",
     "ex:basic": "ENV_LOAD=test ENV_DEBUG=true ts-node examples/basic.ts",
     "ex:custom": "ts-node examples/custom.ts",
     "ex:preload": "ENV_LOAD=test ENV_DEBUG=true ts-node -r snackables/register examples/preload.ts",
@@ -53,7 +52,6 @@
     "@typescript-eslint/eslint-plugin": "^4.4.1",
     "@typescript-eslint/parser": "^4.4.1",
     "browserslist": "^4.14.0",
-    "dtslint": "^4.0.4",
     "enzyme": "^3.11.0",
     "eslint": "^7.11.0",
     "eslint-config-airbnb-base": "^14.2.0",
