@@ -38,7 +38,7 @@ const NEWLINES_MATCH = /\n|\r|\r\n/;
  * @returns an object with keys and values based on `src`
  */
 export default function parse(src: string | Buffer): ParsedOutput {
-  const obj: any = {};
+  let parsed = {};
 
   // convert Buffers before splitting into lines and processing
   src
@@ -67,9 +67,9 @@ export default function parse(src: string | Buffer): ParsedOutput {
           val = val.trim();
         }
 
-        obj[key] = val;
+        parsed = Object.assign(parsed, { [key]: val });
       }
     });
 
-  return obj;
+  return parsed;
 }

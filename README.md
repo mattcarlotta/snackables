@@ -1,6 +1,23 @@
-# snackables
+![snackablesLogo](./snackablesLogo.png)
 
-Heavily inspired by [dotenv](https://github.com/motdotla/dotenv), snackables is a simple, zero-dependency package module that automatically loads agnostic environment variables from a predefined `ENV_LOAD` variable. When it comes to ENV naming, snackables is unopinionated, so you can name your ENVs anything or follow the [The Twelve-Factor App](https://12factor.net/config) methodology.
+<p align="center">
+  <a href="https://www.npmjs.com/package/snackables">
+    <img src="https://img.shields.io/npm/v/snackables.svg?style=for-the-badge&labelColor=000000">
+  </a>
+  <a href="https://github.com/mattcarlotta/snackables/actions?query=workflow%3A%22Publish+Workflow%22">
+    <img src="https://img.shields.io/github/workflow/status/mattcarlotta/snackables/Publish%20Workflow?style=for-the-badge&labelColor=000000">
+  </a>
+  <a href="https://codecov.io/gh/mattcarlotta/snackables/branch/main">
+    <img src="https://img.shields.io/codecov/c/github/mattcarlotta/snackables?style=for-the-badge&labelColor=000000">
+  </a>
+  <a href="https://github.com/mattcarlotta/snackables/blob/master/LICENSE">
+    <img src="https://img.shields.io/github/license/mattcarlotta/snackables?style=for-the-badge&labelColor=000000">
+  </a>
+</p>
+
+Heavily inspired by [dotenv](https://github.com/motdotla/dotenv), snackables is a simple to use, [zero-dependency](https://bundlephobia.com/result?p=snackables) package module that automatically loads environment variables from a predefined `ENV_LOAD` variable. When it comes to `.env` file naming, snackables is unopinionated, so you can name them anything you'd like or you can follow the [The Twelve-Factor App](https://12factor.net/config) methodology.
+
+## Quick Links
 
 [Installation](#installation)
 
@@ -26,7 +43,7 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv), snackables is 
 
 [FAQ](#faq)
 
-- [Should I commit my .env file?](#should-i-commit-my-env-file)
+- [Should I commit my .env files?](#should-i-commit-my-env-files)
 - [How does snackables work and will it overwrite already set or predefined variables?](#how-does-snackables-work-and-will-it-overwrite-already-set-or-predefined-variables)
 - [Is the ENV_LOAD variable required?](#is-the-env_load-variable-required)
 
@@ -70,11 +87,13 @@ require("snackables");
 // import 'snackables';
 ```
 
+Or, you can [preload](#preload) your `.env` files instead!
+
 ## CLI Options
 
 #### ENV_LOAD
 
-By defining an `ENV_LOAD` variable within one of your package.json scripts, this will let snackables know you'd like to immediately load some ENVs when the package is imported. You can pass a single file name or a list of file names separated by commas. By default, snackables appends `.env.` to the file name(s) and attempts to load them from within the project's root directory.
+By defining an `ENV_LOAD` variable within one of your package.json scripts, this will let snackables know you'd like to immediately load some ENVs when the package is imported. You can pass a single file name or a list of file names separated by commas. By default, snackables appends `.env.` to the file name(s) and attempts to load them from within the project's **root** directory.
 
 For example:
 
@@ -139,7 +158,7 @@ For example:
 
 ### Preload
 
-You can use the `--require` (`-r`) [command line option](https://nodejs.org/api/cli.html#cli_r_require_module) with `snackables/register` to preload snackables! By doing this, you do not need to require/import the snackables package within your application code.
+You can use the `--require` (`-r`) [command line option](https://nodejs.org/api/cli.html#cli_r_require_module) with `snackables/register` to preload your `.env` files! By doing so, you do not need to `require`/`import` the snackables package within your code.
 
 ```bash
 $ ENV_LOAD=dev node -r snackables/register app.js
@@ -245,15 +264,15 @@ line'}
 
 ## FAQ
 
-### Should I commit my `.env` file?
+### Should I commit my `.env` files?
 
-No. We **strongly** recommend against committing your `.env` file to version control. It should only include environment-specific values such as database passwords or API keys. Your production database should have a different password than your development database.
+No. We **strongly** recommend against committing your `.env` files to version control. It should only include environment-specific values such as database passwords or API keys. Your production database should have a different password than your development database.
 
 ### How does snackables work and will it overwrite already set or predefined variables?
 
 By default, snackables will look for the `.env.*` file(s) defined within the `ENV_LOAD` variable and append them to `process.env`.
 
-For example, `ENV_LOAD` has two files `.env.base` and `.env.dev`:
+For example, `ENV_LOAD=base,dev` has two files `.env.base` and `.env.dev`:
 
 ```json
 {
@@ -266,14 +285,14 @@ For example, `ENV_LOAD` has two files `.env.base` and `.env.dev`:
 }
 ```
 
-`.env.base` may have static shared database variables:
+in development, `.env.base` may have static shared database variables:
 
 ```dosini
 DB_USER=root
 DB_PASS=password
 ```
 
-And `.env.dev` may have environment specific variables:
+while `.env.dev` may have environment specific variables:
 
 ```dosini
 DB_HOST=localhost
@@ -281,7 +300,7 @@ HOST=http://localhost
 PORT=3000
 ```
 
-snackables will parse the files and append the ENVs in order of how they were defined in `ENV_LOAD`; however, snackables will **NEVER** modify any predefined environment variables that have already been set to the node process on start up or there after. In short, if there is an ENV variable in your one of your `.env` files that attempts to overwrite an `process.env.XXXX` variable that has already been set to the process (either by node or by you), then that variable won't be appended.
+snackables will parse the files and append the ENVs in order of how they were defined in `ENV_LOAD`. However, snackables will **NEVER** modify any predefined environment variables that have already been set to the node process on start up or there after. In short, if there is an ENV variable in your one of your `.env` files that attempts to overwrite a `process.env.XXXX` variable that has already been set to the process (either by node or by you), then that variable won't be appended.
 
 Although it's **NOT** recommended, any ENV variables that haven't been set to the process yet can be overwritten according to their import order, where the last `.env` import takes precendence over any previous ENVs.
 

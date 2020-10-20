@@ -1,18 +1,21 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
     "allowJs": true,
     "alwaysStrict": true,
     "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "module": "commonjs",
     "moduleResolution": "node",
-    "noEmit": true,
+    "noEmit": false,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "resolveJsonModule": true,
+    "rootDir": "./",
+    "removeComments": true,
     "skipLibCheck": true,
+    "sourceMap": false,
     "strict": true,
     "target": "es6"
   },

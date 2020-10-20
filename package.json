@@ -1,6 +1,6 @@
 {
   "name": "snackables",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Loading byte sized ENVs made simple.",
   "main": "lib/index.js",
   "sideEffects": false,
@@ -18,10 +18,10 @@
   "types": "types/index.d.ts",
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "dtslint": "dtslint types",
-    "ex:basic": "ENV_LOAD=test ts-node examples/basic.ts",
+    "ex:basic": "ENV_LOAD=test ENV_DEBUG=true ts-node examples/basic.ts",
     "ex:custom": "ts-node examples/custom.ts",
-    "ex:preload": "ENV_LOAD=test ts-node -r snackables/register examples/preload.ts",
+    "ex:preload": "ENV_LOAD=test ENV_DEBUG=true ts-node -r snackables/register examples/preload.ts",
+    "ex:snackable": "ENV_LOAD=base,test ENV_DEBUG=true ts-node examples/snackable.ts",
     "lint": "eslint ./ --ext .ts,.js",
     "test": "jest --config ./jest.json",
     "test:cov": "jest --config ./jest.json --coverage",
@@ -52,7 +52,6 @@
     "@typescript-eslint/eslint-plugin": "^4.4.1",
     "@typescript-eslint/parser": "^4.4.1",
     "browserslist": "^4.14.0",
-    "dtslint": "^4.0.4",
     "enzyme": "^3.11.0",
     "eslint": "^7.11.0",
     "eslint-config-airbnb-base": "^14.2.0",
@@ -63,7 +62,7 @@
     "jest": "^26.4.2",
     "prettier": "^2.1.1",
     "rimraf": "^3.0.2",
-    "snackables": "latest",
+    "snackables": "^0.0.6",
     "ts-jest": "^26.3.0",
     "ts-node": "^9.0.0",
     "typescript": "^4.0.2"
