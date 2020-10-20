@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [SemVer 2.0](https://semver.org/) for commit guidelines.
 
+## [0.0.6] - 2020-20-08
+
+### Added
+
+- Added logo to README
+
 ## [0.0.6] - 2020-16-08
 
 ### Added
