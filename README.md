@@ -1,4 +1,4 @@
-![snackablesLogo](./snackablesLogo.png)
+![snackablesLogo](https://github.com/mattcarlotta/snackables/blob/main/snackablesLogo.png?raw=true)
 
 <p align="center">
   <a href="https://www.npmjs.com/package/snackables">
