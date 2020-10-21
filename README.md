@@ -172,10 +172,10 @@ For example:
 
 ### Preload
 
-You can use the `--require` (`-r`) [command line option](https://nodejs.org/api/cli.html#cli_r_require_module) with `snackables/register` to preload your `.env` files! By doing so, you do not need to `require`/`import` the snackables package within your code.
+You can use the `--require` (`-r`) [command line option](https://nodejs.org/api/cli.html#cli_r_require_module) with `snackables` to preload your `.env` files! By doing so, you do not need to `require`/`import` the snackables package within your code.
 
 ```bash
-$ ENV_LOAD=dev node -r snackables/register app.js
+$ ENV_LOAD=dev node -r snackables app.js
 ```
 
 or
@@ -183,7 +183,7 @@ or
 ```json
 {
   "scripts": {
-    "dev": "ENV_LOAD=dev node -r snackables/register app.js"
+    "dev": "ENV_LOAD=dev node -r snackables app.js"
   },
   "dependencies": {
     "snackables": "^x.x.x"

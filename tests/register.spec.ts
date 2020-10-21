@@ -3,8 +3,6 @@
 jest.spyOn(global.console, "log").mockImplementation();
 jest.spyOn(global.console, "warn").mockImplementation();
 
-// const root = process.cwd();
-
 describe("Register", () => {
   afterAll(() => {
     jest.resetModules();
