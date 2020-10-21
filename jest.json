@@ -12,5 +12,5 @@
     "<rootDir>/node_modules",
     "<rootDir>/types"
   ],
-  "collectCoverageFrom": ["lib/**/*.ts"]
+  "collectCoverageFrom": ["index.ts"]
 }

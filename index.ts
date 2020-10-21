@@ -25,25 +25,9 @@
 */
 import { readFileSync, statSync } from "fs";
 import { resolve } from "path";
-import { ConfigOptions, Encoding, ParsedOutput } from "../types";
+import { ConfigOptions, Encoding, ParsedOutput } from "./index.d";
 
 const { ENV_LOAD, ENV_DEBUG, ENV_ENCODE } = process.env;
-
-/**
- * Loads a single or multiple `.env` file contents into {@link https://nodejs.org/api/process.html#process_process_env | `process.env`}.
- *
- */
-(function () {
-  // check if ENV_LOAD is defined
-  if (ENV_LOAD != null) {
-    // extract and split all .env.* from ENV_LOAD into a parsed object of ENVS
-    config({
-      path: ENV_LOAD.split(","),
-      debug: Boolean(ENV_DEBUG),
-      encoding: ENV_ENCODE as Encoding
-    });
-  }
-})();
 
 /**
  * Parses a string or buffer in the .env file format into an object.
@@ -68,7 +52,8 @@ export function parse(src: string | Buffer): ParsedOutput {
           /* istanbul ignore next */
           if (!parts) return newEnv;
 
-          let value, replacePart;
+          let value;
+          let replacePart;
 
           // if prefix is escaped
           if (parts[1] === "\\") {
@@ -185,3 +170,19 @@ export function config({
 
   return parsedENVs;
 }
+
+/**
+ * Loads a single or multiple `.env` file contents into {@link https://nodejs.org/api/process.html#process_process_env | `process.env`}.
+ *
+ */
+(function () {
+  // check if ENV_LOAD is defined
+  if (ENV_LOAD != null) {
+    // extract and split all .env.* from ENV_LOAD into a parsed object of ENVS
+    config({
+      path: ENV_LOAD.split(","),
+      debug: Boolean(ENV_DEBUG),
+      encoding: ENV_ENCODE as Encoding
+    });
+  }
+})();

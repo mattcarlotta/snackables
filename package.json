@@ -1,15 +1,15 @@
 {
   "name": "snackables",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "description": "Loading byte sized ENVs made simple.",
   "main": "lib/index.js",
   "sideEffects": false,
   "homepage": "https://github.com/mattcarlotta/snackables",
   "files": [
-    "lib/index.js",
-    "types"
+    "index.js",
+    "index.d.ts"
   ],
-  "types": "types/index.d.ts",
+  "types": "index.d.ts",
   "scripts": {
     "build": "tsc -p tsconfig.build.json && ts-node compress.ts",
     "ex:arrpaths": "ts-node examples/arrpaths.ts",

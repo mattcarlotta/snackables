@@ -1,5 +1,4 @@
-/* eslint-disable no-console */
-import { config } from "../lib";
+import { config } from "../index";
 
 describe("Config Method", () => {
   afterEach(() => {

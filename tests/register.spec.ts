@@ -15,7 +15,7 @@ describe("Register", () => {
     process.env.ENV_DEBUG = true;
 
     /* eslint-disable-next-line */
-    require("../lib");
+    require("../index");
 
     expect(global.console.log.mock.calls[0][0]).toContain(
       `Extracted '.env.base' environment variables`
