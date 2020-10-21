@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [SemVer 2.0](https://semver.org/) for commit guidelines.
 
+## [0.0.16] - 2020-21-10
+
+### Changed
+
+-  Updated dependencies
+
 ## [0.0.15] - 2020-21-10
 
 ### Changed
