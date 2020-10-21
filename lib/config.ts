@@ -21,7 +21,7 @@ export default function config({
   encoding = "utf-8",
   path = defaultPath
 }: ConfigOptions): ParsedOutput {
-  // parses ENVS from file
+  // parses ENVS from files
   const parsed = extract({
     configs: Array.isArray(path) ? path : path.split(","),
     debug: Boolean(debug),
