@@ -3,6 +3,8 @@
 jest.spyOn(global.console, "log").mockImplementation();
 jest.spyOn(global.console, "warn").mockImplementation();
 
+// const root = process.cwd();
+
 describe("Register", () => {
   afterAll(() => {
     jest.resetModules();
@@ -18,15 +20,15 @@ describe("Register", () => {
     require("../lib");
 
     expect(global.console.log.mock.calls[0][0]).toContain(
-      "Extracted 'env.base' environment variables"
+      `Extracted '.env.base' environment variables`
     );
 
     expect(global.console.log.mock.calls[1][0]).toContain(
-      "Extracted 'env.test' environment variables"
+      `Extracted '.env.test' environment variables`
     );
 
     expect(global.console.warn.mock.calls[0][0]).toContain(
-      "Unable to extract 'env.invalid' because the file was not found"
+      `Unable to extract '.env.invalid': ENOENT: no such file or directory`
     );
 
     expect(global.console.log.mock.calls[2][0]).toContain(

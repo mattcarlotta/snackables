@@ -33,13 +33,12 @@ interface ParsedOutput {
 export function parse(src: string | Buffer): ParsedOutput;
 
 export interface ConfigOptions {
-  path?: string; // path to .env file
+  path?: string | string[]; // path to .env file
   encoding?: Encoding; // encoding of .env file
   debug?: string | boolean; // turn on logging for debugging purposes
 }
 
 export interface ConfigOutput {
-  error?: Error; // parsed error
   parsed?: ParsedOutput; // parsed ENVs
 }
 

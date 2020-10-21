@@ -1,4 +1,4 @@
-![snackablesLogo](./snackablesLogo.png)
+![snackablesLogo](https://github.com/mattcarlotta/snackables/blob/main/snackablesLogo.png?raw=true)
 
 <p align="center">
   <a href="https://www.npmjs.com/package/snackables">
@@ -179,19 +179,15 @@ or
 
 ## Config Method
 
-If you wish to manaully import a config, then the config method will read your `.env` file, parse the contents, assign it to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env), and return an object with a `parsed` key containing the loaded content or an `error` key if it failed.
+If you wish to manaully import configs, then the config method will read your `.env` files, parse the contents, assign it to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env), and return an object with parsed keyed ENVS.
 
 ```js
 const result = snackables.config();
 
-if (result.error) {
-  throw result.error;
-}
-
-console.log(result.parsed);
+console.log(result);
 ```
 
-You can additionally, pass options to `config`.
+Additionally, you can pass options to `config`.
 
 ### Config Options
 
@@ -199,12 +195,37 @@ You can additionally, pass options to `config`.
 
 Default: `path.resolve(process.cwd(), '.env')`
 
-You may specify a custom path if your file containing environment variables is located elsewhere.
+You may specify custom paths if your files are located elsewhere (relative to your root directory).
+
+A single file path as a `String`:
 
 ```js
-require("snackables").config({ path: "/custom/path/to/.env" });
+require("snackables").config({ path: "custom/path/to/.env" });
+
 // import { config } from "snackables"
-// config({ path: "/custom/path/to/.env" });
+// config({ path: "custom/path/to/.env" });
+```
+
+Multiple file paths as a single `String` separated by commas:
+
+```js
+require("snackables").config({
+  path: "custom/path/to/.env,custom/path/to/.env.base"
+});
+
+// import { config } from "snackables"
+// config({ path: "custom/path/to/.env,custom/path/to/.env.base" });
+```
+
+Or multiple file paths as an `Array` of `String`s:
+
+```js
+require("snackables").config({
+  path: ["custom/path/to/.env", "custom/path/to/.env.base"]
+});
+
+// import { config } from "snackables"
+// config({ path: ["custom/path/to/.env", "custom/path/to/.env.base"] });
 ```
 
 #### Encoding
@@ -215,6 +236,7 @@ You may specify the encoding of your file containing environment variables.
 
 ```js
 require("snackables").config({ encoding: "latin1" });
+
 // import { config } from "snackables"
 // config({ encoding: "latin1" });
 ```
@@ -227,6 +249,7 @@ You may turn on logging to help debug why certain keys or values are not being s
 
 ```js
 require("snackables").config({ debug: process.env.DEBUG });
+
 // import { config } from "snackables"
 // config({ debug: process.env.DEBUG });
 ```
@@ -285,9 +308,10 @@ For example, `ENV_LOAD=base,dev` has two files `.env.base` and `.env.dev`:
 }
 ```
 
-in development, `.env.base` may have static shared database variables:
+in a local enviroment, `.env.base` may have static shared database variables:
 
 ```dosini
+DB_HOST=localhost
 DB_USER=root
 DB_PASS=password
 ```
@@ -295,14 +319,13 @@ DB_PASS=password
 while `.env.dev` may have environment specific variables:
 
 ```dosini
-DB_HOST=localhost
 HOST=http://localhost
 PORT=3000
 ```
 
-snackables will parse the files and append the ENVs in order of how they were defined in `ENV_LOAD`. However, snackables will **NEVER** modify any predefined environment variables that have already been set to the node process on start up or there after. In short, if there is an ENV variable in your one of your `.env` files that attempts to overwrite a `process.env.XXXX` variable that has already been set to the process (either by node or by you), then that variable won't be appended.
+snackables will parse the files and append the ENVs in order of how they were defined in `ENV_LOAD`.
 
-Although it's **NOT** recommended, any ENV variables that haven't been set to the process yet can be overwritten according to their import order, where the last `.env` import takes precendence over any previous ENVs.
+Any ENV variables in `process.env` or an `.env` can be overwritten according to their imported order, where the last `.env` import takes precendence over any previous ENVs.
 
 ### Is the ENV_LOAD variable required?
 

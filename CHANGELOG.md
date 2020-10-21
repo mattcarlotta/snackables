@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [SemVer 2.0](https://semver.org/) for commit guidelines.
 
+## [0.0.8] - 2020-20-08
+
+### Added
+
+- Allowed `process.env` variables to be overriden
+
+### Changed
+
+- Refactored `paths` to be a string, string with commas, or array of strings
+
 ## [0.0.7] - 2020-20-08
 
 ### Added

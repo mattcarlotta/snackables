@@ -1,45 +1,66 @@
-import fs from "fs";
+/* eslint-disable no-console */
 import { config } from "../lib";
 
-jest.spyOn(fs, "readFileSync");
 jest.spyOn(global.console, "log").mockImplementation();
 jest.spyOn(global.console, "warn").mockImplementation();
-
-const root = process.cwd();
-const defaultEncoding = "utf-8";
 
 describe("Config Method", () => {
   afterAll(() => {
     jest.resetModules();
   });
 
-  it("accepts a path argument", () => {
-    const testPath = "tests/.env";
-    config({ path: testPath });
-    expect(fs.readFileSync).toHaveBeenCalledWith(testPath, {
-      encoding: defaultEncoding
-    });
+  it("accepts a path argument as a string", () => {
+    const result = config({ path: "tests/.env.base" });
+
+    expect(result).toEqual(
+      expect.objectContaining({
+        BASE: "hello"
+      })
+    );
+  });
+
+  it("accepts a path argument as a string of files with commas", () => {
+    const result = config({ path: "tests/.env.base,tests/.env.test" });
+
+    expect(result).toEqual(
+      expect.objectContaining({
+        BASE: "hello",
+        TESTING: "true"
+      })
+    );
+  });
+
+  it("accepts a path argument as an array", () => {
+    const result = config({ path: ["tests/.env.base"] });
+
+    expect(result).toEqual(
+      expect.objectContaining({
+        BASE: "hello"
+      })
+    );
   });
 
   it("accepts an encoding argument", () => {
-    const testEncoding = "latin1";
-    config({ encoding: testEncoding });
-    expect(fs.readFileSync).toHaveBeenCalledWith(`${root}/.env`, {
-      encoding: testEncoding
-    });
+    const result = config({ encoding: "utf-8" });
+
+    expect(result).toEqual(
+      expect.objectContaining({
+        ROOT: "true"
+      })
+    );
   });
 
   it("accepts a debug argument", () => {
-    config({ path: "tests/.env", debug: true });
+    config({ path: "tests/.env.base", debug: true });
 
     // @ts-ignore
     expect(global.console.log.mock.calls[0][0]).toContain(
-      "Extracted 'tests/.env' environment variables"
+      "Extracted 'tests/.env.base' environment variables"
     );
 
     // @ts-ignore
     expect(global.console.log.mock.calls[1][0]).toContain(
-      "Loaded 'tests/.env' environment variables"
+      `Loaded 'tests/.env.base' environment variables`
     );
 
     const invalidPath = "tests/.env.invalid";
@@ -47,50 +68,21 @@ describe("Config Method", () => {
 
     // @ts-ignore
     expect(global.console.warn.mock.calls[0][0]).toContain(
-      `Failed to load '${invalidPath}' environment variables:`
+      `Unable to extract '${invalidPath}': ENOENT: no such file or directory`
     );
   });
 
-  it("extracts and loads file to process.env while returning parsed output", () => {
-    expect(process.env.BASE).toBeUndefined();
-
-    const res = config({ path: "tests/.env.base" });
-
-    expect(process.env.BASE).toEqual("hello");
-
-    expect(res).toEqual(
-      expect.objectContaining({
-        parsed: expect.objectContaining({
-          BASE: "hello"
-        })
-      })
-    );
-  });
-
-  it("fails to extract a file that doesn't exist while returning the error output", () => {
-    const res = config({ path: "tests/.env.invalid", debug: true });
-
-    expect(res).toEqual(
-      expect.objectContaining({
-        error:
-          "Error: ENOENT: no such file or directory, open 'tests/.env.invalid'"
-      })
-    );
-  });
-
-  it("doesn't overwrite keys already in process.env", () => {
+  it("overwrites keys already in process.env", () => {
     const AUTHOR = "Matt";
     process.env.AUTHOR = AUTHOR;
 
-    const res = config({ path: "tests/.env.overwrite" });
+    const result = config({ path: "tests/.env.overwrite" });
 
-    expect(res).toEqual(
+    expect(result).toEqual(
       expect.objectContaining({
-        parsed: expect.objectContaining({
-          AUTHOR: "Hijacker"
-        })
+        AUTHOR: "Default"
       })
     );
-    expect(process.env.AUTHOR).toEqual(AUTHOR);
+    expect(process.env.AUTHOR).toEqual(result.AUTHOR);
   });
 });
