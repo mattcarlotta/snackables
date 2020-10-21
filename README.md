@@ -303,18 +303,20 @@ line'}
 You may want to interoplate ENV values based upon a `process.env` value or a key within the `.env` file. To interoplate a value, simply define it with `$KEY` or `${KEY}`, for example:
 
 Input:
-````dosini
+```dosini
 MESSAGE=Hello
 INTEROP_MESSAGE=$MESSAGE World
 INTEROP_MESSAGE_BRACKETS=${MESSAGE} World
-``
+ENVIROMENT=$NODE_ENV
+```
 
 Output:
 ```dosini
 MESSAGE=Hello
 INTEROP_MESSAGE=Hello World
 INTEROP_MESSAGE_BRACKETS=Hello World
-````
+ENVIROMENT=development
+```
 
 ### Interpolation Rules
 
@@ -340,6 +342,12 @@ Fix:
 ```dosini
 A=up
 B=\$$A
+```
+
+Output:
+```dosini
+A=up
+B=$up
 ```
 
 ## FAQ
