@@ -305,17 +305,17 @@ You may want to interoplate ENV values based upon a `process.env` value or a key
 Input:
 ```dosini
 MESSAGE=Hello
-INTEROP_MESSAGE=$MESSAGE World
-INTEROP_MESSAGE_BRACKETS=${MESSAGE} World
-ENVIROMENT=$NODE_ENV
+INTERP_MESSAGE=$MESSAGE World
+INTERP_MESSAGE_BRACKETS=${MESSAGE} World
+ENVIRONMENT=$NODE_ENV
 ```
 
 Output:
 ```dosini
 MESSAGE=Hello
-INTEROP_MESSAGE=Hello World
-INTEROP_MESSAGE_BRACKETS=Hello World
-ENVIROMENT=development
+INTERP_MESSAGE=Hello World
+INTERP_MESSAGE_BRACKETS=Hello World
+ENVIRONMENT=development
 ```
 
 ### Interpolation Rules
