@@ -14,7 +14,7 @@ describe("Register", () => {
     expect(process.env.MESSAGE).toBeUndefined();
     expect(process.env.TESTING).toBeUndefined();
     process.env.ENV_LOAD = "base,test,invalid";
-    process.env.ENV_DEBUG = "true";
+    process.env.ENV_DEBUG = true;
 
     /* eslint-disable-next-line */
     require("../lib");

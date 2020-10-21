@@ -18,9 +18,7 @@ const options = {
 
 const files = [
   "lib/config.js",
-  "lib/extract.js",
   "lib/index.js",
-  "lib/log.js",
   "lib/parse.js",
   "lib/set.js",
   "register.js"

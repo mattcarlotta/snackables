@@ -1,6 +1,4 @@
-import set from "./lib/set";
-import extract from "./lib/extract";
-import { logInfo } from "./lib/log";
+import config from "./lib/config";
 import { Encoding } from "./types";
 
 const { ENV_LOAD, ENV_DEBUG, ENV_ENCODE } = process.env;
@@ -11,19 +9,11 @@ const { ENV_LOAD, ENV_DEBUG, ENV_ENCODE } = process.env;
 ((): void => {
   // check if ENV_LOAD is defined
   if (ENV_LOAD != null) {
-    const debug = Boolean(ENV_DEBUG);
-
     // extract and split all .env.* from ENV_LOAD into a parsed object of ENVS
-    const parsedENVs = extract({
-      configs: ENV_LOAD.split(","),
-      debug,
+    config({
+      path: ENV_LOAD.split(","),
+      debug: Boolean(ENV_DEBUG),
       encoding: ENV_ENCODE as Encoding
     });
-
-    // sets ENVS to process.env
-    set(parsedENVs);
-
-    /* istanbul ignore else */
-    if (debug) logInfo(`Assigned ${JSON.stringify(parsedENVs)} to process.env`);
   }
 })();

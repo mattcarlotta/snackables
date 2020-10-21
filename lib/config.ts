@@ -1,39 +1,70 @@
+import { readFileSync, statSync } from "fs";
 import { resolve } from "path";
-import extract from "./extract";
+import parse from "./parse";
 import setENVs from "./set";
-import { logInfo } from "./log";
 import { ConfigOptions, ParsedOutput } from "../types";
 
-const defaultPath = resolve(process.cwd(), ".env");
+function logInfo(msg: string): void {
+  console.log(`\x1b[90m[snackables] ${msg}\x1b[0m`);
+}
 
 /**
- * Loads a single `.env` file contents into {@link https://nodejs.org/api/process.html#process_process_env | `process.env`} and returns the result as an object.
+ * Extracts multiple .env files into an object.
  *
+ * @param configs - array of string envs: [".env.base", ".env.local"]
  * @param debug - boolean
  * @param encoding - "ascii" | "utf8" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | "hex"
- * @param path - stringified path to file relative to root
- * @returns an object with a `parsed` key if successful or `error` key if an error occurred
- *
+ * @returns an object with keys and values based on `src`
  */
 export default function config({
+  path = resolve(process.cwd(), ".env"),
   debug = false,
-  encoding = "utf-8",
-  path = defaultPath
+  encoding = "utf-8"
 }: ConfigOptions): ParsedOutput {
-  // parses ENVS from files
-  const parsed = extract({
-    configs: Array.isArray(path) ? path : path.split(","),
-    debug: Boolean(debug),
-    encoding
-  });
+  // split config into array of strings
+  const configs = Array.isArray(path) ? path : path.split(",");
 
-  // assigns ENVS to process.env
-  setENVs(parsed);
+  // initializes ENV object
+  let parsedENVs = {};
 
-  if (debug)
-    logInfo(
-      `Loaded '${path}' environment variables: ${JSON.stringify(parsed)}`
-    );
+  // loop over configs array
+  for (let i = 0; i < configs.length; i += 1) {
+    // sets current config
+    const config = configs[i];
 
-  return parsed;
+    // sets current config path file (append .env. if using shorthand)
+    const configFile = config.indexOf(".env") > -1 ? config : `.env.${config}`;
+
+    try {
+      // gets config path
+      const envPath = resolve(process.cwd(), configFile);
+
+      // checks if "envPath" is a file that exists
+      statSync(envPath).isFile();
+
+      // parses ENVS from path
+      const parsed = parse(readFileSync(envPath, { encoding }));
+
+      // assigns ENVs to ENV object
+      parsedENVs = Object.assign(parsedENVs, parsed);
+
+      /* istanbul ignore else */
+      if (debug)
+        logInfo(
+          `Extracted '${configFile}' environment variables: ${JSON.stringify(
+            parsed
+          )}`
+        );
+    } catch (e) {
+      console.warn(
+        `\x1b[33m[snackables] Unable to extract '${configFile}': ${e.message}.\x1b[0m`
+      );
+    }
+  }
+
+  setENVs(parsedENVs);
+
+  if (debug) logInfo(`Assigned ${JSON.stringify(parsedENVs)} to process.env`);
+
+  return parsedENVs;
 }
