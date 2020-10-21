@@ -25,25 +25,9 @@
 */
 import { readFileSync, statSync } from "fs";
 import { resolve } from "path";
-import { ConfigOptions, Encoding, ParsedOutput } from "../types";
+import { ConfigOptions, Encoding, ParsedOutput } from "./index.d";
 
 const { ENV_LOAD, ENV_DEBUG, ENV_ENCODE } = process.env;
-
-/**
- * Loads a single or multiple `.env` file contents into {@link https://nodejs.org/api/process.html#process_process_env | `process.env`}.
- *
- */
-(function () {
-  // check if ENV_LOAD is defined
-  if (ENV_LOAD != null) {
-    // extract and split all .env.* from ENV_LOAD into a parsed object of ENVS
-    config({
-      path: ENV_LOAD.split(","),
-      debug: Boolean(ENV_DEBUG),
-      encoding: ENV_ENCODE as Encoding
-    });
-  }
-})();
 
 /**
  * Parses a string or buffer in the .env file format into an object.
@@ -68,20 +52,19 @@ export function parse(src: string | Buffer): ParsedOutput {
           /* istanbul ignore next */
           if (!parts) return newEnv;
 
-          const { 0: originalValue, 1: prefix, 2: parsedValue } = parts;
-
-          let value, replacePart;
+          let value;
+          let replacePart;
 
           // if prefix is escaped
-          if (prefix === "\\") {
+          if (parts[1] === "\\") {
             // remove escaped characters
-            replacePart = originalValue;
+            replacePart = parts[0];
             value = replacePart.replace("\\$", "$");
           } else {
             // else remove prefix character
-            replacePart = originalValue.substring(prefix.length);
+            replacePart = parts[0].substring(parts[1].length);
             // interpolate current process ENVs, otherwise fallback to parsed object
-            value = process.env[parsedValue] || obj[parsedValue] || "";
+            value = process.env[parts[2]] || obj[parts[2]] || "";
 
             // Resolve recursive interpolations
             value = interpolate(value);
@@ -145,7 +128,7 @@ export function config({
   const configs = Array.isArray(path) ? path : path.split(",");
 
   // initializes ENV object
-  let parsedENVs = {};
+  const parsedENVs = {};
 
   // loop over configs array
   for (let i = 0; i < configs.length; i += 1) {
@@ -166,7 +149,7 @@ export function config({
       const parsed = parse(readFileSync(envPath, { encoding }));
 
       // assigns ENVs to ENV object
-      parsedENVs = Object.assign(parsedENVs, parsed);
+      Object.assign(parsedENVs, parsed);
 
       if (debug)
         logInfo(
@@ -187,3 +170,19 @@ export function config({
 
   return parsedENVs;
 }
+
+/**
+ * Loads a single or multiple `.env` file contents into {@link https://nodejs.org/api/process.html#process_process_env | `process.env`}.
+ *
+ */
+(function () {
+  // check if ENV_LOAD is defined
+  if (ENV_LOAD != null) {
+    // extract and split all .env.* from ENV_LOAD into a parsed object of ENVS
+    config({
+      path: ENV_LOAD.split(","),
+      debug: Boolean(ENV_DEBUG),
+      encoding: ENV_ENCODE as Encoding
+    });
+  }
+})();

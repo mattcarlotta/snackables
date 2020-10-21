@@ -19,12 +19,11 @@ const options = {
 (async () => {
   try {
     const { code } = await minify(
-      fs.readFileSync("lib/index.js", { encoding: "utf-8" }),
+      fs.readFileSync("index.js", { encoding: "utf-8" }),
       options
     );
-    if (code) fs.writeFileSync("lib/index.js", code, { encoding: "utf-8" });
+    if (code) fs.writeFileSync("index.js", code, { encoding: "utf-8" });
   } catch (error) {
-    /* eslint-disable-next-line */
     console.error(error);
     process.exit(1);
   }

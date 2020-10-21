@@ -7,14 +7,15 @@
     "noEmit": false,
     "noEmitOnError": true
   },
-  "files": ["./types/index.d.ts", "./lib/index.ts"],
-  "include": ["lib/**/*.ts"],
+  "files": ["./index.d.ts", "./index.ts"],
+  "include": ["**/*.ts"],
   "exclude": [
     ".github",
     "coverage",
+    "examples",
     "node_modules",
     "lib",
-    "example.ts",
-    "preload.ts"
+    "tests",
+    "compress.ts"
   ]
 }
