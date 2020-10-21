@@ -60,7 +60,7 @@ describe("Config Method", () => {
 
     // @ts-ignore
     expect(global.console.log.mock.calls[1][0]).toContain(
-      `Loaded 'tests/.env.base' environment variables`
+      `Assigned {"BASE":"hello"} to process.env`
     );
 
     const invalidPath = "tests/.env.invalid";

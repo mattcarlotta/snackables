@@ -37,11 +37,13 @@ const NEWLINES_MATCH = /\n|\r|\r\n/;
  * @returns an object with keys and values based on `src`
  */
 export default function parse(src: string | Buffer): ParsedOutput {
+  const obj: any = {};
+
   // convert Buffers before splitting into lines and processing
-  return src
+  src
     .toString()
     .split(NEWLINES_MATCH)
-    .reduce((acc, line) => {
+    .forEach(line => {
       // matching "KEY' and 'VAL' in 'KEY=VAL'
       const keyValueArr = line.match(RE_INI_KEY_VAL);
       // matched?
@@ -64,9 +66,9 @@ export default function parse(src: string | Buffer): ParsedOutput {
           val = val.trim();
         }
 
-        acc = Object.assign(acc, { [key]: val });
+        obj[key] = val;
       }
+    });
 
-      return acc;
-    }, {});
+  return obj;
 }
