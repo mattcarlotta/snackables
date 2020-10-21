@@ -80,6 +80,20 @@ For example:
 }
 ```
 
+or
+
+```json
+{
+  "scripts": {
+    "dev": "ENV_LOAD=.env.base node test.js",
+    "staging": "ENV_LOAD=.env.base,.env.staging node app.js"
+  },
+  "dependencies": {
+    "snackables": "^x.x.x"
+  }
+}
+```
+
 All you need to do now is `require`/`import` the snackables base package as early as possible:
 
 ```javascript

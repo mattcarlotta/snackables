@@ -27,11 +27,14 @@ export default function extract({
   while (i < configs.length) {
     // sets current config
     const config = configs[i];
+
+    // sets current config path file (append .env. if using shorthand)
     const configFile = config.includes(".env") ? config : `.env.${config}`;
 
     try {
       // gets config path
       const envPath = resolve(process.cwd(), configFile);
+
       // checks if "envPath" is a file that exists
       statSync(envPath).isFile();
 

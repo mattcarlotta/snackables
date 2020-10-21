@@ -2,7 +2,6 @@ import { resolve } from "path";
 import extract from "./extract";
 import setENVs from "./set";
 import { logInfo } from "./log";
-
 import { ConfigOptions, ParsedOutput } from "../types";
 
 const defaultPath = resolve(process.cwd(), ".env");
@@ -21,7 +20,7 @@ export default function config({
   encoding = "utf-8",
   path = defaultPath
 }: ConfigOptions): ParsedOutput {
-  // parses ENVS from file
+  // parses ENVS from files
   const parsed = extract({
     configs: Array.isArray(path) ? path : path.split(","),
     debug: Boolean(debug),
