@@ -24,28 +24,27 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv), snackables is 
 [Usage](#usage)
 
 [CLI Options](#cli-options)
-
-- [ENV_LOAD](#env_load)
-- [ENV_DEBUG](#env_debug)
-- [ENV_ENCODE](#env_encode)
-- [Preload](#preload)
+  - [ENV_LOAD](#env_load)
+  - [ENV_DEBUG](#env_debug)
+  - [ENV_ENCODE](#env_encode)
+  - [Preload](#preload)
 
 [Config Method](#config-method)
-
-- [Config Options](#config-options)
-  - [Path](#path)
-  - [Encoding](#encoding)
-  - [Debug](#debug)
+  - [Config Options](#config-options)
+    - [Path](#path)
+    - [Encoding](#encoding)
+    - [Debug](#debug)
 
 [Parse Method](#parse-method)
+  - [ParseRules](#parse-rules)
 
-- [Rules](#rules)
+[Interpolation](#interpolation)
+  - [Interpolation Rules](#interpolation-rules)
 
 [FAQ](#faq)
-
-- [Should I commit my .env files?](#should-i-commit-my-env-files)
-- [How does snackables work and will it overwrite already set or predefined variables?](#how-does-snackables-work-and-will-it-overwrite-already-set-or-predefined-variables)
-- [Is the ENV_LOAD variable required?](#is-the-env_load-variable-required)
+  - [Should I commit my .env files?](#should-i-commit-my-env-files)
+  - [How does snackables work and will it overwrite already set or predefined variables?](#how-does-snackables-work-and-will-it-overwrite-already-set-or-predefined-variables)
+  - [Is the ENV_LOAD variable required?](#is-the-env_load-variable-required)
 
 [Contributing Guide](#contributing-guide)
 
@@ -280,7 +279,7 @@ const config = parse(buf); // will return an object
 console.log(typeof config, config); // object { BASIC : 'basic' }
 ```
 
-### Rules
+### Parse Rules
 
 The parsing method currently supports the following rules:
 
@@ -297,6 +296,50 @@ The parsing method currently supports the following rules:
 ```
 {MULTILINE: 'new
 line'}
+```
+
+## Interpolation
+
+You may want to interoplate ENV values based upon a `process.env` value or a key within the `.env` file. To interoplate a value, simply define it with `$KEY` or `${KEY}`, for example:
+
+Input:
+````dosini
+MESSAGE=Hello
+INTEROP_MESSAGE=$MESSAGE World
+INTEROP_MESSAGE_BRACKETS=${MESSAGE} World
+``
+
+Output:
+```dosini
+MESSAGE=Hello
+INTEROP_MESSAGE=Hello World
+INTEROP_MESSAGE_BRACKETS=Hello World
+````
+
+### Interpolation Rules
+
+- Values can be interpolated based upon a `process.env` value: `BASIC=$NODE_ENV` || `BASIC=${NODE_ENV}`
+- Values in `process.env` take precedence over interpolated values in `.env` files
+- Interoplated values can't be referenced across multiple `.env`s, instead they must only be referenced within the same file
+- The `$` character **must** be escaped when it doesn't refer to another key within the `.env` file: `\$1234`
+- Do not use escaped `\$` within a value when it's key is referenced by another key: 
+
+Input:
+```dosini
+A=\$up
+B=$A
+```
+
+Output:
+```dosini
+A=\$up
+B=
+```
+
+Fix:
+```dosini
+A=up
+B=\$$A
 ```
 
 ## FAQ

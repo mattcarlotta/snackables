@@ -1,12 +1,9 @@
 /* eslint-disable no-console */
 import { config } from "../lib";
 
-jest.spyOn(global.console, "log").mockImplementation();
-jest.spyOn(global.console, "warn").mockImplementation();
-
 describe("Config Method", () => {
-  afterAll(() => {
-    jest.resetModules();
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 
   it("accepts a path argument as a string", () => {
@@ -51,6 +48,9 @@ describe("Config Method", () => {
   });
 
   it("accepts a debug argument", () => {
+    jest.spyOn(global.console, "log").mockImplementation();
+    jest.spyOn(global.console, "warn").mockImplementation();
+
     config({ path: "tests/.env.base", debug: true });
 
     // @ts-ignore
@@ -69,6 +69,73 @@ describe("Config Method", () => {
     // @ts-ignore
     expect(global.console.warn.mock.calls[0][0]).toContain(
       `Unable to extract '${invalidPath}': ENOENT: no such file or directory`
+    );
+  });
+
+  it("interops .env keys", () => {
+    process.env.MACHINE = "node";
+    const result = config({ path: "tests/.env.interp" });
+
+    expect(result).toEqual(
+      expect.objectContaining({
+        BASIC: "basic",
+        BASIC_EXPAND: "basic",
+        BASIC_EMPTY: ""
+      })
+    );
+  });
+
+  it("interops and prioritizes process.env keys over .env keys", () => {
+    process.env.MACHINE = "node";
+    const result = config({ path: "tests/.env.interp" });
+
+    expect(result).toEqual(
+      expect.objectContaining({
+        MACHINE: "machine_env",
+        MACHINE_EXPAND: "node"
+      })
+    );
+  });
+
+  it("interops undefined keys", () => {
+    const result = config({ path: "tests/.env.interp" });
+
+    expect(result).toEqual(
+      expect.objectContaining({
+        UNDEFINED_EXPAND: ""
+      })
+    );
+  });
+
+  it("interops mixed ENV with or without brackets values", () => {
+    const result = config({ path: "tests/.env.interp" });
+
+    expect(result).toEqual(
+      expect.objectContaining({
+        MONGOLAB_URI:
+          "mongodb://root:password@abcd1234.mongolab.com:12345/localhost",
+        MONGOLAB_URI_RECURSIVELY:
+          "mongodb://root:password@abcd1234.mongolab.com:12345/localhost",
+        MONGOLAB_USER: "root",
+        MONGOLAB_USER_RECURSIVELY: "root:password",
+        UNDEFINED_EXPAND: "",
+        WITHOUT_CURLY_BRACES_URI:
+          "mongodb://root:password@abcd1234.mongolab.com:12345/localhost",
+        WITHOUT_CURLY_BRACES_URI_RECURSIVELY:
+          "mongodb://root:password@abcd1234.mongolab.com:12345/localhost",
+        WITHOUT_CURLY_BRACES_USER_RECURSIVELY: "root:password"
+      })
+    );
+  });
+
+  it("doesn't interp escaped $ keys", () => {
+    const result = config({ path: "tests/.env.interp" });
+
+    expect(result).toEqual(
+      expect.objectContaining({
+        ESCAPED_EXPAND: "$ESCAPED",
+        ESCAPED_TITLE: "There are $nakes in my boot$"
+      })
     );
   });
 

@@ -5,7 +5,7 @@ jest.spyOn(global.console, "warn").mockImplementation();
 
 describe("Register", () => {
   afterAll(() => {
-    jest.resetModules();
+    jest.restoreAllMocks();
   });
 
   it("registers ENVs when the package is imported or registered in the CLI", () => {
