@@ -9,5 +9,13 @@
   },
   "files": ["./index.d.ts", "./index.ts"],
   "include": ["**/*.ts"],
-  "exclude": [".github", "coverage", "examples", "node_modules", "lib", "tests"]
+  "exclude": [
+    ".github",
+    "coverage",
+    "examples",
+    "node_modules",
+    "lib",
+    "tests",
+    "compress.ts"
+  ]
 }
