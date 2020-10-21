@@ -72,7 +72,7 @@ describe("Config Method", () => {
     );
   });
 
-  it("doesn't overwrite keys already in process.env", () => {
+  it("overwrites keys already in process.env", () => {
     const AUTHOR = "Matt";
     process.env.AUTHOR = AUTHOR;
 
@@ -80,9 +80,9 @@ describe("Config Method", () => {
 
     expect(result).toEqual(
       expect.objectContaining({
-        AUTHOR: "Hijacker"
+        AUTHOR: "Default"
       })
     );
-    expect(process.env.AUTHOR).toEqual(AUTHOR);
+    expect(process.env.AUTHOR).toEqual(result.AUTHOR);
   });
 });

@@ -308,9 +308,10 @@ For example, `ENV_LOAD=base,dev` has two files `.env.base` and `.env.dev`:
 }
 ```
 
-in development, `.env.base` may have static shared database variables:
+in a local enviroment, `.env.base` may have static shared database variables:
 
 ```dosini
+DB_HOST=localhost
 DB_USER=root
 DB_PASS=password
 ```
@@ -318,14 +319,13 @@ DB_PASS=password
 while `.env.dev` may have environment specific variables:
 
 ```dosini
-DB_HOST=localhost
 HOST=http://localhost
 PORT=3000
 ```
 
-snackables will parse the files and append the ENVs in order of how they were defined in `ENV_LOAD`. However, snackables will **NEVER** modify any predefined environment variables that have already been set to the node process on start up or there after. In short, if there is an ENV variable in your one of your `.env` files that attempts to overwrite a `process.env.XXXX` variable that has already been set to the process (either by node or by you), then that variable won't be appended.
+snackables will parse the files and append the ENVs in order of how they were defined in `ENV_LOAD`.
 
-Although it's **NOT** recommended, any ENV variables that haven't been set to the process yet can be overwritten according to their import order, where the last `.env` import takes precendence over any previous ENVs.
+Any ENV variables in `process.env` or an `.env` can be overwritten according to their imported order, where the last `.env` import takes precendence over any previous ENVs.
 
 ### Is the ENV_LOAD variable required?
 

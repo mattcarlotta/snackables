@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file. See [SemVer
 
 ## [0.0.8] - 2020-20-08
 
+### Added
+
+- Allowed `process.env` variables to be overriden
+
 ### Changed
 
 - Refactored `paths` to be a string, string with commas, or array of strings
