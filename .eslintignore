@@ -2,4 +2,3 @@
 *.json
 lib
 node_modules
-register.js

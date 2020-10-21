@@ -15,7 +15,7 @@
   </a>
 </p>
 
-Heavily inspired by [dotenv](https://github.com/motdotla/dotenv), snackables is a simple to use, [zero-dependency](https://bundlephobia.com/result?p=snackables) package module that automatically loads environment variables from a predefined `ENV_LOAD` variable. When it comes to `.env` file naming, snackables is unopinionated, so you can name them anything you'd like or you can follow the [The Twelve-Factor App](https://12factor.net/config) methodology.
+Heavily inspired by [dotenv](https://github.com/motdotla/dotenv), snackables is a simple to use, [zero-dependency](https://bundlephobia.com/result?p=snackables@) package module that automatically loads environment variables from a predefined `ENV_LOAD` variable. When it comes to `.env` file naming, snackables is unopinionated, so you can name them anything you'd like or you can follow the [The Twelve-Factor App](https://12factor.net/config) methodology.
 
 ## Quick Links
 
@@ -172,10 +172,10 @@ For example:
 
 ### Preload
 
-You can use the `--require` (`-r`) [command line option](https://nodejs.org/api/cli.html#cli_r_require_module) with `snackables/register` to preload your `.env` files! By doing so, you do not need to `require`/`import` the snackables package within your code.
+You can use the `--require` (`-r`) [command line option](https://nodejs.org/api/cli.html#cli_r_require_module) with `snackables` to preload your `.env` files! By doing so, you do not need to `require`/`import` the snackables package within your code.
 
 ```bash
-$ ENV_LOAD=dev node -r snackables/register app.js
+$ ENV_LOAD=dev node -r snackables app.js
 ```
 
 or
@@ -183,7 +183,7 @@ or
 ```json
 {
   "scripts": {
-    "dev": "ENV_LOAD=dev node -r snackables/register app.js"
+    "dev": "ENV_LOAD=dev node -r snackables app.js"
   },
   "dependencies": {
     "snackables": "^x.x.x"
