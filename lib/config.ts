@@ -1,9 +1,9 @@
-import { readFileSync } from "fs";
 import { resolve } from "path";
-import parse from "./parse";
+import extract from "./extract";
 import setENVs from "./set";
-import { logInfo, logWarning } from "./log";
-import { ConfigOptions, ConfigOutput } from "../types";
+import { logInfo } from "./log";
+
+import { ConfigOptions, ParsedOutput } from "../types";
 
 const defaultPath = resolve(process.cwd(), ".env");
 
@@ -20,30 +20,21 @@ export default function config({
   debug = false,
   encoding = "utf-8",
   path = defaultPath
-}: ConfigOptions): ConfigOutput {
-  try {
-    // parses ENVS from file
-    const parsed = parse(readFileSync(path, { encoding }));
+}: ConfigOptions): ParsedOutput {
+  // parses ENVS from file
+  const parsed = extract({
+    configs: Array.isArray(path) ? path : path.split(","),
+    debug: Boolean(debug),
+    encoding
+  });
 
-    if (debug)
-      logInfo(
-        `Extracted '${path}' environment variables: ${JSON.stringify(parsed)}`
-      );
+  // assigns ENVS to process.env
+  setENVs(parsed);
 
-    // assigns ENVS to process.env
-    setENVs(parsed);
+  if (debug)
+    logInfo(
+      `Loaded '${path}' environment variables: ${JSON.stringify(parsed)}`
+    );
 
-    if (debug)
-      logInfo(
-        `Loaded '${path}' environment variables: ${JSON.stringify(parsed)}`
-      );
-
-    return { parsed };
-  } catch (e) {
-    if (debug)
-      logWarning(
-        `Failed to load '${path}' environment variables: ${e.toString()}`
-      );
-    return { error: e.toString() };
-  }
+  return parsed;
 }

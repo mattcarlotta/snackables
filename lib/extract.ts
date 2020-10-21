@@ -17,9 +17,6 @@ export default function extract({
   debug,
   encoding = "utf-8"
 }: ExtractOptions): ParsedOutput {
-  // grabs root directory
-  const root = process.cwd();
-
   // initializes ENV object
   let parsedENVs = {};
 
@@ -30,11 +27,11 @@ export default function extract({
   while (i < configs.length) {
     // sets current config
     const config = configs[i];
+    const configFile = config.includes(".env") ? config : `.env.${config}`;
 
     try {
       // gets config path
-      const envPath = resolve(root, `.env.${config}`);
-
+      const envPath = resolve(process.cwd(), configFile);
       // checks if "envPath" is a file that exists
       statSync(envPath).isFile();
 
@@ -47,14 +44,12 @@ export default function extract({
       /* istanbul ignore else */
       if (debug)
         logInfo(
-          `Extracted 'env.${config}' environment variables: ${JSON.stringify(
+          `Extracted '${configFile}' environment variables: ${JSON.stringify(
             parsed
           )}`
         );
     } catch (e) {
-      logWarning(
-        `Unable to extract 'env.${config}' because the file was not found within the '${root}' directory.`
-      );
+      logWarning(`Unable to extract '${configFile}': ${e.message}.`);
     } finally {
       i += 1;
     }

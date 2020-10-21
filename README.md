@@ -179,19 +179,15 @@ or
 
 ## Config Method
 
-If you wish to manaully import a config, then the config method will read your `.env` file, parse the contents, assign it to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env), and return an object with a `parsed` key containing the loaded content or an `error` key if it failed.
+If you wish to manaully import configs, then the config method will read your `.env` files, parse the contents, assign it to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env), and return an object with parsed keyed ENVS.
 
 ```js
 const result = snackables.config();
 
-if (result.error) {
-  throw result.error;
-}
-
-console.log(result.parsed);
+console.log(result);
 ```
 
-You can additionally, pass options to `config`.
+Additionally, you can pass options to `config`.
 
 ### Config Options
 
@@ -199,12 +195,37 @@ You can additionally, pass options to `config`.
 
 Default: `path.resolve(process.cwd(), '.env')`
 
-You may specify a custom path if your file containing environment variables is located elsewhere.
+You may specify custom paths if your files are located elsewhere (relative to your root directory).
+
+A single file path as a `String`:
 
 ```js
-require("snackables").config({ path: "/custom/path/to/.env" });
+require("snackables").config({ path: "custom/path/to/.env" });
+
 // import { config } from "snackables"
-// config({ path: "/custom/path/to/.env" });
+// config({ path: "custom/path/to/.env" });
+```
+
+Multiple file paths as a single `String` separated by commas:
+
+```js
+require("snackables").config({
+  path: "custom/path/to/.env,custom/path/to/.env.base"
+});
+
+// import { config } from "snackables"
+// config({ path: "custom/path/to/.env,custom/path/to/.env.base" });
+```
+
+Or multiple file paths as an `Array` of `String`s:
+
+```js
+require("snackables").config({
+  path: ["custom/path/to/.env", "custom/path/to/.env.base"]
+});
+
+// import { config } from "snackables"
+// config({ path: ["custom/path/to/.env", "custom/path/to/.env.base"] });
 ```
 
 #### Encoding
@@ -215,6 +236,7 @@ You may specify the encoding of your file containing environment variables.
 
 ```js
 require("snackables").config({ encoding: "latin1" });
+
 // import { config } from "snackables"
 // config({ encoding: "latin1" });
 ```
@@ -227,6 +249,7 @@ You may turn on logging to help debug why certain keys or values are not being s
 
 ```js
 require("snackables").config({ debug: process.env.DEBUG });
+
 // import { config } from "snackables"
 // config({ debug: process.env.DEBUG });
 ```
