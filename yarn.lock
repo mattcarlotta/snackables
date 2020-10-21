@@ -4327,10 +4327,10 @@ slice-ansi@^2.1.0:
     astral-regex "^1.0.0"
     is-fullwidth-code-point "^2.0.0"
 
-snackables@^0.0.12:
-  version "0.0.12"
-  resolved "https://registry.yarnpkg.com/snackables/-/snackables-0.0.12.tgz#61a4963321f20ffd32e0e990567a1fd07f0e7efa"
-  integrity sha512-dbXBzUwq0RifyH5tLkF1SineZED9l/FUQEe+H1pJXuWWlqfNABHyOZ5jUZq//2WONfYHjWuNqaxRMDqXIhH1Rw==
+snackables@^0.0.13:
+  version "0.0.13"
+  resolved "https://registry.yarnpkg.com/snackables/-/snackables-0.0.13.tgz#5f42796a53df842849ebe2652317e594c2002f35"
+  integrity sha512-exfkZn+tuoTn/pypGBZcQuAR0T1Uq8RJzzMHalNs5bm5v/i3d4LAHcvNddw0LS1mD7Z/sZrmFolx2jBMuxnAZQ==
 
 snapdragon-node@^2.0.1:
   version "2.1.1"

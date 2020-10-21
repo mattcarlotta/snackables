@@ -1,25 +1,3 @@
-import { readFileSync, statSync } from "fs";
-import { resolve } from "path";
-import { ConfigOptions, Encoding, ParsedOutput } from "../types";
-
-const { ENV_LOAD, ENV_DEBUG, ENV_ENCODE } = process.env;
-
-/**
- * Loads a single or multiple `.env` file contents into {@link https://nodejs.org/api/process.html#process_process_env | `process.env`}.
- *
- */
-((): void => {
-  // check if ENV_LOAD is defined
-  if (ENV_LOAD != null) {
-    // extract and split all .env.* from ENV_LOAD into a parsed object of ENVS
-    config({
-      path: ENV_LOAD.split(","),
-      debug: Boolean(ENV_DEBUG),
-      encoding: ENV_ENCODE as Encoding
-    });
-  }
-})();
-
 /*
   Copyright (c) 2015, Scott Motte
   All rights reserved.
@@ -45,6 +23,27 @@ const { ENV_LOAD, ENV_DEBUG, ENV_ENCODE } = process.env;
   OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+import { readFileSync, statSync } from "fs";
+import { resolve } from "path";
+import { ConfigOptions, Encoding, ParsedOutput } from "../types";
+
+const { ENV_LOAD, ENV_DEBUG, ENV_ENCODE } = process.env;
+
+/**
+ * Loads a single or multiple `.env` file contents into {@link https://nodejs.org/api/process.html#process_process_env | `process.env`}.
+ *
+ */
+(function () {
+  // check if ENV_LOAD is defined
+  if (ENV_LOAD != null) {
+    // extract and split all .env.* from ENV_LOAD into a parsed object of ENVS
+    config({
+      path: ENV_LOAD.split(","),
+      debug: Boolean(ENV_DEBUG),
+      encoding: ENV_ENCODE as Encoding
+    });
+  }
+})();
 
 /**
  * Parses a string or buffer in the .env file format into an object.
@@ -52,8 +51,45 @@ const { ENV_LOAD, ENV_DEBUG, ENV_ENCODE } = process.env;
  * @param src - contents to be parsed
  * @returns an object with keys and values based on `src`
  */
-function parse(src: string | Buffer): ParsedOutput {
+export function parse(src: string | Buffer): ParsedOutput {
   const obj: any = {};
+
+  function interpolate(envValue: string): string {
+    const matches = envValue.match(/(.?\${?(?:[a-zA-Z0-9_]+)?}?)/g);
+    // only match ${} => envValue.match(/(.?\${(?:[a-zA-Z0-9_]+)?})/g)
+
+    return !matches
+      ? envValue
+      : matches.reduce((newEnv: string, match: string): string => {
+          // parts = ["$string", "@"| ":" | "/", " ", "strippedstring", index: n, input: "$string", groups ]
+          const parts = /(.?)\${?([a-zA-Z0-9_]+)?}?/g.exec(match);
+          // only match ${} =>  /(.?)\${([a-zA-Z0-9_]+)?}/g
+
+          /* istanbul ignore next */
+          if (!parts) return newEnv;
+
+          const { 0: originalValue, 1: prefix, 2: parsedValue } = parts;
+
+          let value, replacePart;
+
+          // if prefix is escaped
+          if (prefix === "\\") {
+            // remove escaped characters
+            replacePart = originalValue;
+            value = replacePart.replace("\\$", "$");
+          } else {
+            // else remove prefix character
+            replacePart = originalValue.substring(prefix.length);
+            // interpolate current process ENVs, otherwise fallback to parsed object
+            value = process.env[parsedValue] || obj[parsedValue] || "";
+
+            // Resolve recursive interpolations
+            value = interpolate(value);
+          }
+
+          return newEnv.replace(replacePart, value);
+        }, envValue);
+  }
 
   // convert Buffers before splitting into lines and processing
   src
@@ -64,7 +100,6 @@ function parse(src: string | Buffer): ParsedOutput {
       const keyValueArr = line.match(/^\s*([\w.-]+)\s*=\s*(.*)?\s*$/);
       // matched?
       if (keyValueArr != null) {
-        const key = keyValueArr[1];
         // default undefined or missing values to empty string
         let val = keyValueArr[2] || "";
         const end = val.length - 1;
@@ -82,7 +117,7 @@ function parse(src: string | Buffer): ParsedOutput {
           val = val.trim();
         }
 
-        obj[key] = val;
+        obj[keyValueArr[1]] = interpolate(val);
       }
     });
 
@@ -101,8 +136,8 @@ function logInfo(msg: string): void {
  * @param encoding - "ascii" | "utf8" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | "hex"
  * @returns an object with keys and values based on `src`
  */
-function config({
-  path = resolve(process.cwd(), ".env"),
+export function config({
+  path = ".env",
   debug = false,
   encoding = "utf-8"
 }: ConfigOptions): ParsedOutput {
@@ -146,11 +181,9 @@ function config({
     }
   }
 
-  process.env = Object.assign(process.env, parsedENVs);
+  Object.assign(process.env, parsedENVs);
 
   if (debug) logInfo(`Assigned ${JSON.stringify(parsedENVs)} to process.env`);
 
   return parsedENVs;
 }
-
-export { config, parse };
