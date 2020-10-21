@@ -16,13 +16,7 @@ const options = {
   }
 };
 
-const files = [
-  "lib/config.js",
-  "lib/index.js",
-  "lib/parse.js",
-  "lib/set.js",
-  "register.js"
-];
+const files = ["lib/config.js", "lib/index.js", "lib/parse.js", "register.js"];
 
 (async () => {
   try {

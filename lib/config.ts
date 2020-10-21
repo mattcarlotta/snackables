@@ -1,7 +1,6 @@
 import { readFileSync, statSync } from "fs";
 import { resolve } from "path";
 import parse from "./parse";
-import setENVs from "./set";
 import { ConfigOptions, ParsedOutput } from "../types";
 
 function logInfo(msg: string): void {
@@ -21,7 +20,7 @@ export default function config({
   debug = false,
   encoding = "utf-8"
 }: ConfigOptions): ParsedOutput {
-  // split config into array of strings
+  // split path into array of strings
   const configs = Array.isArray(path) ? path : path.split(",");
 
   // initializes ENV object
@@ -48,7 +47,6 @@ export default function config({
       // assigns ENVs to ENV object
       parsedENVs = Object.assign(parsedENVs, parsed);
 
-      /* istanbul ignore else */
       if (debug)
         logInfo(
           `Extracted '${configFile}' environment variables: ${JSON.stringify(
@@ -62,7 +60,7 @@ export default function config({
     }
   }
 
-  setENVs(parsedENVs);
+  process.env = Object.assign(process.env, parsedENVs);
 
   if (debug) logInfo(`Assigned ${JSON.stringify(parsedENVs)} to process.env`);
 

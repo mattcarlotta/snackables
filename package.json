@@ -1,6 +1,6 @@
 {
   "name": "snackables",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Loading byte sized ENVs made simple.",
   "main": "lib/index.js",
   "sideEffects": false,
@@ -65,7 +65,7 @@
     "jest": "^26.6.0",
     "prettier": "^2.1.1",
     "rimraf": "^3.0.2",
-    "snackables": "^0.0.9",
+    "snackables": "^0.0.10",
     "terser": "^5.3.7",
     "ts-jest": "^26.3.0",
     "ts-node": "^9.0.0",

@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [SemVer 2.0](https://semver.org/) for commit guidelines.
 
+## [0.0.11] - 2020-20-08
+
+### Removed
+
+- Removed unnecessary `set` method
+
 ## [0.0.10] - 2020-20-08
 
 ### Changed
