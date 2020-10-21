@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file. See [SemVer
 
 ### Changed
 
--  Updated dependencies
+- Updated dependencies
 
 ## [0.0.15] - 2020-21-10
 
