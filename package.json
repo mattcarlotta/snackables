@@ -22,6 +22,7 @@
     "ex:basic": "ENV_LOAD=test ENV_DEBUG=true ts-node examples/basic.ts",
     "ex:path": "ts-node examples/path.ts",
     "ex:preload": "ENV_LOAD=test ENV_DEBUG=true ts-node -r snackables/register examples/preload.ts",
+    "ex:preloadpath": "ENV_LOAD=.env.base,.env.test ENV_DEBUG=true ts-node -r snackables/register examples/preloadpath.ts",
     "ex:snackable": "ENV_LOAD=base,test ENV_DEBUG=true ts-node examples/snackable.ts",
     "ex:strpaths": "ts-node examples/strpaths.ts",
     "lint": "eslint ./ --ext .ts,.js",
