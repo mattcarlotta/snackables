@@ -2,7 +2,6 @@ import { resolve } from "path";
 import extract from "./extract";
 import setENVs from "./set";
 import { logInfo } from "./log";
-
 import { ConfigOptions, ParsedOutput } from "../types";
 
 const defaultPath = resolve(process.cwd(), ".env");
