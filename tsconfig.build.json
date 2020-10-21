@@ -8,7 +8,7 @@
     "noEmitOnError": true
   },
   "files": ["./types/index.d.ts", "./lib/index.ts"],
-  "include": ["lib/**/*.ts", "register.ts"],
+  "include": ["lib/**/*.ts"],
   "exclude": [
     ".github",
     "coverage",
