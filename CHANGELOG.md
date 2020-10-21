@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [SemVer 2.0](https://semver.org/) for commit guidelines.
 
+## [0.0.13] - 2020-20-08
+
+### Changed
+
+- Combined `config` and `parse` methods into main file
+
 ## [0.0.12] - 2020-20-08
 
 ### Removed

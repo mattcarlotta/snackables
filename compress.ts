@@ -16,19 +16,13 @@ const options = {
   }
 };
 
-const files = ["lib/config.js", "lib/index.js", "lib/parse.js"];
-
 (async () => {
   try {
-    await Promise.all(
-      files.map(async file => {
-        const { code } = await minify(
-          fs.readFileSync(file, { encoding: "utf-8" }),
-          options
-        );
-        if (code) fs.writeFileSync(file, code, { encoding: "utf-8" });
-      })
+    const { code } = await minify(
+      fs.readFileSync("lib/index.js", { encoding: "utf-8" }),
+      options
     );
+    if (code) fs.writeFileSync("lib/index.js", code, { encoding: "utf-8" });
   } catch (error) {
     /* eslint-disable-next-line */
     console.error(error);
