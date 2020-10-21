@@ -2,6 +2,7 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "lib": ["es5"],
+    "target": "es5",
     "noEmit": false
   },
   "files": ["./types/index.d.ts", "./lib/index.ts"],
