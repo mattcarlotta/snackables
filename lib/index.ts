@@ -68,20 +68,18 @@ export function parse(src: string | Buffer): ParsedOutput {
           /* istanbul ignore next */
           if (!parts) return newEnv;
 
-          const { 0: originalValue, 1: prefix, 2: parsedValue } = parts;
-
           let value, replacePart;
 
           // if prefix is escaped
-          if (prefix === "\\") {
+          if (parts[1] === "\\") {
             // remove escaped characters
-            replacePart = originalValue;
+            replacePart = parts[0];
             value = replacePart.replace("\\$", "$");
           } else {
             // else remove prefix character
-            replacePart = originalValue.substring(prefix.length);
+            replacePart = parts[0].substring(parts[1].length);
             // interpolate current process ENVs, otherwise fallback to parsed object
-            value = process.env[parsedValue] || obj[parsedValue] || "";
+            value = process.env[parts[2]] || obj[parts[2]] || "";
 
             // Resolve recursive interpolations
             value = interpolate(value);
@@ -145,7 +143,7 @@ export function config({
   const configs = Array.isArray(path) ? path : path.split(",");
 
   // initializes ENV object
-  let parsedENVs = {};
+  const parsedENVs = {};
 
   // loop over configs array
   for (let i = 0; i < configs.length; i += 1) {
@@ -166,7 +164,7 @@ export function config({
       const parsed = parse(readFileSync(envPath, { encoding }));
 
       // assigns ENVs to ENV object
-      parsedENVs = Object.assign(parsedENVs, parsed);
+      Object.assign(parsedENVs, parsed);
 
       if (debug)
         logInfo(
