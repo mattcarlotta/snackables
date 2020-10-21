@@ -207,7 +207,7 @@ Additionally, you can pass options to `config`.
 
 #### Path
 
-Default: `path.resolve(process.cwd(), '.env')`
+Default: `'.env'`
 
 You may specify custom paths if your files are located elsewhere (relative to your root directory).
 

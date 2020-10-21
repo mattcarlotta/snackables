@@ -8,7 +8,7 @@ const { ENV_LOAD, ENV_DEBUG, ENV_ENCODE } = process.env;
  * Loads a single or multiple `.env` file contents into {@link https://nodejs.org/api/process.html#process_process_env | `process.env`}.
  *
  */
-((): void => {
+(function () {
   // check if ENV_LOAD is defined
   if (ENV_LOAD != null) {
     // extract and split all .env.* from ENV_LOAD into a parsed object of ENVS
@@ -102,7 +102,7 @@ function logInfo(msg: string): void {
  * @returns an object with keys and values based on `src`
  */
 function config({
-  path = resolve(process.cwd(), ".env"),
+  path = ".env",
   debug = false,
   encoding = "utf-8"
 }: ConfigOptions): ParsedOutput {
