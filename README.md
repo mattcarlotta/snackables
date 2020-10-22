@@ -62,10 +62,9 @@ yarn add snackables
 
 ## Usage
 
-Within your package.json, under the `scripts` property, define a `ENV_LOAD` variable and either add a single file
-`ENV_LOAD=file` or add multiple files separated by commas `ENV_LOAD=file,file,file,..etc` before running a process.
+In a CLI or within your package.json or a, under the `scripts` property, define a `ENV_LOAD` variable and either add a single file `ENV_LOAD=file` or add multiple files separated by commas `ENV_LOAD=file,file,file,..etc` before running a process.
 
-For example:
+For example, `.env.*` files can be loaded with shorthand:
 
 ```json
 {
@@ -79,13 +78,27 @@ For example:
 }
 ```
 
-or
+or they can be loaded by their filename:
 
 ```json
 {
   "scripts": {
     "dev": "ENV_LOAD=.env.base node test.js",
     "staging": "ENV_LOAD=.env.base,.env.staging node app.js"
+  },
+  "dependencies": {
+    "snackables": "^x.x.x"
+  }
+}
+```
+
+or they can be loaded as their path + filename:
+
+```json
+{
+  "scripts": {
+    "dev": "ENV_LOAD=custom/path/to.env.base node test.js",
+    "staging": "ENV_LOAD=custom/path/to.env.base,custom/path/to.env.staging node app.js"
   },
   "dependencies": {
     "snackables": "^x.x.x"

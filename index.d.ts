@@ -1,5 +1,6 @@
 /// <reference types="node" />
 
+// accepted encoding types for fs.readFileSync
 export type Encoding =
   | "ascii"
   | "utf8"
@@ -12,22 +13,15 @@ export type Encoding =
   | "binary"
   | "hex";
 
-export interface ExtractOptions {
-  configs: string[]; // .env.* files as an array of strings [".env.a", ".env.b"]
-  debug: boolean; // ouputs extract/assigned ENVs to console
-  encoding: Encoding; // specifies the file encoding type
-}
-
-// keys and values from src
 interface ParsedOutput {
-  [name: string]: string;
+  [name: string]: string; // keys and values from src
 }
 
 /**
- * Parses a string or buffer in the .env file format into an object.
+ * Parses a string or buffer into an object of ENVs.
  *
- * @param src - contents to be parsed
- * @returns an object with keys and values based on `src` string or Buffer
+ * @param src - string or Buffer to be parsed
+ * @returns a single object with parsed ENVs as { key: value } pairs
  */
 
 export function parse(src: string | Buffer): ParsedOutput;
@@ -39,16 +33,15 @@ export interface ConfigOptions {
 }
 
 export interface ConfigOutput {
-  parsed?: ParsedOutput; // parsed ENVs
+  parsed?: ParsedOutput; // parsed ENVs as key value pairs
 }
 
 /**
- * Loads `.env` file contents into {@link https://nodejs.org/api/process.html#process_process_env | `process.env`}.
+ * Extracts and interpolates one or multiple `.env` files into an object and assigns them to {@link https://nodejs.org/api/process.html#process_process_env | `process.env`}.
  * Example: 'KEY=value' becomes { KEY: 'value' }
  *
- * @param options - controls behavior
- * @returns an object with a parsed key value pairs if successful
- *
+ * @param options - accepts: { path: string | string[], debug: boolean, encoding: | "ascii" | "utf8" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary"| "hex" }
+ * @returns a single object with parsed ENVs as { key: value } pairs
  */
 export function config(options?: ConfigOptions): ConfigOutput;
 
