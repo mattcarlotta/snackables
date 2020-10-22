@@ -334,7 +334,7 @@ B=$A
 
 Output:
 ```dosini
-A=\$up
+A=$up
 B=
 ```
 
