@@ -27,7 +27,7 @@ interface ParsedOutput {
  * Parses a string or buffer in the .env file format into an object.
  *
  * @param src - contents to be parsed
- * @returns an object with keys and values based on `src`
+ * @returns an object with keys and values based on `src` string or Buffer
  */
 
 export function parse(src: string | Buffer): ParsedOutput;
@@ -47,7 +47,7 @@ export interface ConfigOutput {
  * Example: 'KEY=value' becomes { parsed: { KEY: 'value' } }
  *
  * @param options - controls behavior
- * @returns an object with a `parsed` key if successful or `error` key if an error occurred
+ * @returns an object with a `parsed` key if successful
  *
  */
 export function config(options?: ConfigOptions): ConfigOutput;
