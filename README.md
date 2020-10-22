@@ -36,7 +36,7 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
     - [Debug](#debug)
 
 [Parse Method](#parse-method)
-  - [ParseRules](#parse-rules)
+  - [Parse Rules](#parse-rules)
 
 [Interpolation](#interpolation)
   - [Interpolation Rules](#interpolation-rules)
