@@ -300,7 +300,7 @@ line'}
 
 ## Interpolation
 
-You may want to interoplate ENV values based upon a `process.env` value or a key within the `.env` file. To interoplate a value, simply define it with `$KEY` or `${KEY}`, for example:
+You may want to interpolate ENV values based upon a `process.env` value or a key within the `.env` file. To interpolate a value, simply define it with `$KEY` or `${KEY}`, for example:
 
 Input:
 ```dosini
