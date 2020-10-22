@@ -1,4 +1,5 @@
 *.log*
+*.js
 node_modules
 coverage
 .cc_token
