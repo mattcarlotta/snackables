@@ -44,10 +44,10 @@ export interface ConfigOutput {
 
 /**
  * Loads `.env` file contents into {@link https://nodejs.org/api/process.html#process_process_env | `process.env`}.
- * Example: 'KEY=value' becomes { parsed: { KEY: 'value' } }
+ * Example: 'KEY=value' becomes { KEY: 'value' }
  *
  * @param options - controls behavior
- * @returns an object with a `parsed` key if successful
+ * @returns an object with a parsed key value pairs if successful
  *
  */
 export function config(options?: ConfigOptions): ConfigOutput;
