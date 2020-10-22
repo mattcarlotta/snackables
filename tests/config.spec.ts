@@ -47,28 +47,24 @@ describe("Config Method", () => {
   });
 
   it("accepts a debug argument", () => {
-    jest.spyOn(global.console, "log").mockImplementation();
-    jest.spyOn(global.console, "warn").mockImplementation();
+    const spy = jest.spyOn(global.console, "log").mockImplementation();
 
     config({ path: "tests/.env.base", debug: true });
 
-    // @ts-ignore
-    expect(global.console.log.mock.calls[0][0]).toContain(
-      "Extracted 'tests/.env.base' environment variables"
-    );
+    expect(spy.mock.calls[0][0]).toContain("Extracted 'tests/.env.base' ENVs");
 
-    // @ts-ignore
-    expect(global.console.log.mock.calls[1][0]).toContain(
+    expect(spy.mock.calls[1][0]).toContain(
       `Assigned {"BASE":"hello"} to process.env`
     );
 
     const invalidPath = "tests/.env.invalid";
     config({ path: "tests/.env.invalid", debug: true });
 
-    // @ts-ignore
-    expect(global.console.warn.mock.calls[0][0]).toContain(
+    expect(spy.mock.calls[2][0]).toContain(
       `Unable to extract '${invalidPath}': ENOENT: no such file or directory`
     );
+
+    spy.mockRestore();
   });
 
   it("interops .env keys", () => {

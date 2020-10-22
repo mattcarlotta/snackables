@@ -36,18 +36,18 @@ const { ENV_LOAD, ENV_DEBUG, ENV_ENCODE } = process.env;
  * @returns an object with keys and values based on `src`
  */
 export function parse(src: string | Buffer): ParsedOutput {
-  const obj: any = {};
+  const obj: ParsedOutput = {};
 
   function interpolate(envValue: string): string {
     const matches = envValue.match(/(.?\${?(?:[a-zA-Z0-9_]+)?}?)/g);
-    // only match ${} => envValue.match(/(.?\${(?:[a-zA-Z0-9_]+)?})/g)
+    // should only match ${brackets} => envValue.match(/(.?\${(?:[a-zA-Z0-9_]+)?})/g) ??
 
     return !matches
       ? envValue
       : matches.reduce((newEnv: string, match: string): string => {
-          // parts = ["$string", "@"| ":" | "/", " ", "strippedstring", index: n, input: "$string", groups ]
           const parts = /(.?)\${?([a-zA-Z0-9_]+)?}?/g.exec(match);
-          // only match ${} =>  /(.?)\${([a-zA-Z0-9_]+)?}/g
+          // parts = ["$string", "@"| ":" | "/", " ", "strippedstring", index: n, input: "$string", groups ]
+          // should only match ${brackets} => /(.?)\${([a-zA-Z0-9_]+)?}/g ??
 
           /* istanbul ignore next */
           if (!parts) return newEnv;
@@ -63,11 +63,8 @@ export function parse(src: string | Buffer): ParsedOutput {
           } else {
             // else remove prefix character
             replacePart = parts[0].substring(parts[1].length);
-            // interpolate current process ENVs, otherwise fallback to parsed object
-            value = process.env[parts[2]] || obj[parts[2]] || "";
-
-            // Resolve recursive interpolations
-            value = interpolate(value);
+            // interpolate value from process or parsed object or empty string
+            value = interpolate(process.env[parts[2]] || obj[parts[2]] || "");
           }
 
           return newEnv.replace(replacePart, value);
@@ -105,10 +102,6 @@ export function parse(src: string | Buffer): ParsedOutput {
     });
 
   return obj;
-}
-
-function logInfo(msg: string): void {
-  console.log(`\x1b[90m[snackables] ${msg}\x1b[0m`);
 }
 
 /**
@@ -152,21 +145,24 @@ export function config({
       Object.assign(parsedENVs, parsed);
 
       if (debug)
-        logInfo(
-          `Extracted '${configFile}' environment variables: ${JSON.stringify(
+        console.log(
+          `\x1b[90mExtracted '${configFile}' ENVs: ${JSON.stringify(
             parsed
-          )}`
+          )}\x1b[0m`
         );
     } catch (e) {
-      console.warn(
-        `\x1b[33m[snackables] Unable to extract '${configFile}': ${e.message}.\x1b[0m`
+      console.log(
+        `\x1b[33mUnable to extract '${configFile}': ${e.message}.\x1b[0m`
       );
     }
   }
 
   Object.assign(process.env, parsedENVs);
 
-  if (debug) logInfo(`Assigned ${JSON.stringify(parsedENVs)} to process.env`);
+  if (debug)
+    console.log(
+      `\x1b[90mAssigned ${JSON.stringify(parsedENVs)} to process.env\x1b[0m`
+    );
 
   return parsedENVs;
 }
@@ -177,12 +173,11 @@ export function config({
  */
 (function () {
   // check if ENV_LOAD is defined
-  if (ENV_LOAD != null) {
+  if (ENV_LOAD != null)
     // extract and split all .env.* from ENV_LOAD into a parsed object of ENVS
     config({
-      path: ENV_LOAD.split(","),
+      path: ENV_LOAD,
       debug: Boolean(ENV_DEBUG),
       encoding: ENV_ENCODE as Encoding
     });
-  }
 })();

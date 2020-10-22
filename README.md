@@ -36,7 +36,7 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
     - [Debug](#debug)
 
 [Parse Method](#parse-method)
-  - [ParseRules](#parse-rules)
+  - [Parse Rules](#parse-rules)
 
 [Interpolation](#interpolation)
   - [Interpolation Rules](#interpolation-rules)
@@ -322,7 +322,7 @@ ENVIRONMENT=development
 
 - Values can be interpolated based upon a `process.env` value: `BASIC=$NODE_ENV` || `BASIC=${NODE_ENV}`
 - Values in `process.env` take precedence over interpolated values in `.env` files
-- Interoplated values can't be referenced across multiple `.env`s, instead they must only be referenced within the same file
+- Interpolated values can't be referenced across multiple `.env`s, instead they must only be referenced within the same file
 - The `$` character **must** be escaped when it doesn't refer to another key within the `.env` file: `\$1234`
 - Do not use escaped `\$` within a value when it's key is referenced by another key: 
 
@@ -334,7 +334,7 @@ B=$A
 
 Output:
 ```dosini
-A=\$up
+A=$up
 B=
 ```
 
