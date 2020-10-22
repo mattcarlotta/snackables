@@ -105,18 +105,15 @@ export function parse(src: string | Buffer): ParsedOutput {
 }
 
 /**
- * Extracts multiple .env files into an object.
+ * Extracts multiple .env files into an object and assigns them to process.env.
  *
- * @param configs - array of string envs: [".env.base", ".env.local"]
- * @param debug - boolean
- * @param encoding - "ascii" | "utf8" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | "hex"
- * @returns an object with keys and values based on `src`
+ * @param options - accepts: { path: string | string[], debug: boolean, encoding: | "ascii" | "utf8" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary"| "hex" }
+ * @returns an object with parsed ENVs as key value pairs
  */
-export function config({
-  path = ".env",
-  debug = false,
-  encoding = "utf-8"
-}: ConfigOptions): ParsedOutput {
+export function config(options?: ConfigOptions): ParsedOutput {
+  const path = options && options.path ? options.path : ".env";
+  const debug = options && options.debug ? options.debug : false;
+  const encoding = options && options.encoding ? options.encoding : "utf-8";
   // split path into array of strings
   const configs = Array.isArray(path) ? path : path.split(",");
 
