@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [SemVer 2.0](https://semver.org/) for commit guidelines.
 
+## [0.0.23] - 2020-23-10
+
+### Changed
+
+- Refactored logic to reduce bundle size
+
 ## [0.0.22] - 2020-22-10
 
 ### Added
