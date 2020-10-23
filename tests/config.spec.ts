@@ -1,10 +1,6 @@
 import { config } from "../index";
 
 describe("Config Method", () => {
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-
   it("accepts a path argument as a string", () => {
     const result = config({ path: "tests/.env.base" });
 

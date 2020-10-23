@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [SemVer 2.0](https://semver.org/) for commit guidelines.
 
+## [0.0.22] - 2020-22-10
+
+### Added
+
+- Added optional internal file caching
+- Introduced a `CACHE_ENV` variable that throws warnings if attempting to load the same env file
+
 ## [0.0.21] - 2020-22-10
 
 ### Changed
