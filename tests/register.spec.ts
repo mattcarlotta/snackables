@@ -1,4 +1,5 @@
-const spy = jest.spyOn(global.console, "log").mockImplementation();
+const spy = jest.spyOn(console, "log").mockImplementation();
+const root = process.cwd();
 
 describe("Register", () => {
   afterAll(() => {
@@ -14,12 +15,16 @@ describe("Register", () => {
     /* eslint-disable-next-line */
     require("../index");
 
-    expect(spy.mock.calls[0][0]).toContain(`Extracted '.env.base' ENVs`);
+    expect(spy.mock.calls[0][0]).toContain(
+      `Extracted '${root}/.env.base' ENVs`
+    );
 
-    expect(spy.mock.calls[1][0]).toContain(`Extracted '.env.test' ENVs`);
+    expect(spy.mock.calls[1][0]).toContain(
+      `Extracted '${root}/.env.test' ENVs`
+    );
 
     expect(spy.mock.calls[2][0]).toContain(
-      `Unable to extract '.env.invalid': ENOENT: no such file or directory`
+      `Unable to extract '${root}/.env.invalid': ENOENT: no such file or directory`
     );
 
     expect(spy.mock.calls[3][0]).toContain(

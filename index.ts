@@ -27,7 +27,7 @@ import { readFileSync, statSync } from "fs";
 import { resolve } from "path";
 import { ConfigOptions, Encoding, ParsedOutput } from "./index.d";
 
-let __CACHE__: string[] = [];
+const __CACHE_: any = {};
 
 /**
  * Parses a string or buffer in the .env file format into an object.
@@ -110,6 +110,11 @@ export function parse(src: string | Buffer): ParsedOutput {
  * @returns an object with parsed ENVs as key value pairs
  */
 export function config(options?: ConfigOptions): ParsedOutput {
+  const { cwd, env } = process;
+  const { ENV_CACHE } = env;
+  const { log } = console;
+  const { assign } = Object;
+
   let path: string | string[] = [".env"];
   let debug;
   let encoding: Encoding = "utf-8";
@@ -132,48 +137,42 @@ export function config(options?: ConfigOptions): ParsedOutput {
     // sets current config
     const config = configs[i];
 
-    // sets current config path file (append .env. if using shorthand)
-    const configFile = config.includes(".env") ? config : `.env.${config}`;
-
+    // gets config path file (append .env. if using shorthand)
+    const envPath = resolve(
+      cwd(),
+      config.includes(".env") ? config : `.env.${config}`
+    );
     try {
-      // gets config path
-      const envPath = resolve(process.cwd(), configFile);
-
       // check that the file hasn't already been cached
-      if (__CACHE__.includes(envPath) && Boolean(process.env.ENV_CACHE))
-        throw Error(`The file has already been loaded`);
+      if (!ENV_CACHE || (!__CACHE_[envPath] && ENV_CACHE)) {
+        // checks if "envPath" is a file that exists
+        statSync(envPath).isFile();
 
-      // checks if "envPath" is a file that exists
-      statSync(envPath).isFile();
+        // store path to internal cache
+        __CACHE_[envPath] = envPath;
 
-      // store path to internal cache
-      __CACHE__.push(envPath);
+        // parses ENVS from path
+        const parsed = parse(readFileSync(envPath, { encoding }));
 
-      // parses ENVS from path
-      const parsed = parse(readFileSync(envPath, { encoding }));
+        // assigns ENVs to ENV object
+        assign(parsedENVs, parsed);
 
-      // assigns ENVs to ENV object
-      Object.assign(parsedENVs, parsed);
-
-      if (debug)
-        console.log(
-          `\x1b[90mExtracted '${configFile}' ENVs: ${JSON.stringify(
-            parsed
-          )}\x1b[0m`
-        );
-    } catch (e) {
-      console.log(
-        `\x1b[33mUnable to extract '${configFile}': ${e.message}.\x1b[0m`
-      );
+        if (debug)
+          log(
+            `\x1b[90mExtracted '${envPath}' ENVs: ${JSON.stringify(
+              parsed
+            )}\x1b[0m`
+          );
+      }
+    } catch (err) {
+      log(`\x1b[33mUnable to extract '${envPath}': ${err.message}.\x1b[0m`);
     }
   }
 
-  Object.assign(process.env, parsedENVs);
+  assign(env, parsedENVs);
 
   if (debug)
-    console.log(
-      `\x1b[90mAssigned ${JSON.stringify(parsedENVs)} to process.env\x1b[0m`
-    );
+    log(`\x1b[90mAssigned ${JSON.stringify(parsedENVs)} to process.env\x1b[0m`);
 
   return parsedENVs;
 }
@@ -184,11 +183,12 @@ export function config(options?: ConfigOptions): ParsedOutput {
  */
 (function () {
   // check if ENV_LOAD is defined
-  if (process.env.ENV_LOAD)
+  const { ENV_LOAD, ENV_DEBUG, ENV_ENCODE } = process.env;
+  if (ENV_LOAD)
     // extract and split all .env.* from ENV_LOAD into a parsed object of ENVS
     config({
-      path: process.env.ENV_LOAD,
-      debug: process.env.ENV_DEBUG,
-      encoding: process.env.ENV_ENCODE as Encoding
+      path: ENV_LOAD,
+      debug: ENV_DEBUG,
+      encoding: ENV_ENCODE as Encoding
     });
 })();
