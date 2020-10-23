@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [SemVer 2.0](https://semver.org/) for commit guidelines.
 
+## [0.0.25] - 2020-23-10
+
+### Added
+
+- Config method returns cached file ENVs and parsed ENVs
+
 ## [0.0.23 - 0.0.24] - 2020-23-10
 
 ### Changed

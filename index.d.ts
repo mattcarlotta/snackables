@@ -14,7 +14,11 @@ export type Encoding =
   | "hex";
 
 interface ParsedOutput {
-  [name: string]: string; // keys and values from src
+  [name: string]: string;
+}
+
+interface cachedENVFiles {
+  [name: string]: string;
 }
 
 /**
@@ -34,6 +38,7 @@ export interface ConfigOptions {
 
 export interface ConfigOutput {
   parsed?: ParsedOutput; // parsed ENVs as key value pairs
+  cachedENVFiles?: cachedENVFiles; // cached ENVs as key value pairs
 }
 
 /**
@@ -41,7 +46,7 @@ export interface ConfigOutput {
  * Example: 'KEY=value' becomes { KEY: 'value' }
  *
  * @param options - accepts: { path: string | string[], debug: boolean, encoding: | "ascii" | "utf8" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary"| "hex" }
- * @returns a single object with parsed ENVs as { key: value } pairs
+ * @returns a single parsed object with parsed ENVs as { key: value } pairs and an array of cached ENVs as { key: value} pairs
  */
 export function config(options?: ConfigOptions): ConfigOutput;
 
