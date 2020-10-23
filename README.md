@@ -27,6 +27,7 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
   - [ENV_LOAD](#env_load)
   - [ENV_DEBUG](#env_debug)
   - [ENV_ENCODE](#env_encode)
+  - [ENV_CACHE](#env_cache)
   - [Preload](#preload)
 
 [Config Method](#config-method)
@@ -62,7 +63,7 @@ yarn add snackables
 
 ## Usage
 
-In a CLI or within your package.json or a, under the `scripts` property, define a `ENV_LOAD` variable and either add a single file `ENV_LOAD=file` or add multiple files separated by commas `ENV_LOAD=file,file,file,..etc` before running a process.
+In a CLI or within your package.json, under the `scripts` property, define a `ENV_LOAD` variable and either add a single file `ENV_LOAD=file` or add multiple files separated by commas `ENV_LOAD=file,file,file,..etc` before running a process.
 
 For example, `.env.*` files can be loaded with shorthand:
 
@@ -175,6 +176,20 @@ For example:
 {
   "scripts": {
     "dev": "ENV_LOAD=dev ENV_ENCODE=latin1 node app.js"
+  },
+  "dependencies": {
+    "snackables": "^x.x.x"
+  }
+}
+```
+### ENV_CACHE
+
+By defining `ENV_CACHE` to `true`, any `.env` file that has been previous extracted and assigned to `process.env` will be stored to temporary cache. Any attempts to reload the same file within the same running process will be skipped and throw warnings. 
+
+```json
+{
+  "scripts": {
+    "dev": "ENV_CACHE=true node app.js"
   },
   "dependencies": {
     "snackables": "^x.x.x"

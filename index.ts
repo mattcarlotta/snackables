@@ -27,7 +27,8 @@ import { readFileSync, statSync } from "fs";
 import { resolve } from "path";
 import { ConfigOptions, Encoding, ParsedOutput } from "./index.d";
 
-const { ENV_LOAD, ENV_DEBUG, ENV_ENCODE } = process.env;
+/* eslint-disable-next-line */
+let __CACHED_ENVS__: string[] = [];
 
 /**
  * Parses a string or buffer in the .env file format into an object.
@@ -112,8 +113,9 @@ export function parse(src: string | Buffer): ParsedOutput {
  */
 export function config(options?: ConfigOptions): ParsedOutput {
   const path = options && options.path ? options.path : ".env";
-  const debug = options && options.debug ? options.debug : false;
+  const debug = options && options.debug ? Boolean(options.debug) : false;
   const encoding = options && options.encoding ? options.encoding : "utf-8";
+
   // split path into array of strings
   const configs = Array.isArray(path) ? path : path.split(",");
 
@@ -132,8 +134,15 @@ export function config(options?: ConfigOptions): ParsedOutput {
       // gets config path
       const envPath = resolve(process.cwd(), configFile);
 
+      // check that the file hasn't already been loaded
+      if (__CACHED_ENVS__.includes(envPath) && Boolean(process.env.ENV_CACHE))
+        throw Error(`The file has already been loaded`);
+
       // checks if "envPath" is a file that exists
       statSync(envPath).isFile();
+
+      // store path to internal cache
+      __CACHED_ENVS__.push(envPath);
 
       // parses ENVS from path
       const parsed = parse(readFileSync(envPath, { encoding }));
@@ -170,11 +179,11 @@ export function config(options?: ConfigOptions): ParsedOutput {
  */
 (function () {
   // check if ENV_LOAD is defined
-  if (ENV_LOAD != null)
+  if (process.env.ENV_LOAD != null)
     // extract and split all .env.* from ENV_LOAD into a parsed object of ENVS
     config({
-      path: ENV_LOAD,
-      debug: Boolean(ENV_DEBUG),
-      encoding: ENV_ENCODE as Encoding
+      path: process.env.ENV_LOAD,
+      debug: process.env.ENV_DEBUG,
+      encoding: process.env.ENV_ENCODE as Encoding
     });
 })();
