@@ -27,8 +27,7 @@ import { readFileSync, statSync } from "fs";
 import { resolve } from "path";
 import { ConfigOptions, Encoding, ParsedOutput } from "./index.d";
 
-/* eslint-disable-next-line */
-let __CACHED_ENVS__: string[] = [];
+let __CACHE__: string[] = [];
 
 /**
  * Parses a string or buffer in the .env file format into an object.
@@ -46,15 +45,14 @@ export function parse(src: string | Buffer): ParsedOutput {
     return !matches
       ? envValue
       : matches.reduce((newEnv: string, match: string): string => {
-          const parts = /(.?)\${?([a-zA-Z0-9_]+)?}?/g.exec(match);
           // parts = ["$string", "@"| ":" | "/", " ", "strippedstring", index: n, input: "$string", groups ]
+          const parts = /(.?)\${?([a-zA-Z0-9_]+)?}?/g.exec(match);
           // should only match ${brackets} => /(.?)\${([a-zA-Z0-9_]+)?}/g ??
 
           /* istanbul ignore next */
           if (!parts) return newEnv;
 
-          let value;
-          let replacePart;
+          let value, replacePart;
 
           // if prefix is escaped
           if (parts[1] === "\\") {
@@ -80,25 +78,25 @@ export function parse(src: string | Buffer): ParsedOutput {
       // matching "KEY' and 'VAL' in 'KEY=VAL'
       const keyValueArr = line.match(/^\s*([\w.-]+)\s*=\s*(.*)?\s*$/);
       // matched?
-      if (keyValueArr != null) {
+      if (keyValueArr) {
         // default undefined or missing values to empty string
-        let val = keyValueArr[2] || "";
-        const end = val.length - 1;
-        const isDoubleQuoted = val[0] === '"' && val[end] === '"';
-        const isSingleQuoted = val[0] === "'" && val[end] === "'";
+        let value = keyValueArr[2] || "";
+        const end = value.length - 1;
+        const isDoubleQuoted = value[0] === '"' && value[end] === '"';
+        const isSingleQuoted = value[0] === "'" && value[end] === "'";
 
         // if single or double quoted, remove quotes
         if (isSingleQuoted || isDoubleQuoted) {
-          val = val.substring(1, end);
+          value = value.substring(1, end);
 
           // if double quoted, expand newlines
-          if (isDoubleQuoted) val = val.replace(/\\n/g, "\n");
+          if (isDoubleQuoted) value = value.replace(/\\n/g, "\n");
         } else {
           // remove surrounding whitespace
-          val = val.trim();
+          value = value.trim();
         }
 
-        obj[keyValueArr[1]] = interpolate(val);
+        obj[keyValueArr[1]] = interpolate(value);
       }
     });
 
@@ -112,9 +110,16 @@ export function parse(src: string | Buffer): ParsedOutput {
  * @returns an object with parsed ENVs as key value pairs
  */
 export function config(options?: ConfigOptions): ParsedOutput {
-  const path = options && options.path ? options.path : ".env";
-  const debug = options && options.debug ? Boolean(options.debug) : false;
-  const encoding = options && options.encoding ? options.encoding : "utf-8";
+  let path: string | string[] = [".env"];
+  let debug;
+  let encoding: Encoding = "utf-8";
+
+  // override default options with options arguments
+  if (options) {
+    path = options.path || path;
+    debug = options.debug;
+    encoding = options.encoding || encoding;
+  }
 
   // split path into array of strings
   const configs = Array.isArray(path) ? path : path.split(",");
@@ -128,21 +133,21 @@ export function config(options?: ConfigOptions): ParsedOutput {
     const config = configs[i];
 
     // sets current config path file (append .env. if using shorthand)
-    const configFile = config.indexOf(".env") > -1 ? config : `.env.${config}`;
+    const configFile = config.includes(".env") ? config : `.env.${config}`;
 
     try {
       // gets config path
       const envPath = resolve(process.cwd(), configFile);
 
-      // check that the file hasn't already been loaded
-      if (__CACHED_ENVS__.includes(envPath) && Boolean(process.env.ENV_CACHE))
+      // check that the file hasn't already been cached
+      if (__CACHE__.includes(envPath) && Boolean(process.env.ENV_CACHE))
         throw Error(`The file has already been loaded`);
 
       // checks if "envPath" is a file that exists
       statSync(envPath).isFile();
 
       // store path to internal cache
-      __CACHED_ENVS__.push(envPath);
+      __CACHE__.push(envPath);
 
       // parses ENVS from path
       const parsed = parse(readFileSync(envPath, { encoding }));
@@ -179,7 +184,7 @@ export function config(options?: ConfigOptions): ParsedOutput {
  */
 (function () {
   // check if ENV_LOAD is defined
-  if (process.env.ENV_LOAD != null)
+  if (process.env.ENV_LOAD)
     // extract and split all .env.* from ENV_LOAD into a parsed object of ENVS
     config({
       path: process.env.ENV_LOAD,

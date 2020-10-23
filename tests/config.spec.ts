@@ -1,6 +1,16 @@
 import { config } from "../index";
 
 describe("Config Method", () => {
+  it("loads a default .env file", () => {
+    const result = config();
+
+    expect(result).toEqual(
+      expect.objectContaining({
+        ROOT: "true"
+      })
+    );
+  });
+
   it("accepts a path argument as a string", () => {
     const result = config({ path: "tests/.env.base" });
 

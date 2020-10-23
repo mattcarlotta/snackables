@@ -25,6 +25,8 @@
     "@typescript-eslint/ban-ts-comment": 0,
     "@typescript-eslint/no-explicit-any": 0,
     "prefer-object-spread": 0,
+    "prefer-const": 0,
+    "one-var": 0,
     "no-console": 0,
     "camelcase": 0,
     "func-names": 0,

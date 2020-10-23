@@ -182,7 +182,7 @@ For example:
   }
 }
 ```
-### ENV_CACHE
+#### ENV_CACHE
 
 By defining `ENV_CACHE` to `true`, any `.env` file that has been previous extracted and assigned to `process.env` will be stored to temporary cache. Any attempts to reload the same file within the same running process will be skipped and throw warnings. 
 
