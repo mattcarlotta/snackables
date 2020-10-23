@@ -1,5 +1,7 @@
 import { config } from "../index";
 
+const root = process.cwd();
+
 describe("Config Method", () => {
   it("loads a default .env file", () => {
     const result = config();
@@ -53,11 +55,13 @@ describe("Config Method", () => {
   });
 
   it("accepts a debug argument", () => {
-    const spy = jest.spyOn(global.console, "log").mockImplementation();
+    const spy = jest.spyOn(console, "log").mockImplementation();
 
     config({ path: "tests/.env.base", debug: true });
 
-    expect(spy.mock.calls[0][0]).toContain("Extracted 'tests/.env.base' ENVs");
+    expect(spy.mock.calls[0][0]).toContain(
+      `Extracted '${root}/tests/.env.base' ENVs`
+    );
 
     expect(spy.mock.calls[1][0]).toContain(
       `Assigned {"BASE":"hello"} to process.env`
@@ -67,7 +71,7 @@ describe("Config Method", () => {
     config({ path: "tests/.env.invalid", debug: true });
 
     expect(spy.mock.calls[2][0]).toContain(
-      `Unable to extract '${invalidPath}': ENOENT: no such file or directory`
+      `Unable to extract '${root}/${invalidPath}': ENOENT: no such file or directory`
     );
 
     spy.mockRestore();
