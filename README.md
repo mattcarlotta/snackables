@@ -220,12 +220,13 @@ or
 
 ## Config Method
 
-If you wish to manaully import configs, then the config method will read your `.env` files, parse the contents, assign it to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env), and return an object with parsed keyed ENVS.
+If you wish to manaully import configs, then the config method will read your `.env` files, parse the contents, assign it to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env), and return an object with parsed keyed ENVS as `parsed` and an object with cached envs as `cachedENVFiles`.
 
 ```js
 const result = snackables.config();
 
-console.log(result);
+console.log("parsed", result.parsed);
+console.log("cachedENVFiles", result.cachedENVFiles);
 ```
 
 Additionally, you can pass options to `config`.

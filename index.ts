@@ -25,9 +25,9 @@
 */
 import { readFileSync, statSync } from "fs";
 import { resolve } from "path";
-import { ConfigOptions, Encoding, ParsedOutput } from "./index.d";
+import { ConfigOptions, ConfigOutput, Encoding, ParsedOutput } from "./index.d";
 
-const __CACHE_: any = {};
+const __CACHE__: any = {};
 
 /**
  * Parses a string or buffer in the .env file format into an object.
@@ -107,9 +107,9 @@ export function parse(src: string | Buffer): ParsedOutput {
  * Extracts multiple .env files into an object and assigns them to process.env.
  *
  * @param options - accepts: { path: string | string[], debug: boolean, encoding: | "ascii" | "utf8" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary"| "hex" }
- * @returns an object with parsed ENVs as key value pairs
+ * @returns a single parsed object with parsed ENVs as { key: value } pairs and an array of cached ENVs as { key: value} pairs
  */
-export function config(options?: ConfigOptions): ParsedOutput {
+export function config(options?: ConfigOptions): ConfigOutput {
   const { cwd, env } = process;
   const { ENV_CACHE } = env;
   const { log } = console;
@@ -144,12 +144,12 @@ export function config(options?: ConfigOptions): ParsedOutput {
     );
     try {
       // check that the file hasn't already been cached
-      if (!ENV_CACHE || (!__CACHE_[envPath] && ENV_CACHE)) {
+      if (!ENV_CACHE || (!__CACHE__[envPath] && ENV_CACHE)) {
         // checks if "envPath" is a file that exists
         statSync(envPath).isFile();
 
         // store path to internal cache
-        __CACHE_[envPath] = envPath;
+        __CACHE__[envPath] = envPath;
 
         // parses ENVS from path
         const parsed = parse(readFileSync(envPath, { encoding }));
@@ -174,7 +174,7 @@ export function config(options?: ConfigOptions): ParsedOutput {
   if (debug)
     log(`\x1b[90mAssigned ${JSON.stringify(parsedENVs)} to process.env\x1b[0m`);
 
-  return parsedENVs;
+  return { parsed: parsedENVs, cachedENVFiles: __CACHE__ };
 }
 
 /**

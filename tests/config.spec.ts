@@ -4,9 +4,9 @@ const root = process.cwd();
 
 describe("Config Method", () => {
   it("loads a default .env file", () => {
-    const result = config();
+    const { parsed } = config();
 
-    expect(result).toEqual(
+    expect(parsed).toEqual(
       expect.objectContaining({
         ROOT: "true"
       })
@@ -14,9 +14,9 @@ describe("Config Method", () => {
   });
 
   it("accepts a path argument as a string", () => {
-    const result = config({ path: "tests/.env.base" });
+    const { parsed } = config({ path: "tests/.env.base" });
 
-    expect(result).toEqual(
+    expect(parsed).toEqual(
       expect.objectContaining({
         BASE: "hello"
       })
@@ -24,9 +24,9 @@ describe("Config Method", () => {
   });
 
   it("accepts a path argument as a string of files with commas", () => {
-    const result = config({ path: "tests/.env.base,tests/.env.test" });
+    const { parsed } = config({ path: "tests/.env.base,tests/.env.test" });
 
-    expect(result).toEqual(
+    expect(parsed).toEqual(
       expect.objectContaining({
         BASE: "hello",
         TESTING: "true"
@@ -35,9 +35,9 @@ describe("Config Method", () => {
   });
 
   it("accepts a path argument as an array", () => {
-    const result = config({ path: ["tests/.env.base"] });
+    const { parsed } = config({ path: ["tests/.env.base"] });
 
-    expect(result).toEqual(
+    expect(parsed).toEqual(
       expect.objectContaining({
         BASE: "hello"
       })
@@ -45,9 +45,9 @@ describe("Config Method", () => {
   });
 
   it("accepts an encoding argument", () => {
-    const result = config({ encoding: "utf-8" });
+    const { parsed } = config({ encoding: "utf-8" });
 
-    expect(result).toEqual(
+    expect(parsed).toEqual(
       expect.objectContaining({
         ROOT: "true"
       })
@@ -79,9 +79,9 @@ describe("Config Method", () => {
 
   it("interops .env keys", () => {
     process.env.MACHINE = "node";
-    const result = config({ path: "tests/.env.interp" });
+    const { parsed } = config({ path: "tests/.env.interp" });
 
-    expect(result).toEqual(
+    expect(parsed).toEqual(
       expect.objectContaining({
         BASIC: "basic",
         BASIC_EXPAND: "basic",
@@ -92,9 +92,9 @@ describe("Config Method", () => {
 
   it("interops and prioritizes process.env keys over .env keys", () => {
     process.env.MACHINE = "node";
-    const result = config({ path: "tests/.env.interp" });
+    const { parsed } = config({ path: "tests/.env.interp" });
 
-    expect(result).toEqual(
+    expect(parsed).toEqual(
       expect.objectContaining({
         MACHINE: "machine_env",
         MACHINE_EXPAND: "node"
@@ -103,9 +103,9 @@ describe("Config Method", () => {
   });
 
   it("interops undefined keys", () => {
-    const result = config({ path: "tests/.env.interp" });
+    const { parsed } = config({ path: "tests/.env.interp" });
 
-    expect(result).toEqual(
+    expect(parsed).toEqual(
       expect.objectContaining({
         UNDEFINED_EXPAND: ""
       })
@@ -113,9 +113,9 @@ describe("Config Method", () => {
   });
 
   it("interops mixed ENV with or without brackets values", () => {
-    const result = config({ path: "tests/.env.interp" });
+    const { parsed } = config({ path: "tests/.env.interp" });
 
-    expect(result).toEqual(
+    expect(parsed).toEqual(
       expect.objectContaining({
         MONGOLAB_URI:
           "mongodb://root:password@abcd1234.mongolab.com:12345/localhost",
@@ -134,9 +134,9 @@ describe("Config Method", () => {
   });
 
   it("doesn't interp escaped $ keys", () => {
-    const result = config({ path: "tests/.env.interp" });
+    const { parsed } = config({ path: "tests/.env.interp" });
 
-    expect(result).toEqual(
+    expect(parsed).toEqual(
       expect.objectContaining({
         ESCAPED_EXPAND: "$ESCAPED",
         ESCAPED_TITLE: "There are $nakes in my boot$"
@@ -148,13 +148,13 @@ describe("Config Method", () => {
     const AUTHOR = "Matt";
     process.env.AUTHOR = AUTHOR;
 
-    const result = config({ path: "tests/.env.overwrite" });
+    const { parsed } = config({ path: "tests/.env.overwrite" });
 
-    expect(result).toEqual(
+    expect(parsed).toEqual(
       expect.objectContaining({
         AUTHOR: "Default"
       })
     );
-    expect(process.env.AUTHOR).toEqual(result.AUTHOR);
+    expect(process.env.AUTHOR).toEqual(parsed?.AUTHOR);
   });
 });
