@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [SemVer 2.0](https://semver.org/) for commit guidelines.
 
+## [0.0.26] - 2020-26-10
+
+### Changed
+
+- Config method returns an array of file path ENVs and parsed ENV contents
+- Prevent ENVs in `process.env` from being overwritten
+
 ## [0.0.25] - 2020-23-10
 
 ### Added

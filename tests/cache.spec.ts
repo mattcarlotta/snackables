@@ -6,7 +6,7 @@ const spy = jest.spyOn(console, "log").mockImplementation();
 
 describe("Caching", () => {
   it("prevents the same file from being loaded and throws a warning", () => {
-    const { cachedENVFiles } = config({
+    const { parsed, cachedENVFiles } = config({
       path: "tests/.env.base,tests/.env.base",
       debug: true
     });
@@ -20,9 +20,12 @@ describe("Caching", () => {
     );
 
     expect(cachedENVFiles).toEqual(
-      expect.objectContaining({
-        [envPath]: envPath
-      })
+      expect.arrayContaining([
+        expect.objectContaining({
+          path: envPath,
+          contents: JSON.stringify(parsed)
+        })
+      ])
     );
 
     spy.mockRestore();

@@ -17,9 +17,10 @@ interface ParsedOutput {
   [name: string]: string;
 }
 
-interface cachedENVFiles {
-  [name: string]: string;
-}
+type CachedENVFiles = Array<{
+  path: string;
+  contents: any;
+}>;
 
 /**
  * Parses a string or buffer into an object of ENVs.
@@ -37,9 +38,11 @@ export interface ConfigOptions {
 }
 
 export interface ConfigOutput {
-  parsed?: ParsedOutput; // parsed ENVs as key value pairs
-  cachedENVFiles?: cachedENVFiles; // cached ENVs as key value pairs
+  parsed: ParsedOutput; // parsed ENVs as key value pairs
+  cachedENVFiles: CachedENVFiles; // cached ENVs as key value pairs
 }
+
+function getCache(): CachedENVFiles;
 
 /**
  * Extracts and interpolates one or multiple `.env` files into an object and assigns them to {@link https://nodejs.org/api/process.html#process_process_env | `process.env`}.
@@ -54,4 +57,5 @@ export function config(options?: ConfigOptions): ConfigOutput;
 export interface SnackableEnv {
   config: typeof config;
   parse: typeof parse;
+  getCache: typeof getCache;
 }

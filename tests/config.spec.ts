@@ -144,17 +144,19 @@ describe("Config Method", () => {
     );
   });
 
-  it("overwrites keys already in process.env", () => {
+  it("overwrites keys in other envs but not ENVs already in process.env", () => {
     const AUTHOR = "Matt";
     process.env.AUTHOR = AUTHOR;
 
-    const { parsed } = config({ path: "tests/.env.overwrite" });
+    const { parsed } = config({ path: "tests/.env.base,tests/.env.overwrite" });
 
     expect(parsed).toEqual(
       expect.objectContaining({
-        AUTHOR: "Default"
+        AUTHOR: "Default",
+        BASE: "bye"
       })
     );
-    expect(process.env.AUTHOR).toEqual(parsed?.AUTHOR);
+
+    expect(process.env.AUTHOR).toEqual(AUTHOR);
   });
 });
