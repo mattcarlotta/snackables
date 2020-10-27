@@ -74,13 +74,13 @@ export function parse(src: string | Buffer | LoadedEnvFiles): ParsedENVs {
   const { assign } = Object;
   const { env } = process;
   const { PROCESSED_ENV_CACHE } = env;
-  const extractedEnvs: ParsedENVs = {};
+  const extracted: ParsedENVs = {};
 
   // check if src is an array of precached ENVs
   if (!PROCESSED_ENV_CACHE && Array.isArray(src)) {
     for (let i = 0; i < src.length; i += 1) {
       process.env = assign(
-        extractedEnvs,
+        extracted,
         JSON.parse(Buffer.from(src[i].contents, "base64").toString()),
         env
       );
@@ -112,7 +112,7 @@ export function parse(src: string | Buffer | LoadedEnvFiles): ParsedENVs {
             // else remove prefix character
             replacePart = parts[0].substring(parts[1].length);
             // interpolate value from process or parsed object or empty string
-            value = interpolate(env[parts[2]] || extractedEnvs[parts[2]] || "");
+            value = interpolate(env[parts[2]] || extracted[parts[2]] || "");
           }
 
           return newEnv.replace(replacePart, value);
@@ -149,11 +149,11 @@ export function parse(src: string | Buffer | LoadedEnvFiles): ParsedENVs {
         value = interpolate(value);
 
         // prevent the extracted value from overwriting a process.env variable
-        if (!process.env[keyValueArr[1]]) extractedEnvs[keyValueArr[1]] = value;
+        if (!process.env[keyValueArr[1]]) extracted[keyValueArr[1]] = value;
       }
     });
 
-  return extractedEnvs;
+  return extracted;
 }
 
 /**
@@ -231,7 +231,7 @@ export function config(options?: ConfigOptions): ConfigOutput {
   }
 
   return {
-    parsed: process.env = Object.assign(extracted, process.env),
+    parsed: process.env = Object.assign({}, extracted, process.env),
     extracted,
     cachedEnvFiles: __CACHE__
   };
