@@ -21,7 +21,7 @@ export type ProcessEnv = { [key: string]: string };
 
 export type LoadedEnvFiles = Array<{
   path: string;
-  contents: any;
+  contents: string;
 }>;
 
 /**
@@ -30,7 +30,15 @@ export type LoadedEnvFiles = Array<{
  * @param src - string or Buffer or an array of precached files to be parsed
  * @returns a single object with parsed ENVs as { key: value } pairs
  */
-export function parse(src: string | Buffer | LoadedEnvFiles): ParsedENVs;
+export function parse(src: string | Buffer): ParsedENVs;
+
+/**
+ * Parses a string or buffer into an object of ENVs.
+ *
+ * @param src - loaded precached Buffer extracted ENVs contents
+ * @returns a single object with parsed ENVs as { key: value } pairs
+ */
+export function parseCache(src: LoadedEnvFiles): ProcessEnv;
 
 export interface ConfigOptions {
   dir?: string; // directory to env files
@@ -66,4 +74,5 @@ export interface SnackableEnv {
   config: typeof config;
   parse: typeof parse;
   getCache: typeof getCache;
+  parseCache: typeof parseCache;
 }

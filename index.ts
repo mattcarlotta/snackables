@@ -56,6 +56,25 @@ function setENVS(extracted: ParsedENVs): ProcessEnv {
 }
 
 /**
+ * Parses a string or buffer into an object of ENVs.
+ *
+ * @param src - pre-cached extracted ENVs
+ * @returns a single object with parsed ENVs as { key: value } pairs
+ */
+export function parseCache(src: LoadedEnvFiles): ProcessEnv {
+  const extracted: ParsedENVs = {};
+  if (!process.env.PROCESSED_ENV_CACHE) {
+    for (let i = 0; i < src.length; i += 1) {
+      Object.assign(
+        extracted,
+        JSON.parse(Buffer.from(src[i].contents, "base64").toString())
+      );
+    }
+  }
+  return setENVS(extracted);
+}
+
+/**
  * Parses a string or buffer in the .env file format into an object.
  *
  * @param src - contents to be parsed
@@ -63,14 +82,6 @@ function setENVS(extracted: ParsedENVs): ProcessEnv {
  */
 export function parse(src: string | Buffer | LoadedEnvFiles): ParsedENVs {
   // check if src is an array of precached ENVs
-  if (Array.isArray(src)) {
-    const extracted: ParsedENVs = {};
-    for (let i = 0; i < src.length; i += 1) {
-      Object.assign(extracted, parse(src[i].contents));
-    }
-    return setENVS(extracted);
-  }
-
   const obj: ParsedENVs = {};
 
   function interpolate(envValue: string): string {
@@ -199,7 +210,7 @@ export function config(options?: ConfigOptions): ConfigOutput {
         // stores path and contents to internal cache
         __CACHE__.push({
           path: envPath,
-          contents: fileContent
+          contents: Buffer.from(JSON.stringify(parsed)).toString("base64")
         });
 
         // assigns ENVs to accumulated object

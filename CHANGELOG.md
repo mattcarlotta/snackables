@@ -2,7 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [SemVer 2.0](https://semver.org/) for commit guidelines.
 
-## [0.0.26] - 2020-26-10
+## [0.0.26] - 2020-27-10
+
+### Added
+
+- Added a `parseCache` method to reuse interpolated .env file contents
 
 ### Changed
 
