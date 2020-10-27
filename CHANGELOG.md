@@ -4,14 +4,11 @@ All notable changes to this project will be documented in this file. See [SemVer
 
 ## [0.0.26] - 2020-27-10
 
-### Added
-
-- Added a `parseCache` method to reuse interpolated .env file contents
-
 ### Changed
 
 - Config method returns cachedEnvs, all `process.env` contents, and extracted ENVs as an object
 - Prevented ENVs in `process.env` from being overwritten
+- Parse method optionally parses cached ENV files and applies them to `process.env`
 
 ## [0.0.25] - 2020-23-10
 

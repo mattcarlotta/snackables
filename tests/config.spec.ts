@@ -1,5 +1,5 @@
 import { config } from "../index";
-import { ParsedENVs } from "../index.d";
+import type { ParsedENVs } from "../index";
 
 const root = process.cwd();
 

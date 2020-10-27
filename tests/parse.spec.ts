@@ -1,5 +1,5 @@
 import fs from "fs";
-import { config, parse, parseCache } from "../index";
+import { parse } from "../index";
 
 const parsed = parse(fs.readFileSync("tests/.env", { encoding: "utf8" }));
 
@@ -111,31 +111,21 @@ describe("Parse Method", () => {
   });
 
   it("parses files from cache", () => {
-    const result = config({
-      path: "tests/.env.base"
-    });
+    process.env.ENV_CACHE = "true";
 
-    const parsed = parseCache(result.cachedENVFiles);
-
-    expect(parsed).toEqual(
-      expect.objectContaining({
-        BASE: "hello"
-      })
+    const contents = parse(
+      fs.readFileSync("tests/.env.cache", { encoding: "utf8" })
     );
 
-    process.env.PROCESSED_ENV_CACHE = "true";
-    const parsed2 = parse(
-      fs.readFileSync("tests/.env.overwrite", { encoding: "utf8" })
-    );
     const fakeCache = [
       {
         path: "tests/.env.uft8",
-        contents: Buffer.from(JSON.stringify(parsed2)).toString("base64")
+        contents: Buffer.from(JSON.stringify(contents)).toString("base64")
       }
     ];
 
-    const parsed3 = parseCache(fakeCache);
+    const parsed = parse(fakeCache);
 
-    expect(parsed3.UTF8).toBeUndefined();
+    expect(parsed.CACHE).toBeTruthy();
   });
 });
