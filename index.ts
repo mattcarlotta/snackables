@@ -24,19 +24,24 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 import { readFileSync, statSync } from "fs";
-import { resolve } from "path";
+import { join } from "path";
 import {
-  CachedENVFiles,
+  ENVFiles,
   ConfigOptions,
   ConfigOutput,
   Encoding,
-  ParsedOutput
+  ParsedENVs,
+  ProcessEnv
 } from "./index.d";
 
-const __CACHE__: CachedENVFiles = [];
+const __CACHE__: ENVFiles = [];
 
-export function getCache(): CachedENVFiles {
+export function getCache(): ENVFiles {
   return __CACHE__;
+}
+
+function setENVS(extracted: ParsedENVs): ProcessEnv {
+  return (process.env = Object.assign({}, extracted, process.env));
 }
 
 /**
@@ -45,8 +50,18 @@ export function getCache(): CachedENVFiles {
  * @param src - contents to be parsed
  * @returns an object with keys and values based on `src`
  */
-export function parse(src: string | Buffer): ParsedOutput {
-  const obj: ParsedOutput = {};
+export function parse(src: string | Buffer | ENVFiles): ParsedENVs {
+  // check if src is an array of precached
+  if (Array.isArray(src)) {
+    const extracted: ParsedENVs = {};
+    for (let i = 0; i < src.length; i += 1) {
+      Object.assign(extracted, parse(src[i].contents));
+    }
+    return setENVS(extracted);
+  }
+
+  const obj: ParsedENVs = {};
+  const environment = process.env;
 
   function interpolate(envValue: string): string {
     const matches = envValue.match(/(.?\${?(?:[a-zA-Z0-9_]+)?}?)/g);
@@ -106,7 +121,9 @@ export function parse(src: string | Buffer): ParsedOutput {
           value = value.trim();
         }
 
-        obj[keyValueArr[1]] = interpolate(value);
+        value = interpolate(value);
+
+        if (!environment[keyValueArr[1]]) obj[keyValueArr[1]] = value;
       }
     });
 
@@ -123,14 +140,15 @@ export function config(options?: ConfigOptions): ConfigOutput {
   const { cwd, env } = process;
   const { ENV_CACHE } = env;
   const { log } = console;
-  const { assign } = Object;
 
+  let dir = cwd();
   let path: string | string[] = [".env"];
   let debug;
   let encoding: Encoding = "utf-8";
 
   // override default options with options arguments
   if (options) {
+    dir = options.dir || dir;
     path = options.path || path;
     debug = options.debug;
     encoding = options.encoding || encoding;
@@ -140,7 +158,7 @@ export function config(options?: ConfigOptions): ConfigOutput {
   const configs = Array.isArray(path) ? path : path.split(",");
 
   // initializes ENV object
-  const parsedENVs = {};
+  const extracted = {};
 
   // loop over configs array
   for (let i = 0; i < configs.length; i += 1) {
@@ -148,8 +166,8 @@ export function config(options?: ConfigOptions): ConfigOutput {
     const config = configs[i];
 
     // gets config path file (append .env. if using shorthand)
-    const envPath = resolve(
-      cwd(),
+    const envPath = join(
+      dir,
       config.includes(".env") ? config : `.env.${config}`
     );
     try {
@@ -161,17 +179,19 @@ export function config(options?: ConfigOptions): ConfigOutput {
         // checks if "envPath" is a file that exists
         statSync(envPath).isFile();
 
+        const fileContent = readFileSync(envPath, { encoding });
+
         // parses ENVS from path
-        const parsed = parse(readFileSync(envPath, { encoding }));
+        const parsed = parse(fileContent);
 
         // store path and contents to internal cache
         __CACHE__.push({
           path: envPath,
-          contents: JSON.stringify(parsed)
+          contents: fileContent
         });
 
         // assigns ENVs to ENV object
-        assign(parsedENVs, parsed);
+        Object.assign(extracted, parsed);
 
         if (debug)
           log(
@@ -181,16 +201,22 @@ export function config(options?: ConfigOptions): ConfigOutput {
           );
       }
     } catch (err) {
-      log(`\x1b[33mUnable to extract '${envPath}': ${err.message}.\x1b[0m`);
+      if (err.code !== "ENOENT" || debug) {
+        log(`\x1b[33mUnable to extract '${envPath}': ${err.message}.\x1b[0m`);
+      }
     }
   }
 
-  process.env = assign({}, parsedENVs, process.env);
+  const parsed = setENVS(extracted);
 
   if (debug)
-    log(`\x1b[90mAssigned ${JSON.stringify(parsedENVs)} to process.env\x1b[0m`);
+    log(`\x1b[90mAssigned ${JSON.stringify(extracted)} to process.env\x1b[0m`);
 
-  return { parsed: parsedENVs, cachedENVFiles: __CACHE__ };
+  return {
+    parsed,
+    extracted,
+    cachedENVFiles: __CACHE__
+  };
 }
 
 /**

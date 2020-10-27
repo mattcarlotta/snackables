@@ -6,8 +6,8 @@ All notable changes to this project will be documented in this file. See [SemVer
 
 ### Changed
 
-- Config method returns an array of file path ENVs and parsed ENV contents
-- Prevent ENVs in `process.env` from being overwritten
+- Config method returns cachedEnvs, all `process.env` contents, and extracted ENVs as an object
+- Prevented ENVs in `process.env` from being overwritten
 
 ## [0.0.25] - 2020-23-10
 

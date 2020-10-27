@@ -32,6 +32,7 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 
 [Config Method](#config-method)
   - [Config Options](#config-options)
+    - [Dir](#dir)
     - [Path](#path)
     - [Encoding](#encoding)
     - [Debug](#debug)
@@ -232,6 +233,21 @@ console.log("cachedENVFiles", result.cachedENVFiles);
 Additionally, you can pass options to `config`.
 
 ### Config Options
+
+#### Dir
+
+Default: `process.cwd()` (root directory)
+
+You may specify a single directory path if your files are located elsewhere.
+
+A single directory path as a `String`:
+
+```js
+require("snackables").config({ dir: "./src" });
+
+// import { config } from "snackables"
+// config({ dir: "./src" });
+```
 
 #### Path
 

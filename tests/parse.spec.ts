@@ -1,5 +1,5 @@
 import fs from "fs";
-import { parse } from "../index";
+import { config, parse } from "../index";
 
 const parsed = parse(fs.readFileSync("tests/.env", { encoding: "utf8" }));
 
@@ -108,5 +108,19 @@ describe("Parse Method", () => {
       Buffer.from("SERVER=localhost\r\nPASSWORD=password\r\nDB=tests\r\n")
     );
     expect(RNPayload).toEqual(expectedPayload);
+  });
+
+  it("parses files from cache", () => {
+    const { cachedENVFiles } = config({
+      path: "tests/.env.base"
+    });
+
+    const parsed = parse(cachedENVFiles);
+
+    expect(parsed).toEqual(
+      expect.objectContaining({
+        BASE: "hello"
+      })
+    );
   });
 });
