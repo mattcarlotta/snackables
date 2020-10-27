@@ -19,7 +19,7 @@ interface ParsedENVs {
 
 export type ProcessEnv = { [key: string]: string };
 
-export type ENVFiles = Array<{
+export type LoadedEnvFiles = Array<{
   path: string;
   contents: any;
 }>;
@@ -30,7 +30,7 @@ export type ENVFiles = Array<{
  * @param src - string or Buffer or an array of precached files to be parsed
  * @returns a single object with parsed ENVs as { key: value } pairs
  */
-export function parse(src: string | Buffer | ENVFiles): ParsedENVs;
+export function parse(src: string | Buffer | LoadedEnvFiles): ParsedENVs;
 
 export interface ConfigOptions {
   dir?: string; // directory to env files
@@ -42,7 +42,7 @@ export interface ConfigOptions {
 export interface ConfigOutput {
   parsed: ParsedENVs; // process.env ENVs as key value pairs
   extracted: ParsedENVs; // extracted ENVs as key value pairs
-  cachedENVFiles: ENVFiles; // cached ENVs as key value pairs
+  cachedENVFiles: LoadedEnvFiles; // cached ENVs as key value pairs
 }
 
 /**
@@ -50,7 +50,7 @@ export interface ConfigOutput {
  *
  * @returns an array of cached ENVs as { path: path/to/file, contents: file contents as string} pairs
  */
-export function getCache(): ENVFiles;
+export function getCache(): LoadedEnvFiles;
 
 /**
  * Extracts and interpolates one or multiple `.env` files into an object and assigns them to {@link https://nodejs.org/api/process.html#process_process_env | `process.env`}.

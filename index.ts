@@ -26,22 +26,22 @@
 import { readFileSync, statSync } from "fs";
 import { join } from "path";
 import {
-  ENVFiles,
   ConfigOptions,
   ConfigOutput,
   Encoding,
+  LoadedEnvFiles,
   ParsedENVs,
   ProcessEnv
 } from "./index.d";
 
-const __CACHE__: ENVFiles = [];
+const __CACHE__: LoadedEnvFiles = [];
 
 /**
  * Returns cached envs;
  *
  * @returns an array of cached envs that have already been assign to the process
  */
-export function getCache(): ENVFiles {
+export function getCache(): LoadedEnvFiles {
   return __CACHE__;
 }
 
@@ -61,7 +61,7 @@ function setENVS(extracted: ParsedENVs): ProcessEnv {
  * @param src - contents to be parsed
  * @returns an object with keys and values based on `src`
  */
-export function parse(src: string | Buffer | ENVFiles): ParsedENVs {
+export function parse(src: string | Buffer | LoadedEnvFiles): ParsedENVs {
   // check if src is an array of precached ENVs
   if (Array.isArray(src)) {
     const extracted: ParsedENVs = {};
