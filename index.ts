@@ -72,7 +72,6 @@ export function parse(src: string | Buffer | LoadedEnvFiles): ParsedENVs {
   }
 
   const obj: ParsedENVs = {};
-  const environment = process.env;
 
   function interpolate(envValue: string): string {
     // find interpolated values with $KEY or ${KEY}
@@ -135,7 +134,7 @@ export function parse(src: string | Buffer | LoadedEnvFiles): ParsedENVs {
         value = interpolate(value);
 
         // prevent the extracted value from overwriting a process.env variable
-        if (!environment[keyValueArr[1]]) obj[keyValueArr[1]] = value;
+        if (!process.env[keyValueArr[1]]) obj[keyValueArr[1]] = value;
       }
     });
 
@@ -203,7 +202,7 @@ export function config(options?: ConfigOptions): ConfigOutput {
           contents: fileContent
         });
 
-        // assigns ENVs to ENV object
+        // assigns ENVs to accumulated object
         Object.assign(extracted, parsed);
 
         if (debug) log(`\x1b[90mLoaded env from ${envPath}\x1b[0m`);
@@ -211,7 +210,7 @@ export function config(options?: ConfigOptions): ConfigOutput {
     } catch (err) {
       /* istanbul ignore next */
       if (err.code !== "ENOENT") {
-        log(`\x1b[33mUnable to load '${envPath}': ${err.message}.\x1b[0m`);
+        log(`\x1b[33mUnable to load ${envPath}: ${err.message}.\x1b[0m`);
       }
     }
   }
