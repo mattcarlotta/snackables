@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [SemVer 2.0](https://semver.org/) for commit guidelines.
 
+## [0.0.27] - 2020-27-10
+
+### Changed
+
+- Fix config method to return correct `extracted` envs
+
 ## [0.0.26] - 2020-27-10
 
 ### Changed
