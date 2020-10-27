@@ -5,25 +5,28 @@ process.env.ENV_CACHE = "true";
 const spy = jest.spyOn(console, "log").mockImplementation();
 
 describe("Caching", () => {
+  afterEach(() => {
+    jest.resetModules();
+  });
+
   it("prevents the same file from being loaded and throws a warning", () => {
-    const { cachedENVFiles } = config({
+    const { cachedEnvFiles } = config({
       path: "tests/.env.base,tests/.env.base",
       debug: true
     });
 
     const envPath = `${process.cwd()}/tests/.env.base`;
 
-    expect(spy.mock.calls[0][0]).toContain(`Extracted '${envPath}' ENVs`);
+    expect(spy.mock.calls[0][0]).toContain(`Loaded env from ${envPath}`);
 
-    expect(spy.mock.calls[1][0]).toContain(
-      'Assigned {"BASE":"hello"} to process.env'
-    );
-
-    expect(cachedENVFiles).toEqual(
+    const expectedCached = expect.arrayContaining([
       expect.objectContaining({
-        [envPath]: envPath
+        path: envPath,
+        contents: cachedEnvFiles[0].contents
       })
-    );
+    ]);
+
+    expect(cachedEnvFiles).toEqual(expectedCached);
 
     spy.mockRestore();
   });

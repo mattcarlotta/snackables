@@ -24,30 +24,79 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 import { readFileSync, statSync } from "fs";
-import { resolve } from "path";
-import { ConfigOptions, ConfigOutput, Encoding, ParsedOutput } from "./index.d";
+import { join } from "path";
 
-const __CACHE__: any = {};
+export type Encoding =
+  | "ascii"
+  | "utf8"
+  | "utf-8"
+  | "utf16le"
+  | "ucs2"
+  | "ucs-2"
+  | "base64"
+  | "latin1"
+  | "binary"
+  | "hex";
+
+export interface ParsedENVs {
+  [name: string]: string;
+}
+
+export type ProcessEnv = { [key: string]: string };
+
+export type LoadedEnvFiles = Array<{
+  path: string;
+  contents: string;
+}>;
+
+export interface ConfigOptions {
+  dir?: string; // directory to env files
+  path?: string | string[]; // path to .env file
+  encoding?: Encoding; // encoding of .env file
+  debug?: string | boolean; // turn on logging for debugging purposes
+}
+
+export interface ConfigOutput {
+  parsed: ParsedENVs; // process.env ENVs as key value pairs
+  extracted: ParsedENVs; // extracted ENVs as key value pairs
+  cachedEnvFiles: LoadedEnvFiles; // cached ENVs as key value pairs
+}
+
+const __CACHE__: LoadedEnvFiles = [];
 
 /**
- * Parses a string or buffer in the .env file format into an object.
+ * Parses a string, buffer, or precached envs into an object.
  *
  * @param src - contents to be parsed
  * @returns an object with keys and values based on `src`
  */
-export function parse(src: string | Buffer): ParsedOutput {
-  const obj: ParsedOutput = {};
+export function parse(src: string | Buffer | LoadedEnvFiles): ParsedENVs {
+  const { assign } = Object;
+  const { env } = process;
+  const { PROCESSED_ENV_CACHE } = env;
+  const extractedEnvs: ParsedENVs = {};
+
+  // check if src is an array of precached ENVs
+  if (!PROCESSED_ENV_CACHE && Array.isArray(src)) {
+    for (let i = 0; i < src.length; i += 1) {
+      process.env = assign(
+        extractedEnvs,
+        JSON.parse(Buffer.from(src[i].contents, "base64").toString()),
+        env
+      );
+    }
+    return process.env as ParsedENVs;
+  }
 
   function interpolate(envValue: string): string {
+    // find interpolated values with $KEY or ${KEY}
     const matches = envValue.match(/(.?\${?(?:[a-zA-Z0-9_]+)?}?)/g);
-    // should only match ${brackets} => envValue.match(/(.?\${(?:[a-zA-Z0-9_]+)?})/g) ??
 
     return !matches
       ? envValue
       : matches.reduce((newEnv: string, match: string): string => {
           // parts = ["$string", "@"| ":" | "/", " ", "strippedstring", index: n, input: "$string", groups ]
           const parts = /(.?)\${?([a-zA-Z0-9_]+)?}?/g.exec(match);
-          // should only match ${brackets} => /(.?)\${([a-zA-Z0-9_]+)?}/g ??
 
           /* istanbul ignore next */
           if (!parts) return newEnv;
@@ -63,7 +112,7 @@ export function parse(src: string | Buffer): ParsedOutput {
             // else remove prefix character
             replacePart = parts[0].substring(parts[1].length);
             // interpolate value from process or parsed object or empty string
-            value = interpolate(process.env[parts[2]] || obj[parts[2]] || "");
+            value = interpolate(env[parts[2]] || extractedEnvs[parts[2]] || "");
           }
 
           return newEnv.replace(replacePart, value);
@@ -96,31 +145,38 @@ export function parse(src: string | Buffer): ParsedOutput {
           value = value.trim();
         }
 
-        obj[keyValueArr[1]] = interpolate(value);
+        // interpolate value from .env or process.env
+        value = interpolate(value);
+
+        // prevent the extracted value from overwriting a process.env variable
+        if (!process.env[keyValueArr[1]]) extractedEnvs[keyValueArr[1]] = value;
       }
     });
 
-  return obj;
+  return extractedEnvs;
 }
 
 /**
- * Extracts multiple .env files into an object and assigns them to process.env.
+ * Extracts and interpolates one or multiple `.env` files into an object and assigns them to {@link https://nodejs.org/api/process.html#process_process_env | `process.env`}.
+ * Example: 'KEY=value' becomes { KEY: 'value' }
  *
- * @param options - accepts: { path: string | string[], debug: boolean, encoding: | "ascii" | "utf8" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary"| "hex" }
- * @returns a single parsed object with parsed ENVs as { key: value } pairs and an array of cached ENVs as { key: value} pairs
+ * @param options - accepts: { dir: string, path: string | string[], debug: boolean, encoding: | "ascii" | "utf8" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary"| "hex" }
+ * @returns a single parsed object with parsed ENVs as { key: value } pairs, a single extracted object with extracted ENVS as { key: value } pairs, and an array of cached ENVs as { path: string, contents: string} pairs
  */
 export function config(options?: ConfigOptions): ConfigOutput {
   const { cwd, env } = process;
   const { ENV_CACHE } = env;
   const { log } = console;
-  const { assign } = Object;
 
+  // default config options
+  let dir = cwd();
   let path: string | string[] = [".env"];
   let debug;
   let encoding: Encoding = "utf-8";
 
-  // override default options with options arguments
+  // override default options with config options arguments
   if (options) {
+    dir = options.dir || dir;
     path = options.path || path;
     debug = options.debug;
     encoding = options.encoding || encoding;
@@ -130,7 +186,7 @@ export function config(options?: ConfigOptions): ConfigOutput {
   const configs = Array.isArray(path) ? path : path.split(",");
 
   // initializes ENV object
-  const parsedENVs = {};
+  const extracted: ParsedENVs = {};
 
   // loop over configs array
   for (let i = 0; i < configs.length; i += 1) {
@@ -138,48 +194,51 @@ export function config(options?: ConfigOptions): ConfigOutput {
     const config = configs[i];
 
     // gets config path file (append .env. if using shorthand)
-    const envPath = resolve(
-      cwd(),
+    const envPath = join(
+      dir,
       config.includes(".env") ? config : `.env.${config}`
     );
     try {
       // check that the file hasn't already been cached
-      if (!ENV_CACHE || (!__CACHE__[envPath] && ENV_CACHE)) {
+      if (
+        !ENV_CACHE ||
+        (!__CACHE__.some(({ path }) => path === envPath) && ENV_CACHE)
+      ) {
         // checks if "envPath" is a file that exists
         statSync(envPath).isFile();
 
-        // store path to internal cache
-        __CACHE__[envPath] = envPath;
-
-        // parses ENVS from path
+        // reads and parses ENVS from .env file
         const parsed = parse(readFileSync(envPath, { encoding }));
 
-        // assigns ENVs to ENV object
-        assign(parsedENVs, parsed);
+        // stores path and contents to internal cache
+        if (ENV_CACHE)
+          __CACHE__.push({
+            path: envPath,
+            contents: Buffer.from(JSON.stringify(parsed)).toString("base64")
+          });
 
-        if (debug)
-          log(
-            `\x1b[90mExtracted '${envPath}' ENVs: ${JSON.stringify(
-              parsed
-            )}\x1b[0m`
-          );
+        // assigns ENVs to accumulated object
+        Object.assign(extracted, parsed);
+
+        if (debug) log(`\x1b[90mLoaded env from ${envPath}\x1b[0m`);
       }
     } catch (err) {
-      log(`\x1b[33mUnable to extract '${envPath}': ${err.message}.\x1b[0m`);
+      /* istanbul ignore next */
+      if (err.code !== "ENOENT") {
+        log(`\x1b[33mUnable to load ${envPath}: ${err.message}.\x1b[0m`);
+      }
     }
   }
 
-  assign(env, parsedENVs);
-
-  if (debug)
-    log(`\x1b[90mAssigned ${JSON.stringify(parsedENVs)} to process.env\x1b[0m`);
-
-  return { parsed: parsedENVs, cachedENVFiles: __CACHE__ };
+  return {
+    parsed: process.env = Object.assign(extracted, process.env),
+    extracted,
+    cachedEnvFiles: __CACHE__
+  };
 }
 
 /**
- * Loads a single or multiple `.env` file contents into {@link https://nodejs.org/api/process.html#process_process_env | `process.env`}.
- *
+ * Immediately loads a single or multiple `.env` file contents into {@link https://nodejs.org/api/process.html#process_process_env | `process.env`} when the package is imported.
  */
 (function () {
   // check if ENV_LOAD is defined

@@ -1,22 +1,33 @@
 import { config } from "../index";
+import type { ParsedENVs } from "../index";
 
 const root = process.cwd();
 
 describe("Config Method", () => {
   it("loads a default .env file", () => {
-    const { parsed } = config();
+    const { extracted } = config();
 
-    expect(parsed).toEqual(
+    expect(extracted).toEqual(
       expect.objectContaining({
         ROOT: "true"
       })
     );
   });
 
-  it("accepts a path argument as a string", () => {
-    const { parsed } = config({ path: "tests/.env.base" });
+  it("accepts a dir argument as a string", () => {
+    const { extracted } = config({ dir: "tests" });
 
-    expect(parsed).toEqual(
+    expect(extracted).toEqual(
+      expect.objectContaining({
+        BASIC: "basic"
+      })
+    );
+  });
+
+  it("accepts a path argument as a string", () => {
+    const { extracted } = config({ path: "tests/.env.base" });
+
+    expect(extracted).toEqual(
       expect.objectContaining({
         BASE: "hello"
       })
@@ -24,32 +35,35 @@ describe("Config Method", () => {
   });
 
   it("accepts a path argument as a string of files with commas", () => {
-    const { parsed } = config({ path: "tests/.env.base,tests/.env.test" });
+    const { extracted } = config({ path: "tests/.env.base,tests/.env.test" });
 
-    expect(parsed).toEqual(
+    expect(extracted).toEqual(
       expect.objectContaining({
-        BASE: "hello",
         TESTING: "true"
       })
     );
   });
 
   it("accepts a path argument as an array", () => {
-    const { parsed } = config({ path: ["tests/.env.base"] });
+    const { extracted } = config({ path: ["tests/.env.path"] });
 
-    expect(parsed).toEqual(
+    expect(extracted).toEqual(
       expect.objectContaining({
-        BASE: "hello"
+        SNACKS: "true"
       })
     );
   });
 
   it("accepts an encoding argument", () => {
-    const { parsed } = config({ encoding: "utf-8" });
+    const { extracted } = config({
+      dir: "tests",
+      path: ".env.utf8",
+      encoding: "utf-8"
+    });
 
-    expect(parsed).toEqual(
+    expect(extracted).toEqual(
       expect.objectContaining({
-        ROOT: "true"
+        UTF8: "true"
       })
     );
   });
@@ -57,104 +71,102 @@ describe("Config Method", () => {
   it("accepts a debug argument", () => {
     const spy = jest.spyOn(console, "log").mockImplementation();
 
-    config({ path: "tests/.env.base", debug: true });
+    config({ path: "tests/.env.basic", debug: true });
 
     expect(spy.mock.calls[0][0]).toContain(
-      `Extracted '${root}/tests/.env.base' ENVs`
+      `Loaded env from ${root}/tests/.env.basic`
     );
 
-    expect(spy.mock.calls[1][0]).toContain(
-      `Assigned {"BASE":"hello"} to process.env`
-    );
-
-    const invalidPath = "tests/.env.invalid";
     config({ path: "tests/.env.invalid", debug: true });
-
-    expect(spy.mock.calls[2][0]).toContain(
-      `Unable to extract '${root}/${invalidPath}': ENOENT: no such file or directory`
-    );
 
     spy.mockRestore();
   });
 
-  it("interops .env keys", () => {
-    process.env.MACHINE = "node";
-    const { parsed } = config({ path: "tests/.env.interp" });
+  it("allows non-existent files to silently fail", () => {
+    const spy = jest.spyOn(console, "log").mockImplementation();
 
-    expect(parsed).toEqual(
-      expect.objectContaining({
-        BASIC: "basic",
-        BASIC_EXPAND: "basic",
-        BASIC_EMPTY: ""
-      })
-    );
+    config({ path: "tests/.env.invalid" });
+
+    expect(spy).not.toHaveBeenCalled();
+
+    spy.mockRestore();
   });
 
-  it("interops and prioritizes process.env keys over .env keys", () => {
-    process.env.MACHINE = "node";
-    const { parsed } = config({ path: "tests/.env.interp" });
+  describe("Interpolation", () => {
+    let extracted: ParsedENVs;
+    beforeAll(() => {
+      process.env.MACHINE = "node";
+      extracted = config({ path: "tests/.env.interp" }).extracted;
+    });
 
-    expect(parsed).toEqual(
-      expect.objectContaining({
-        MACHINE: "machine_env",
-        MACHINE_EXPAND: "node"
-      })
-    );
+    it("interops .env keys", () => {
+      expect(extracted).toEqual(
+        expect.objectContaining({
+          BASIC_EXPAND: "basic",
+          BASIC_EMPTY: ""
+        })
+      );
+    });
+
+    it("interops and prioritizes process.env keys over .env keys", () => {
+      expect(extracted).toEqual(
+        expect.objectContaining({
+          MACHINE_EXPAND: "node"
+        })
+      );
+    });
+
+    it("interops undefined keys", () => {
+      expect(extracted).toEqual(
+        expect.objectContaining({
+          UNDEFINED_EXPAND: ""
+        })
+      );
+    });
+
+    it("interops mixed ENV with or without brackets values", () => {
+      expect(extracted).toEqual(
+        expect.objectContaining({
+          MONGOLAB_URI:
+            "mongodb://root:password@abcd1234.mongolab.com:12345/localhost",
+          MONGOLAB_URI_RECURSIVELY:
+            "mongodb://root:password@abcd1234.mongolab.com:12345/localhost",
+          MONGOLAB_USER: "root",
+          MONGOLAB_USER_RECURSIVELY: "root:password",
+          UNDEFINED_EXPAND: "",
+          WITHOUT_CURLY_BRACES_URI:
+            "mongodb://root:password@abcd1234.mongolab.com:12345/localhost",
+          WITHOUT_CURLY_BRACES_URI_RECURSIVELY:
+            "mongodb://root:password@abcd1234.mongolab.com:12345/localhost",
+          WITHOUT_CURLY_BRACES_USER_RECURSIVELY: "root:password"
+        })
+      );
+    });
+
+    it("doesn't interp escaped $ keys", () => {
+      expect(extracted).toEqual(
+        expect.objectContaining({
+          ESCAPED_EXPAND: "$ESCAPED",
+          ESCAPED_TITLE: "There are $nakes in my boot$"
+        })
+      );
+    });
   });
 
-  it("interops undefined keys", () => {
-    const { parsed } = config({ path: "tests/.env.interp" });
-
-    expect(parsed).toEqual(
-      expect.objectContaining({
-        UNDEFINED_EXPAND: ""
-      })
-    );
-  });
-
-  it("interops mixed ENV with or without brackets values", () => {
-    const { parsed } = config({ path: "tests/.env.interp" });
-
-    expect(parsed).toEqual(
-      expect.objectContaining({
-        MONGOLAB_URI:
-          "mongodb://root:password@abcd1234.mongolab.com:12345/localhost",
-        MONGOLAB_URI_RECURSIVELY:
-          "mongodb://root:password@abcd1234.mongolab.com:12345/localhost",
-        MONGOLAB_USER: "root",
-        MONGOLAB_USER_RECURSIVELY: "root:password",
-        UNDEFINED_EXPAND: "",
-        WITHOUT_CURLY_BRACES_URI:
-          "mongodb://root:password@abcd1234.mongolab.com:12345/localhost",
-        WITHOUT_CURLY_BRACES_URI_RECURSIVELY:
-          "mongodb://root:password@abcd1234.mongolab.com:12345/localhost",
-        WITHOUT_CURLY_BRACES_USER_RECURSIVELY: "root:password"
-      })
-    );
-  });
-
-  it("doesn't interp escaped $ keys", () => {
-    const { parsed } = config({ path: "tests/.env.interp" });
-
-    expect(parsed).toEqual(
-      expect.objectContaining({
-        ESCAPED_EXPAND: "$ESCAPED",
-        ESCAPED_TITLE: "There are $nakes in my boot$"
-      })
-    );
-  });
-
-  it("overwrites keys already in process.env", () => {
+  it("overwrites keys in other .envs but not ENVs already defined in process.env", () => {
     const AUTHOR = "Matt";
     process.env.AUTHOR = AUTHOR;
 
-    const { parsed } = config({ path: "tests/.env.overwrite" });
+    const { extracted, parsed } = config({
+      path: "tests/.env.write,tests/.env.overwrite"
+    });
 
-    expect(parsed).toEqual(
+    expect(extracted).toEqual(
       expect.objectContaining({
-        AUTHOR: "Default"
+        WRITE: "false"
       })
     );
-    expect(process.env.AUTHOR).toEqual(parsed?.AUTHOR);
+
+    expect(parsed.AUTHOR).toEqual(AUTHOR);
   });
 });

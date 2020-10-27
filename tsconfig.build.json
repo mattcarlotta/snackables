@@ -2,12 +2,13 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "diagnostics": true,
+    "declaration": true,
     "lib": ["es5"],
     "target": "es5",
     "noEmit": false,
     "noEmitOnError": true
   },
-  "files": ["./index.d.ts", "./index.ts"],
+  "files": ["./index.ts"],
   "include": ["**/*.ts"],
   "exclude": [
     ".github",

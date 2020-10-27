@@ -109,4 +109,23 @@ describe("Parse Method", () => {
     );
     expect(RNPayload).toEqual(expectedPayload);
   });
+
+  it("parses files from cache", () => {
+    process.env.ENV_CACHE = "true";
+
+    const contents = parse(
+      fs.readFileSync("tests/.env.cache", { encoding: "utf8" })
+    );
+
+    const fakeCache = [
+      {
+        path: "tests/.env.uft8",
+        contents: Buffer.from(JSON.stringify(contents)).toString("base64")
+      }
+    ];
+
+    const parsed = parse(fakeCache);
+
+    expect(parsed.CACHE).toBeTruthy();
+  });
 });

@@ -32,6 +32,7 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 
 [Config Method](#config-method)
   - [Config Options](#config-options)
+    - [Dir](#dir)
     - [Path](#path)
     - [Encoding](#encoding)
     - [Debug](#debug)
@@ -233,6 +234,21 @@ Additionally, you can pass options to `config`.
 
 ### Config Options
 
+#### Dir
+
+Default: `process.cwd()` (root directory)
+
+You may specify a single directory path if your files are located elsewhere.
+
+A single directory path as a `String`:
+
+```js
+require("snackables").config({ dir: "./src" });
+
+// import { config } from "snackables"
+// config({ dir: "./src" });
+```
+
 #### Path
 
 Default: `'.env'`
@@ -419,7 +435,7 @@ PORT=3000
 
 snackables will parse the files and append the ENVs in order of how they were defined in `ENV_LOAD`.
 
-Any ENV variables in `process.env` or an `.env` can be overwritten according to their imported order, where the last `.env` import takes precendence over any previous ENVs.
+Any ENV variables with an `.env` can be overwritten according to their imported order, where the last `.env` import takes precendence over any previous ENVs; however predefined/pre-set ENVs within `process.env` can't be overwritten.
 
 ### Is the ENV_LOAD variable required?
 
