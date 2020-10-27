@@ -15,21 +15,9 @@ describe("Register", () => {
     /* eslint-disable-next-line */
     require("../index");
 
-    expect(spy.mock.calls[0][0]).toContain(
-      `Extracted '${root}/.env.base' ENVs`
-    );
+    expect(spy.mock.calls[0][0]).toContain(`Loaded env from ${root}/.env.base`);
 
-    expect(spy.mock.calls[1][0]).toContain(
-      `Extracted '${root}/.env.test' ENVs`
-    );
-
-    expect(spy.mock.calls[2][0]).toContain(
-      `Unable to extract '${root}/.env.invalid': ENOENT: no such file or directory`
-    );
-
-    expect(spy.mock.calls[3][0]).toContain(
-      'Assigned {"BASE":"hello","TESTING":"true"} to process.env'
-    );
+    expect(spy.mock.calls[1][0]).toContain(`Loaded env from ${root}/.env.test`);
 
     expect(process.env.BASE).toEqual("hello");
     expect(process.env.TESTING).toEqual("true");

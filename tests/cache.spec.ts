@@ -13,11 +13,7 @@ describe("Caching", () => {
 
     const envPath = `${process.cwd()}/tests/.env.base`;
 
-    expect(spy.mock.calls[0][0]).toContain(`Extracted '${envPath}' ENVs`);
-
-    expect(spy.mock.calls[1][0]).toContain(
-      'Assigned {"BASE":"hello"} to process.env'
-    );
+    expect(spy.mock.calls[0][0]).toContain(`Loaded env from ${envPath}`);
 
     const expectedCached = expect.arrayContaining([
       expect.objectContaining({

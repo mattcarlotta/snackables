@@ -74,19 +74,10 @@ describe("Config Method", () => {
     config({ path: "tests/.env.basic", debug: true });
 
     expect(spy.mock.calls[0][0]).toContain(
-      `Extracted '${root}/tests/.env.basic' ENVs`
+      `Loaded env from ${root}/tests/.env.basic`
     );
 
-    expect(spy.mock.calls[1][0]).toContain(
-      `Assigned {"BASICENV":"basic"} to process.env`
-    );
-
-    const invalidPath = "tests/.env.invalid";
     config({ path: "tests/.env.invalid", debug: true });
-
-    expect(spy.mock.calls[2][0]).toContain(
-      `Unable to extract '${root}/${invalidPath}': ENOENT: no such file or directory`
-    );
 
     spy.mockRestore();
   });

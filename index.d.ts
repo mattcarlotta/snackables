@@ -33,7 +33,7 @@ export type ENVFiles = Array<{
 export function parse(src: string | Buffer | ENVFiles): ParsedENVs;
 
 export interface ConfigOptions {
-  dir?: string; // root directory
+  dir?: string; // directory to env files
   path?: string | string[]; // path to .env file
   encoding?: Encoding; // encoding of .env file
   debug?: string | boolean; // turn on logging for debugging purposes
