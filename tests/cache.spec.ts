@@ -10,7 +10,7 @@ describe("Caching", () => {
   });
 
   it("prevents the same file from being loaded and throws a warning", () => {
-    const { cachedENVFiles } = config({
+    const { cachedEnvFiles } = config({
       path: "tests/.env.base,tests/.env.base",
       debug: true
     });
@@ -22,11 +22,11 @@ describe("Caching", () => {
     const expectedCached = expect.arrayContaining([
       expect.objectContaining({
         path: envPath,
-        contents: cachedENVFiles[0].contents
+        contents: cachedEnvFiles[0].contents
       })
     ]);
 
-    expect(cachedENVFiles).toEqual(expectedCached);
+    expect(cachedEnvFiles).toEqual(expectedCached);
 
     spy.mockRestore();
   });

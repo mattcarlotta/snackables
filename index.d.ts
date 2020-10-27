@@ -19,7 +19,7 @@ export interface ConfigOptions {
 export interface ConfigOutput {
     parsed: ParsedENVs;
     extracted: ParsedENVs;
-    cachedENVFiles: LoadedEnvFiles;
+    cachedEnvFiles: LoadedEnvFiles;
 }
 /**
  * Parses a string, buffer, or precached envs into an object.

@@ -59,7 +59,7 @@ export interface ConfigOptions {
 export interface ConfigOutput {
   parsed: ParsedENVs; // process.env ENVs as key value pairs
   extracted: ParsedENVs; // extracted ENVs as key value pairs
-  cachedENVFiles: LoadedEnvFiles; // cached ENVs as key value pairs
+  cachedEnvFiles: LoadedEnvFiles; // cached ENVs as key value pairs
 }
 
 const __CACHE__: LoadedEnvFiles = [];
@@ -231,9 +231,9 @@ export function config(options?: ConfigOptions): ConfigOutput {
   }
 
   return {
-    parsed: process.env = Object.assign({}, extracted, process.env),
+    parsed: process.env = Object.assign(extracted, process.env),
     extracted,
-    cachedENVFiles: __CACHE__
+    cachedEnvFiles: __CACHE__
   };
 }
 
