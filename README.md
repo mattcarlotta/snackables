@@ -50,7 +50,7 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 
 [Contributing Guide](#contributing-guide)
 
-[Change Log](#change-log)
+[Updates Log](#updates-log)
 
 ## Installation
 
@@ -466,6 +466,6 @@ config({ ... });
 
 See [CONTRIBUTING.md](CONTRIBUTING.md)
 
-## Change Log
+## Updates Log
 
-See [CHANGELOG.md](CHANGELOG.md)
+See [UPDATESLOG.md](UPDATESLOG.md)

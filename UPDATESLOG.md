@@ -1,12 +1,12 @@
-# Changelog
+# Updates Log
 
-All notable changes to this project will be documented in this file. See [SemVer 2.0](https://semver.org/) for commit guidelines.
+All notable updates to this project will be documented in this file. See [SemVer 2.0](https://semver.org/) for commit guidelines.
 
-## [0.0.29] - 2020-28-10
+## [0.0.29 - 0.0.30] - 2020-28-10
 
-### Added
+### Changed
 
-- Added `CHANGELOG.md` to `.npmignore` file
+- Renamed `CHANGELOG.md` to `UPDATESLOG.md` to be able to exlcude it from published package
 
 ## [0.0.28] - 2020-28-10
 
