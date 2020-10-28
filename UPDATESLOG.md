@@ -6,7 +6,7 @@ All notable updates to this project will be documented in this file. See [SemVer
 
 ### Changed
 
-- Renamed `CHANGELOG.md` to `UPDATESLOG.md` to be able to exlcude it from published package
+- Renamed `CHANGELOG.md` to `UPDATESLOG.md` to be able to exclude it from published package
 
 ## [0.0.28] - 2020-28-10
 
