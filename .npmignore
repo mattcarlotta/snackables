@@ -14,9 +14,8 @@ tests
 .npmrc
 .prettierignore
 .prettierrc
-CHANGELOG.md
 compress.ts
-CONTRIBUTING.md
+UPDATES.md
 jest.json
 snackablesLogo.png
 tsconfig.build.json
