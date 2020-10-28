@@ -9,7 +9,7 @@ describe("Register", () => {
   it("registers ENVs once when the package is imported or registered in the CLI", () => {
     expect(process.env.BASE).toBeUndefined();
     expect(process.env.TESTING).toBeUndefined();
-    process.env.ENV_LOAD = "base,test,invalid";
+    process.env.ENV_LOAD = ".env.base,.env.test,.env.invalid";
     process.env.ENV_DEBUG = "true";
 
     /* eslint-disable-next-line */

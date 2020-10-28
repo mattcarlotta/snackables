@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [SemVer 2.0](https://semver.org/) for commit guidelines.
 
+## [0.0.28] - 2020-28-10
+
+### Added
+
+- Added Codecov CI in `publish` workflow
+
+### Changed
+
+- Updated README
+- Reduce bundle size
+- Removed shorthand `.env` file loading
+
 ## [0.0.27] - 2020-27-10
 
 ### Changed

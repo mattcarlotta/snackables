@@ -46,7 +46,7 @@ jobs:
       - name: Run Tests
         id: tests
         if: steps.lint.exit_code == 0
-        run: yarn test
+        run: yarn test:cov
 
       - name: Create Local Build
         id: build
@@ -54,7 +54,14 @@ jobs:
         run: yarn build
 
       - name: Publish to NPM
+        id: publish
         uses: JS-DevTools/npm-publish@v1
         if: steps.tests.build == 0
         with:
           token: ${{ secrets.TOKEN }}
+
+      - name: Update Code Coverage
+        uses: codecov/codecov-action@v1
+        if: steps.publish.exit_code == 0
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
