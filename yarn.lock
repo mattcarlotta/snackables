@@ -4389,7 +4389,7 @@ slice-ansi@^2.1.0:
     astral-regex "^1.0.0"
     is-fullwidth-code-point "^2.0.0"
 
-snackables@^0.0.27:
+snackables@latest:
   version "0.0.27"
   resolved "https://registry.yarnpkg.com/snackables/-/snackables-0.0.27.tgz#7a2a9588f1ed7230a2e363df1effe40f98fee58d"
   integrity sha512-Q3pPVSmNY/uPik2A6ALmMZts+iRxMzcUUCJqk2Pb4J1dmQw1mEW4i94RGMv0gOAP478mBXFcb/VbFwwMgrE5CA==
