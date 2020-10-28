@@ -1,6 +1,6 @@
 {
   "name": "snackables",
-  "version": "0.0.27",
+  "version": "0.0.28",
   "description": "Loading byte sized ENVs made simple.",
   "main": "lib/index.js",
   "sideEffects": false,
@@ -13,21 +13,21 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json && ts-node compress.ts",
     "ex:arrpaths": "ts-node examples/arrpaths.ts",
-    "ex:basic": "ENV_LOAD=test ENV_DEBUG=true ts-node examples/basic.ts",
-    "ex:cache": "ENV_LOAD=base ENV_DEBUG=true ENV_CACHE=true ts-node examples/cache.ts",
+    "ex:basic": "ENV_LOAD=.env.test ENV_DEBUG=true ts-node examples/basic.ts",
+    "ex:cache": "ENV_LOAD=.env.base ENV_DEBUG=true ENV_CACHE=true ts-node examples/cache.ts",
     "ex:config": "ENV_DEBUG=true ts-node examples/config.ts",
     "ex:interpolate": "ts-node examples/interpolate.ts",
     "ex:parse": "ts-node examples/parse.ts",
     "ex:path": "ts-node examples/path.ts",
-    "ex:preload": "ENV_LOAD=test ENV_DEBUG=true ts-node -r snackables examples/preload.ts",
+    "ex:preload": "ENV_LOAD=.env.test ENV_DEBUG=true ts-node -r snackables examples/preload.ts",
     "ex:preloadcustompaths": "ENV_LOAD=tests/.env.base,tests/.env.test ENV_DEBUG=true ts-node -r snackables examples/preloadcustompaths.ts",
     "ex:preloadpaths": "ENV_LOAD=.env.base,.env.test ENV_DEBUG=true ts-node -r snackables examples/preloadpaths.ts",
     "ex:strpaths": "ts-node examples/strpaths.ts",
     "examples": "npm run ex:arrpaths && npm run ex:basic && npm run ex:cache && npm run ex:config && npm run ex:interpolate && npm run ex:parse && npm run ex:path && npm run ex:preload && npm run ex:preloadcustompaths && npm run ex:preloadpaths && npm run ex:strpaths",
     "lint": "eslint ./ --ext .ts,.js",
-    "test": "jest --config ./jest.json",
-    "test:cov": "jest --config ./jest.json --coverage",
-    "test:watch": "jest --config ./jest.json --watchAll"
+    "test": "rimraf index.js && jest --config ./jest.json",
+    "test:cov": "rimraf index.js && jest --config ./jest.json --coverage",
+    "test:watch": "rimraf index.js && jest --config ./jest.json --watchAll"
   },
   "repository": {
     "type": "git",

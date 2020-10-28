@@ -26,25 +26,13 @@
 import { readFileSync, statSync } from "fs";
 import { join } from "path";
 
-export type Encoding =
-  | "ascii"
-  | "utf8"
-  | "utf-8"
-  | "utf16le"
-  | "ucs2"
-  | "ucs-2"
-  | "base64"
-  | "latin1"
-  | "binary"
-  | "hex";
-
 export interface ParsedENVs {
   [name: string]: string;
 }
 
 export type ProcessEnv = { [key: string]: string };
 
-export type LoadedEnvFiles = Array<{
+export type CachedEnvFiles = Array<{
   path: string;
   contents: string;
 }>;
@@ -52,17 +40,17 @@ export type LoadedEnvFiles = Array<{
 export interface ConfigOptions {
   dir?: string; // directory to env files
   path?: string | string[]; // path to .env file
-  encoding?: Encoding; // encoding of .env file
+  encoding?: BufferEncoding; // encoding of .env file
   debug?: string | boolean; // turn on logging for debugging purposes
 }
 
 export interface ConfigOutput {
   parsed: ParsedENVs; // process.env ENVs as key value pairs
   extracted: ParsedENVs; // extracted ENVs as key value pairs
-  cachedEnvFiles: LoadedEnvFiles; // cached ENVs as key value pairs
+  cachedEnvFiles: CachedEnvFiles; // cached ENVs as key value pairs
 }
 
-const __CACHE__: LoadedEnvFiles = [];
+const _EC_: CachedEnvFiles = [];
 
 /**
  * Parses a string, buffer, or precached envs into an object.
@@ -70,16 +58,15 @@ const __CACHE__: LoadedEnvFiles = [];
  * @param src - contents to be parsed
  * @returns an object with keys and values based on `src`
  */
-export function parse(src: string | Buffer | LoadedEnvFiles): ParsedENVs {
-  const { assign } = Object;
+export function parse(src: string | Buffer | CachedEnvFiles): ParsedENVs {
   const { env } = process;
-  const { PROCESSED_ENV_CACHE } = env;
+  const { LOADED_CACHE } = env;
   const extracted: ParsedENVs = {};
 
   // check if src is an array of precached ENVs
-  if (!PROCESSED_ENV_CACHE && Array.isArray(src)) {
+  if (!LOADED_CACHE && Array.isArray(src)) {
     for (let i = 0; i < src.length; i += 1) {
-      process.env = assign(
+      process.env = Object.assign(
         extracted,
         JSON.parse(Buffer.from(src[i].contents, "base64").toString()),
         env
@@ -111,7 +98,7 @@ export function parse(src: string | Buffer | LoadedEnvFiles): ParsedENVs {
           } else {
             // else remove prefix character
             replacePart = parts[0].substring(parts[1].length);
-            // interpolate value from process or parsed object or empty string
+            // interpolate value from process or extracted object or empty string
             value = interpolate(env[parts[2]] || extracted[parts[2]] || "");
           }
 
@@ -149,7 +136,7 @@ export function parse(src: string | Buffer | LoadedEnvFiles): ParsedENVs {
         value = interpolate(value);
 
         // prevent the extracted value from overwriting a process.env variable
-        if (!process.env[keyValueArr[1]]) extracted[keyValueArr[1]] = value;
+        if (!env[keyValueArr[1]]) extracted[keyValueArr[1]] = value;
       }
     });
 
@@ -171,8 +158,8 @@ export function config(options?: ConfigOptions): ConfigOutput {
   // default config options
   let dir = cwd();
   let path: string | string[] = [".env"];
-  let debug;
-  let encoding: Encoding = "utf-8";
+  let debug: string | boolean | undefined;
+  let encoding: BufferEncoding = "utf-8";
 
   // override default options with config options arguments
   if (options) {
@@ -190,19 +177,13 @@ export function config(options?: ConfigOptions): ConfigOutput {
 
   // loop over configs array
   for (let i = 0; i < configs.length; i += 1) {
-    // sets current config
-    const config = configs[i];
-
     // gets config path file (append .env. if using shorthand)
-    const envPath = join(
-      dir,
-      config.includes(".env") ? config : `.env.${config}`
-    );
+    const envPath = join(dir, configs[i]);
     try {
       // check that the file hasn't already been cached
       if (
         !ENV_CACHE ||
-        (!__CACHE__.some(({ path }) => path === envPath) && ENV_CACHE)
+        (!_EC_.some(({ path }) => path === envPath) && ENV_CACHE)
       ) {
         // checks if "envPath" is a file that exists
         statSync(envPath).isFile();
@@ -212,7 +193,7 @@ export function config(options?: ConfigOptions): ConfigOutput {
 
         // stores path and contents to internal cache
         if (ENV_CACHE)
-          __CACHE__.push({
+          _EC_.push({
             path: envPath,
             contents: Buffer.from(JSON.stringify(parsed)).toString("base64")
           });
@@ -231,9 +212,9 @@ export function config(options?: ConfigOptions): ConfigOutput {
   }
 
   return {
-    parsed: process.env = Object.assign({}, extracted, process.env),
+    parsed: process.env = Object.assign({}, extracted, env),
     extracted,
-    cachedEnvFiles: __CACHE__
+    cachedEnvFiles: _EC_
   };
 }
 
@@ -244,10 +225,9 @@ export function config(options?: ConfigOptions): ConfigOutput {
   // check if ENV_LOAD is defined
   const { ENV_LOAD, ENV_DEBUG, ENV_ENCODE } = process.env;
   if (ENV_LOAD)
-    // extract and split all .env.* from ENV_LOAD into a parsed object of ENVS
     config({
       path: ENV_LOAD,
       debug: ENV_DEBUG,
-      encoding: ENV_ENCODE as Encoding
+      encoding: ENV_ENCODE as BufferEncoding
     });
 })();
