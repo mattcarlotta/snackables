@@ -2,6 +2,12 @@
 
 All notable updates to this project will be documented in this file. See [SemVer 2.0](https://semver.org/) for commit guidelines.
 
+## [0.0.31] - 2020-28-10
+
+### Changed
+
+- Reduced bundle size
+
 ## [0.0.29 - 0.0.30] - 2020-28-10
 
 ### Changed
