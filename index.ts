@@ -220,12 +220,12 @@ export function config(options?: ConfigOptions): ConfigOutput {
 }
 
 /**
- * Immediately loads a single or multiple `.env` file contents into {@link https://nodejs.org/api/process.html#process_process_env | `process.env`} when the package is imported.
+ * Immediately loads a single or multiple `.env` file contents into {@link https://nodejs.org/api/process.html#process_process_env | `process.env`} when the package is preloaded or imported.
  */
 (function () {
   // check if ENV_LOAD is defined
   const { ENV_CACHE, ENV_DIR, ENV_LOAD, ENV_DEBUG, ENV_ENCODE } = process.env;
-  if (ENV_LOAD)
+  if (ENV_LOAD) {
     config({
       dir: ENV_DIR,
       path: ENV_LOAD,
@@ -233,4 +233,7 @@ export function config(options?: ConfigOptions): ConfigOutput {
       encoding: ENV_ENCODE as BufferEncoding,
       cache: ENV_CACHE
     });
+    // prevent the IFFE from reloading the .env files
+    delete process.env.ENV_LOAD;
+  }
 })();
