@@ -1,0 +1,647 @@
+<!DOCTYPE html><html><head>
+      <title>README</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      
+      <link rel="stylesheet" href="file:////home/m6d/.vscode/extensions/shd101wyy.markdown-preview-enhanced-0.5.13/node_modules/@shd101wyy/mume/dependencies/katex/katex.min.css">
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <style>
+      /**
+ * prism.js Github theme based on GitHub's theme.
+ * @author Sam Clarke
+ */
+code[class*="language-"],
+pre[class*="language-"] {
+  color: #333;
+  background: none;
+  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.4;
+
+  -moz-tab-size: 8;
+  -o-tab-size: 8;
+  tab-size: 8;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+  padding: .8em;
+  overflow: auto;
+  /* border: 1px solid #ddd; */
+  border-radius: 3px;
+  /* background: #fff; */
+  background: #f5f5f5;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+  padding: .1em;
+  border-radius: .3em;
+  white-space: normal;
+  background: #f5f5f5;
+}
+
+.token.comment,
+.token.blockquote {
+  color: #969896;
+}
+
+.token.cdata {
+  color: #183691;
+}
+
+.token.doctype,
+.token.punctuation,
+.token.variable,
+.token.macro.property {
+  color: #333;
+}
+
+.token.operator,
+.token.important,
+.token.keyword,
+.token.rule,
+.token.builtin {
+  color: #a71d5d;
+}
+
+.token.string,
+.token.url,
+.token.regex,
+.token.attr-value {
+  color: #183691;
+}
+
+.token.property,
+.token.number,
+.token.boolean,
+.token.entity,
+.token.atrule,
+.token.constant,
+.token.symbol,
+.token.command,
+.token.code {
+  color: #0086b3;
+}
+
+.token.tag,
+.token.selector,
+.token.prolog {
+  color: #63a35c;
+}
+
+.token.function,
+.token.namespace,
+.token.pseudo-element,
+.token.class,
+.token.class-name,
+.token.pseudo-class,
+.token.id,
+.token.url-reference .token.variable,
+.token.attr-name {
+  color: #795da3;
+}
+
+.token.entity {
+  cursor: help;
+}
+
+.token.title,
+.token.title .token.punctuation {
+  font-weight: bold;
+  color: #1d3e81;
+}
+
+.token.list {
+  color: #ed6a43;
+}
+
+.token.inserted {
+  background-color: #eaffea;
+  color: #55a532;
+}
+
+.token.deleted {
+  background-color: #ffecec;
+  color: #bd2c00;
+}
+
+.token.bold {
+  font-weight: bold;
+}
+
+.token.italic {
+  font-style: italic;
+}
+
+
+/* JSON */
+.language-json .token.property {
+  color: #183691;
+}
+
+.language-markup .token.tag .token.punctuation {
+  color: #333;
+}
+
+/* CSS */
+code.language-css,
+.language-css .token.function {
+  color: #0086b3;
+}
+
+/* YAML */
+.language-yaml .token.atrule {
+  color: #63a35c;
+}
+
+code.language-yaml {
+  color: #183691;
+}
+
+/* Ruby */
+.language-ruby .token.function {
+  color: #333;
+}
+
+/* Markdown */
+.language-markdown .token.url {
+  color: #795da3;
+}
+
+/* Makefile */
+.language-makefile .token.symbol {
+  color: #795da3;
+}
+
+.language-makefile .token.variable {
+  color: #183691;
+}
+
+.language-makefile .token.builtin {
+  color: #0086b3;
+}
+
+/* Bash */
+.language-bash .token.keyword {
+  color: #0086b3;
+}
+
+/* highlight */
+pre[data-line] {
+  position: relative;
+  padding: 1em 0 1em 3em;
+}
+pre[data-line] .line-highlight-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: transparent;
+  display: block;
+  width: 100%;
+}
+
+pre[data-line] .line-highlight {
+  position: absolute;
+  left: 0;
+  right: 0;
+  padding: inherit 0;
+  margin-top: 1em;
+  background: hsla(24, 20%, 50%,.08);
+  background: linear-gradient(to right, hsla(24, 20%, 50%,.1) 70%, hsla(24, 20%, 50%,0));
+  pointer-events: none;
+  line-height: inherit;
+  white-space: pre;
+}
+
+pre[data-line] .line-highlight:before, 
+pre[data-line] .line-highlight[data-end]:after {
+  content: attr(data-start);
+  position: absolute;
+  top: .4em;
+  left: .6em;
+  min-width: 1em;
+  padding: 0 .5em;
+  background-color: hsla(24, 20%, 50%,.4);
+  color: hsl(24, 20%, 95%);
+  font: bold 65%/1.5 sans-serif;
+  text-align: center;
+  vertical-align: .3em;
+  border-radius: 999px;
+  text-shadow: none;
+  box-shadow: 0 1px white;
+}
+
+pre[data-line] .line-highlight[data-end]:after {
+  content: attr(data-end);
+  top: auto;
+  bottom: .4em;
+}html body{font-family:"Helvetica Neue",Helvetica,"Segoe UI",Arial,freesans,sans-serif;font-size:16px;line-height:1.6;color:#333;background-color:#fff;overflow:initial;box-sizing:border-box;word-wrap:break-word}html body>:first-child{margin-top:0}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{line-height:1.2;margin-top:1em;margin-bottom:16px;color:#000}html body h1{font-size:2.25em;font-weight:300;padding-bottom:.3em}html body h2{font-size:1.75em;font-weight:400;padding-bottom:.3em}html body h3{font-size:1.5em;font-weight:500}html body h4{font-size:1.25em;font-weight:600}html body h5{font-size:1.1em;font-weight:600}html body h6{font-size:1em;font-weight:600}html body h1,html body h2,html body h3,html body h4,html body h5{font-weight:600}html body h5{font-size:1em}html body h6{color:#5c5c5c}html body strong{color:#000}html body del{color:#5c5c5c}html body a:not([href]){color:inherit;text-decoration:none}html body a{color:#08c;text-decoration:none}html body a:hover{color:#00a3f5;text-decoration:none}html body img{max-width:100%}html body>p{margin-top:0;margin-bottom:16px;word-wrap:break-word}html body>ul,html body>ol{margin-bottom:16px}html body ul,html body ol{padding-left:2em}html body ul.no-list,html body ol.no-list{padding:0;list-style-type:none}html body ul ul,html body ul ol,html body ol ol,html body ol ul{margin-top:0;margin-bottom:0}html body li{margin-bottom:0}html body li.task-list-item{list-style:none}html body li>p{margin-top:0;margin-bottom:0}html body .task-list-item-checkbox{margin:0 .2em .25em -1.8em;vertical-align:middle}html body .task-list-item-checkbox:hover{cursor:pointer}html body blockquote{margin:16px 0;font-size:inherit;padding:0 15px;color:#5c5c5c;background-color:#f0f0f0;border-left:4px solid #d6d6d6}html body blockquote>:first-child{margin-top:0}html body blockquote>:last-child{margin-bottom:0}html body hr{height:4px;margin:32px 0;background-color:#d6d6d6;border:0 none}html body table{margin:10px 0 15px 0;border-collapse:collapse;border-spacing:0;display:block;width:100%;overflow:auto;word-break:normal;word-break:keep-all}html body table th{font-weight:bold;color:#000}html body table td,html body table th{border:1px solid #d6d6d6;padding:6px 13px}html body dl{padding:0}html body dl dt{padding:0;margin-top:16px;font-size:1em;font-style:italic;font-weight:bold}html body dl dd{padding:0 16px;margin-bottom:16px}html body code{font-family:Menlo,Monaco,Consolas,'Courier New',monospace;font-size:.85em !important;color:#000;background-color:#f0f0f0;border-radius:3px;padding:.2em 0}html body code::before,html body code::after{letter-spacing:-0.2em;content:"\00a0"}html body pre>code{padding:0;margin:0;font-size:.85em !important;word-break:normal;white-space:pre;background:transparent;border:0}html body .highlight{margin-bottom:16px}html body .highlight pre,html body pre{padding:1em;overflow:auto;font-size:.85em !important;line-height:1.45;border:#d6d6d6;border-radius:3px}html body .highlight pre{margin-bottom:0;word-break:normal}html body pre code,html body pre tt{display:inline;max-width:initial;padding:0;margin:0;overflow:initial;line-height:inherit;word-wrap:normal;background-color:transparent;border:0}html body pre code:before,html body pre tt:before,html body pre code:after,html body pre tt:after{content:normal}html body p,html body blockquote,html body ul,html body ol,html body dl,html body pre{margin-top:0;margin-bottom:16px}html body kbd{color:#000;border:1px solid #d6d6d6;border-bottom:2px solid #c7c7c7;padding:2px 4px;background-color:#f0f0f0;border-radius:3px}@media print{html body{background-color:#fff}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{color:#000;page-break-after:avoid}html body blockquote{color:#5c5c5c}html body pre{page-break-inside:avoid}html body table{display:table}html body img{display:block;max-width:100%;max-height:100%}html body pre,html body code{word-wrap:break-word;white-space:pre}}.markdown-preview{width:100%;height:100%;box-sizing:border-box}.markdown-preview .pagebreak,.markdown-preview .newpage{page-break-before:always}.markdown-preview pre.line-numbers{position:relative;padding-left:3.8em;counter-reset:linenumber}.markdown-preview pre.line-numbers>code{position:relative}.markdown-preview pre.line-numbers .line-numbers-rows{position:absolute;pointer-events:none;top:1em;font-size:100%;left:0;width:3em;letter-spacing:-1px;border-right:1px solid #999;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.markdown-preview pre.line-numbers .line-numbers-rows>span{pointer-events:none;display:block;counter-increment:linenumber}.markdown-preview pre.line-numbers .line-numbers-rows>span:before{content:counter(linenumber);color:#999;display:block;padding-right:.8em;text-align:right}.markdown-preview .mathjax-exps .MathJax_Display{text-align:center !important}.markdown-preview:not([for="preview"]) .code-chunk .btn-group{display:none}.markdown-preview:not([for="preview"]) .code-chunk .status{display:none}.markdown-preview:not([for="preview"]) .code-chunk .output-div{margin-bottom:16px}.scrollbar-style::-webkit-scrollbar{width:8px}.scrollbar-style::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}.scrollbar-style::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,0.66);border:4px solid rgba(150,150,150,0.66);background-clip:content-box}html body[for="html-export"]:not([data-presentation-mode]){position:relative;width:100%;height:100%;top:0;left:0;margin:0;padding:0;overflow:auto}html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{position:relative;top:0}@media screen and (min-width:914px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{padding:2em calc(50% - 457px + 2em)}}@media screen and (max-width:914px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{font-size:14px !important;padding:1em}}@media print{html body[for="html-export"]:not([data-presentation-mode]) #sidebar-toc-btn{display:none}}html body[for="html-export"]:not([data-presentation-mode]) #sidebar-toc-btn{position:fixed;bottom:8px;left:8px;font-size:28px;cursor:pointer;color:inherit;z-index:99;width:32px;text-align:center;opacity:.4}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] #sidebar-toc-btn{opacity:1}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc{position:fixed;top:0;left:0;width:300px;height:100%;padding:32px 0 48px 0;font-size:14px;box-shadow:0 0 4px rgba(150,150,150,0.33);box-sizing:border-box;overflow:auto;background-color:inherit}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar{width:8px}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,0.66);border:4px solid rgba(150,150,150,0.66);background-clip:content-box}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc a{text-decoration:none}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc ul{padding:0 1.6em;margin-top:.8em}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc li{margin-bottom:.8em}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc ul{list-style-type:none}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{left:300px;width:calc(100% -  300px);padding:2em calc(50% - 457px -  150px);margin:0;box-sizing:border-box}@media screen and (max-width:1274px){html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{width:100%}}html body[for="html-export"]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .markdown-preview{left:50%;transform:translateX(-50%)}html body[for="html-export"]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .md-sidebar-toc{display:none}
+/* Please visit the URL below for more information: */
+/*   https://shd101wyy.github.io/markdown-preview-enhanced/#/customize-css */
+
+      </style>
+    </head>
+    <body for="html-export">
+      <div class="mume markdown-preview  ">
+      <p><img src="https://github.com/mattcarlotta/snackables/blob/main/snackablesLogo.png?raw=true" alt="snackablesLogo"></p>
+<p align="center">
+  <a href="https://www.npmjs.com/package/snackables">
+    <img src="https://img.shields.io/npm/v/snackables.svg?style=for-the-badge&amp;labelColor=000000">
+  </a>
+  <a href="https://github.com/mattcarlotta/snackables/actions?query=workflow%3A%22Publish+Workflow%22">
+    <img src="https://img.shields.io/github/workflow/status/mattcarlotta/snackables/Publish%20Workflow?style=for-the-badge&amp;labelColor=000000">
+  </a>
+  <a href="https://codecov.io/gh/mattcarlotta/snackables/branch/main">
+    <img src="https://img.shields.io/codecov/c/github/mattcarlotta/snackables?style=for-the-badge&amp;labelColor=000000">
+  </a>
+  <a href="https://github.com/mattcarlotta/snackables/blob/master/LICENSE">
+    <img src="https://img.shields.io/github/license/mattcarlotta/snackables?style=for-the-badge&amp;labelColor=000000">
+  </a>
+</p>
+<p>Heavily inspired by <a href="https://github.com/motdotla/dotenv">dotenv</a> and <a href="https://github.com/motdotla/dotenv-expand">dotenv-expand</a>, snackables is a simple to use <a href="https://bundlephobia.com/result?p=snackables@">zero-dependency</a> package module that automatically loads environment variables from a predefined <code>ENV_LOAD</code> variable. When it comes to <code>.env</code> file naming, snackables is unopinionated, so you can name them anything you&apos;d like or you can follow the <a href="https://12factor.net/config">The Twelve-Factor App</a> methodology.</p>
+<h2 class="mume-header" id="quick-links">Quick Links</h2>
+
+<p><a href="#installation">Installation</a></p>
+<p><a href="#usage">Usage</a></p>
+<p><a href="#cli-options">CLI Options</a></p>
+<ul>
+<li><a href="#env_load">ENV_LOAD</a></li>
+<li><a href="#env_dir">ENV_DIR</a></li>
+<li><a href="#env_debug">ENV_DEBUG</a></li>
+<li><a href="#env_encode">ENV_ENCODE</a></li>
+<li><a href="#env_cache">ENV_CACHE</a></li>
+</ul>
+<p><a href="#preload">Preload</a></p>
+<p><a href="#config-method">Config Method</a></p>
+<ul>
+<li><a href="#config-options">Config Options</a>
+<ul>
+<li><a href="#dir">dir</a></li>
+<li><a href="#path">path</a></li>
+<li><a href="#cache">cache</a></li>
+<li><a href="#encoding">encoding</a></li>
+<li><a href="#debug">debug</a></li>
+</ul>
+</li>
+</ul>
+<p><a href="#parse-method">Parse Method</a></p>
+<ul>
+<li><a href="#parse-cache">Parse Cache</a></li>
+<li><a href="#parse-rules">Parse Rules</a></li>
+</ul>
+<p><a href="#interpolation">Interpolation</a></p>
+<ul>
+<li><a href="#interpolation-rules">Interpolation Rules</a></li>
+</ul>
+<p><a href="#faq">FAQ</a></p>
+<ul>
+<li><a href="#should-i-commit-my-env-files">Should I commit my .env files?</a></li>
+<li><a href="#how-does-snackables-work-and-will-it-overwrite-already-set-or-predefined-variables">How does snackables work and will it overwrite already set or predefined variables?</a></li>
+<li><a href="#is-the-env_load-variable-required">Is the ENV_LOAD variable required?</a></li>
+</ul>
+<p><a href="#contributing-guide">Contributing Guide</a></p>
+<p><a href="#updates-log">Updates Log</a></p>
+<h2 class="mume-header" id="installation">Installation</h2>
+
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token comment"># with npm</span>
+<span class="token function">npm</span> <span class="token function">install</span> snackables
+
+<span class="token comment"># or with Yarn</span>
+yarn add snackables
+</pre><h2 class="mume-header" id="usage">Usage</h2>
+
+<p>In a CLI or within your package.json, under the <code>scripts</code> property, define an <code>ENV_LOAD</code> variable and either add a single file <code>ENV_LOAD=.env.base</code> or add multiple files separated by commas <code>ENV_LOAD=.env.base,.env.local,.env.dev,..etc</code> before running a process. Snackables loads <code>.env</code> files according to their defined order (left to right), where the last imported file will take precedence over any previously imported files.</p>
+<p>For example, <code>.env.*</code> files can be loaded by their filename (assuming they&apos;re located in the projects root):</p>
+<pre data-role="codeBlock" data-info="json" class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">&quot;scripts&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">&quot;dev&quot;</span><span class="token operator">:</span> <span class="token string">&quot;ENV_LOAD=.env.base node test.js&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;staging&quot;</span><span class="token operator">:</span> <span class="token string">&quot;ENV_LOAD=.env.base,.env.staging node app.js&quot;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;dependencies&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">&quot;snackables&quot;</span><span class="token operator">:</span> <span class="token string">&quot;^x.x.x&quot;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</pre><p>or they can be loaded by their path and filename:</p>
+<pre data-role="codeBlock" data-info="json" class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">&quot;scripts&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">&quot;dev&quot;</span><span class="token operator">:</span> <span class="token string">&quot;ENV_LOAD=custom/path/to/.env.base node test.js&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;staging&quot;</span><span class="token operator">:</span> <span class="token string">&quot;ENV_LOAD=custom/path/to/.env.base,custom/path/to/.env.staging node app.js&quot;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;dependencies&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">&quot;snackables&quot;</span><span class="token operator">:</span> <span class="token string">&quot;^x.x.x&quot;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</pre><p>All you need to do now is <code>require</code>/<code>import</code> the snackables base package as early as possible:</p>
+<pre data-role="codeBlock" data-info="javascript" class="language-javascript"><span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;snackables&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// import &apos;snackables&apos;;</span>
+</pre><p>Or, you can <a href="#preload">preload</a> your <code>.env</code> files instead!</p>
+<h2 class="mume-header" id="cli-options">CLI Options</h2>
+
+<h4 class="mume-header" id="env_load">ENV_LOAD</h4>
+
+<p>By defining an <code>ENV_LOAD</code> variable within one of your package.json scripts, this will let snackables know you&apos;d like to immediately load some <code>.env</code> files when the package is imported. You can pass a single file name or a list of file names separated by commas. By default, snackables attempts to load them from within the project&apos;s <strong>root</strong> directory.</p>
+<p>For example:</p>
+<pre data-role="codeBlock" data-info="json" class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">&quot;scripts&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">&quot;dev&quot;</span><span class="token operator">:</span> <span class="token string">&quot;ENV_LOAD=.env.base,.env.local,.env.dev node app.js&quot;</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;prod&quot;</span><span class="token operator">:</span> <span class="token string">&quot;ENV_LOAD=.env.prod node app.js&quot;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;dependencies&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">&quot;snackables&quot;</span><span class="token operator">:</span> <span class="token string">&quot;^x.x.x&quot;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</pre><h4 class="mume-header" id="env_dir">ENV_DIR</h4>
+
+<p>By defining an <code>ENV_DIR</code> variable within one of your package.json scripts, this will let snackables know you&apos;d like to load <code>.env</code> files from a custom directory.</p>
+<pre data-role="codeBlock" data-info="json" class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">&quot;scripts&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">&quot;dev&quot;</span><span class="token operator">:</span> <span class="token string">&quot;ENV_DIR=custom/path/to/directory ENV_LOAD=.env.base,.env.dev node app.js&quot;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;dependencies&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">&quot;snackables&quot;</span><span class="token operator">:</span> <span class="token string">&quot;^x.x.x&quot;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</pre><h4 class="mume-header" id="env_debug">ENV_DEBUG</h4>
+
+<p>By defining an <code>ENV_DEBUG</code> variable within one of your package.json scripts, this will let snackables know you&apos;d like to be in debug mode and output the results of extracting/loading ENVs.</p>
+<p>For example:</p>
+<pre data-role="codeBlock" data-info="json" class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">&quot;scripts&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">&quot;dev&quot;</span><span class="token operator">:</span> <span class="token string">&quot;ENV_LOAD=.env.dev ENV_DEBUG=true node app.js&quot;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;dependencies&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">&quot;snackables&quot;</span><span class="token operator">:</span> <span class="token string">&quot;^x.x.x&quot;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</pre><h4 class="mume-header" id="env_encode">ENV_ENCODE</h4>
+
+<p>By defining an <code>ENV_ENCODE</code> variable within one of your package.json scripts, this will let snackables know you&apos;d like to set the encoding type of the <code>.env</code> file(s). The following file encode types are supported:</p>
+<pre data-role="codeBlock" data-info class="language-"><code>ascii
+utf8
+utf-8 (default)
+utf16le
+ucs2
+ucs-2
+base64
+latin1
+binary
+hex
+</code></pre><p>For example:</p>
+<pre data-role="codeBlock" data-info="json" class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">&quot;scripts&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">&quot;dev&quot;</span><span class="token operator">:</span> <span class="token string">&quot;ENV_LOAD=.env.dev ENV_ENCODE=latin1 node app.js&quot;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;dependencies&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">&quot;snackables&quot;</span><span class="token operator">:</span> <span class="token string">&quot;^x.x.x&quot;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</pre><h4 class="mume-header" id="env_cache">ENV_CACHE</h4>
+
+<p>By defining <code>ENV_CACHE</code>, any <code>.env</code> file that has been <a href="#preload">preloaded</a> will be stored to temporary cache. Any attempts to reload the same file within the same running process using <a href="#config-method">config</a> will be skipped.</p>
+<pre data-role="codeBlock" data-info="json" class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">&quot;scripts&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">&quot;dev&quot;</span><span class="token operator">:</span> <span class="token string">&quot;ENV_LOAD=.env.dev ENV_CACHE=true node -r snackables app.js&quot;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;dependencies&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">&quot;snackables&quot;</span><span class="token operator">:</span> <span class="token string">&quot;^x.x.x&quot;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</pre><h2 class="mume-header" id="preload">Preload</h2>
+
+<p>You can use the <code>--require</code> (<code>-r</code>) <a href="https://nodejs.org/api/cli.html#cli_r_require_module">command line option</a> with <code>snackables</code> to preload your <code>.env</code> files! By doing so, you do not need to <code>require</code>/<code>import</code> the snackables package within your project.</p>
+<p>CLI:</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash">$ ENV_LOAD<span class="token operator">=</span>dev node -r snackables app.js
+</pre><p>Package.json:</p>
+<pre data-role="codeBlock" data-info="json" class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">&quot;scripts&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">&quot;dev&quot;</span><span class="token operator">:</span> <span class="token string">&quot;ENV_LOAD=.env.dev node -r snackables app.js&quot;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;dependencies&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">&quot;snackables&quot;</span><span class="token operator">:</span> <span class="token string">&quot;^x.x.x&quot;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</pre><h2 class="mume-header" id="config-method">Config Method</h2>
+
+<p>If you wish to manaully import <code>.env</code> files, then the config method will read your <code>.env</code> files, parse the contents, assign them to <a href="https://nodejs.org/docs/latest/api/process.html#process_process_env"><code>process.env</code></a>, and return an <code>Object</code> with <code>parsed</code>, <code>extracted</code> and <code>cachedEnvFiles</code> properties (the <a href="#cache">cache</a> argument of <code>config</code> <strong>must</strong> be set to true for <code>cachedEnvFiles</code> to be utilized):</p>
+<pre data-role="codeBlock" data-info="js" class="language-javascript"><span class="token keyword">const</span> result <span class="token operator">=</span> snackables<span class="token punctuation">.</span><span class="token function">config</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">&quot;parsed&quot;</span><span class="token punctuation">,</span> result<span class="token punctuation">.</span>parsed<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// process.env with loaded ENVs</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">&quot;extracted&quot;</span><span class="token punctuation">,</span> result<span class="token punctuation">.</span>extracted<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// extracted ENVs within a { KEY: VALUE } object</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">&quot;cachedEnvFiles&quot;</span><span class="token punctuation">,</span> result<span class="token punctuation">.</span>cachedEnvFiles<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// array of file path and file parsed contents objects: [{ path: &quot;path/to/.env&quot;, contents: parsed base64 encoded string }] </span>
+</pre><p>Additionally, you can pass options to <code>config</code>.</p>
+<h3 class="mume-header" id="config-options">Config Options</h3>
+
+<h4 class="mume-header" id="dir">dir</h4>
+
+<p>Default: <code>process.cwd()</code> (root directory)</p>
+<p>You may specify a single directory path if your files are located elsewhere.</p>
+<p>A single directory path as a <code>String</code>:</p>
+<pre data-role="codeBlock" data-info="js" class="language-javascript"><span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;snackables&quot;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">config</span><span class="token punctuation">(</span><span class="token punctuation">{</span> dir<span class="token punctuation">:</span> <span class="token string">&quot;path/to/directory&quot;</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// import { config } from &quot;snackables&quot;</span>
+<span class="token comment">// config({ dir: &quot;path/to/directory&quot; });</span>
+</pre><h4 class="mume-header" id="path">path</h4>
+
+<p>Default: <code>.env</code></p>
+<p>You may specify custom paths if your files are located elsewhere (recommended to use <strong>absolute</strong> path(s) from your root directory).</p>
+<p>A single file path as a <code>String</code>:</p>
+<pre data-role="codeBlock" data-info="js" class="language-javascript"><span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;snackables&quot;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">config</span><span class="token punctuation">(</span><span class="token punctuation">{</span> path<span class="token punctuation">:</span> <span class="token string">&quot;custom/path/to/.env&quot;</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// import { config } from &quot;snackables&quot;</span>
+<span class="token comment">// config({ path: &quot;custom/path/to/.env&quot; });</span>
+</pre><p>Multiple file paths as a single <code>String</code> separated by commas:</p>
+<pre data-role="codeBlock" data-info="js" class="language-javascript"><span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;snackables&quot;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">config</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  path<span class="token punctuation">:</span> <span class="token string">&quot;custom/path/to/.env,custom/path/to/.env.base&quot;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// import { config } from &quot;snackables&quot;</span>
+<span class="token comment">// config({ path: &quot;custom/path/to/.env,custom/path/to/.env.base&quot; });</span>
+</pre><p>Or multiple file paths as an <code>Array</code> of <code>String</code>s:</p>
+<pre data-role="codeBlock" data-info="js" class="language-javascript"><span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;snackables&quot;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">config</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  path<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">&quot;custom/path/to/.env&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;custom/path/to/.env.base&quot;</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// import { config } from &quot;snackables&quot;</span>
+<span class="token comment">// config({ path: [&quot;custom/path/to/.env&quot;, &quot;custom/path/to/.env.base&quot;] });</span>
+</pre><h4 class="mume-header" id="cache">cache</h4>
+
+<p>Default: <code>false</code></p>
+<p>You may specify whether or not to temporarily cache <code>.env</code> files once they&apos;re loaded. This is useful if you&apos;re importing snackables multiple times and attempting to load a file more than once. If the cache contains the loaded <code>.env</code> file, it will be skipped. This also works for reloading cached files using <a href="#parse-method">parse</a> if the <code>process.env</code> happens to be reset to a default state.</p>
+<pre data-role="codeBlock" data-info="js" class="language-javascript"><span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;snackables&quot;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">config</span><span class="token punctuation">(</span><span class="token punctuation">{</span> path<span class="token punctuation">:</span> <span class="token string">&quot;.env&quot;</span><span class="token punctuation">,</span> cache<span class="token punctuation">:</span> <span class="token boolean">true</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// import { config } from &quot;snackables&quot;</span>
+<span class="token comment">// config({ path: &quot;.env&quot;, cache: true });</span>
+</pre><h4 class="mume-header" id="encoding">encoding</h4>
+
+<p>Default: <code>utf-8</code></p>
+<p>You may specify the encoding of your file containing environment variables.</p>
+<pre data-role="codeBlock" data-info="js" class="language-javascript"><span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;snackables&quot;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">config</span><span class="token punctuation">(</span><span class="token punctuation">{</span> encoding<span class="token punctuation">:</span> <span class="token string">&quot;latin1&quot;</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// import { config } from &quot;snackables&quot;</span>
+<span class="token comment">// config({ encoding: &quot;latin1&quot; });</span>
+</pre><h4 class="mume-header" id="debug">debug</h4>
+
+<p>Default: <code>false</code></p>
+<p>You may turn on logging to help debug file loading.</p>
+<pre data-role="codeBlock" data-info="js" class="language-javascript"><span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;snackables&quot;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">config</span><span class="token punctuation">(</span><span class="token punctuation">{</span> debug<span class="token punctuation">:</span> process<span class="token punctuation">.</span>env<span class="token punctuation">.</span><span class="token constant">DEBUG</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// import { config } from &quot;snackables&quot;</span>
+<span class="token comment">// config({ debug: process.env.DEBUG });</span>
+</pre><h2 class="mume-header" id="parse-method">Parse Method</h2>
+
+<p>If you wish to manually parse ENVs from a buffer or file, then parse accepts a <code>String</code> or <code>Buffer</code> argument and will return an <code>Object</code> with the parsed keys and values (by default these will <strong>not</strong> be assigned to <code>process.env</code>).</p>
+<pre data-role="codeBlock" data-info="js" class="language-javascript"><span class="token keyword">const</span> <span class="token punctuation">{</span> readFileSync <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;fs&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> <span class="token punctuation">{</span> parse <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;snackables&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// import { readFileSync } from &quot;fs&quot;;</span>
+<span class="token comment">// import { parse } from &quot;snackables&quot;;</span>
+
+<span class="token keyword">const</span> config <span class="token operator">=</span> <span class="token function">parse</span><span class="token punctuation">(</span>Buffer<span class="token punctuation">.</span><span class="token keyword">from</span><span class="token punctuation">(</span><span class="token string">&quot;BASIC=basic&quot;</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// will return an object</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">typeof</span> config<span class="token punctuation">,</span> config<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// object { BASIC : &apos;basic&apos; }</span>
+
+<span class="token keyword">const</span> result <span class="token operator">=</span> <span class="token function">parse</span><span class="token punctuation">(</span><span class="token function">readFileSync</span><span class="token punctuation">(</span><span class="token string">&quot;path/to/.env.file&quot;</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> encoding<span class="token punctuation">:</span> <span class="token string">&quot;utf8&quot;</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// will return an object</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">typeof</span> config<span class="token punctuation">,</span> config<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// object { KEY : &apos;value&apos; }</span>
+</pre><h3 class="mume-header" id="parse-cache">Parse Cache</h3>
+
+<p>In addition to accepting a string or buffer, the parse method also accepts the <code>cachedEnvFiles</code> array (returned by <a href="#config-method">config</a>) as an argument if the follow requirements are met:</p>
+<p><a href="#env_cache">ENV_CACHE</a> is defined or the <a href="#cache">cache</a> argument is set to <code>true</code> when the <code>config</code> method is used and <code>process.env.LOADED_CACHE</code> is not defined.</p>
+<p>If the above requirements are met, parse will reapply cached ENVs properties to <code>process.env</code> and return <code>process.env</code>.</p>
+<pre data-role="codeBlock" data-info="js" class="language-javascript"><span class="token keyword">const</span> <span class="token punctuation">{</span> config<span class="token punctuation">,</span> parse <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;snackables&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// import { config, parse } from &quot;snackables&quot;;</span>
+
+<span class="token comment">// loads &quot;.env.base&quot; and &quot;.env.dev&quot; to process.env and returns an array of cached env objects</span>
+<span class="token comment">// cachedEnvFiles = [{ path: &quot;path/to/.env&quot;, contents: base64 encoded string with parsed contents }]</span>
+<span class="token keyword">const</span> <span class="token punctuation">{</span> cachedEnvFiles <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token function">config</span><span class="token punctuation">(</span><span class="token punctuation">{</span> path<span class="token punctuation">:</span> <span class="token string">&quot;.env.base,.env.dev&quot;</span><span class="token punctuation">,</span> cache<span class="token punctuation">:</span> <span class="token boolean">true</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+
+<span class="token comment">// parses and reapplies cached ENVs if the process.env.PROPERTY is undefined</span>
+<span class="token comment">// returns process.env with any reapplied ENVs from cache</span>
+<span class="token keyword">const</span> reappliedProcessEnv <span class="token operator">=</span> <span class="token function">parse</span><span class="token punctuation">(</span>cachedEnvFiles<span class="token punctuation">)</span><span class="token punctuation">;</span> 
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>reappliedProcessEnv<span class="token punctuation">)</span> 
+
+<span class="token comment">// this lets snackables know not to reload from cache</span>
+process<span class="token punctuation">.</span>env<span class="token punctuation">.</span><span class="token constant">LOADED_CACHE</span> <span class="token operator">=</span> <span class="token string">&quot;true&quot;</span><span class="token punctuation">;</span> 
+
+<span class="token comment">// since process.env.LOADED_CACHE is defined, cache is skipped and process.env is returned as is</span>
+<span class="token keyword">const</span> originalProcessEnv <span class="token operator">=</span> <span class="token function">parse</span><span class="token punctuation">(</span>cachedEnvFiles<span class="token punctuation">)</span><span class="token punctuation">;</span> 
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>originalProcessEnv<span class="token punctuation">)</span> 
+</pre><h3 class="mume-header" id="parse-rules">Parse Rules</h3>
+
+<p>The parsing method currently supports the following rules:</p>
+<ul>
+<li><code>BASIC=basic</code> becomes <code>{BASIC: &apos;basic&apos;}</code></li>
+<li>empty lines are skipped</li>
+<li>lines beginning with <code>#</code> are treated as comments</li>
+<li>empty values become empty strings (<code>EMPTY=</code> becomes <code>{EMPTY: &apos;&apos;}</code>)</li>
+<li>inner quotes are maintained (think JSON) (<code>JSON={&quot;foo&quot;: &quot;bar&quot;}</code> becomes <code>{JSON:&quot;{\&quot;foo\&quot;: \&quot;bar\&quot;}&quot;</code>)</li>
+<li>whitespace is removed from both ends of unquoted values (see more on <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/Trim"><code>trim</code></a>) (<code>FOO= some value</code> becomes <code>{FOO: &apos;some value&apos;}</code>)</li>
+<li>single and double quoted values are escaped (<code>SINGLE_QUOTE=&apos;quoted&apos;</code> becomes <code>{SINGLE_QUOTE: &quot;quoted&quot;}</code>)</li>
+<li>single and double quoted values maintain whitespace from both ends (<code>FOO=&quot; some value &quot;</code> becomes <code>{FOO: &apos; some value &apos;}</code>)</li>
+<li>double quoted values expand new lines (<code>MULTILINE=&quot;new\nline&quot;</code> becomes</li>
+</ul>
+<pre data-role="codeBlock" data-info class="language-"><code>{MULTILINE: &apos;new
+line&apos;}
+</code></pre><h2 class="mume-header" id="interpolation">Interpolation</h2>
+
+<p>You may want to interpolate ENV values based upon a <code>process.env</code> value or a key within the <code>.env</code> file. To interpolate a value, simply define it with <code>$KEY</code> or <code>${KEY}</code>, for example:</p>
+<p>Input:</p>
+<pre data-role="codeBlock" data-info="dosini" class="language-dosini"><code>MESSAGE=Hello
+INTERP_MESSAGE=$MESSAGE World
+INTERP_MESSAGE_BRACKETS=${MESSAGE} World
+ENVIRONMENT=$NODE_ENV
+</code></pre><p>Output:</p>
+<pre data-role="codeBlock" data-info="dosini" class="language-dosini"><code>MESSAGE=Hello
+INTERP_MESSAGE=Hello World
+INTERP_MESSAGE_BRACKETS=Hello World
+ENVIRONMENT=development
+</code></pre><h3 class="mume-header" id="interpolation-rules">Interpolation Rules</h3>
+
+<ul>
+<li>Values can be interpolated based upon a <code>process.env</code> value: <code>BASIC=$NODE_ENV</code> || <code>BASIC=${NODE_ENV}</code></li>
+<li>Values in <code>process.env</code> take precedence over interpolated values in <code>.env</code> files</li>
+<li>Interpolated values can&apos;t be referenced across multiple <code>.env</code>s, instead they must only be referenced within the same file</li>
+<li>The <code>$</code> character <strong>must</strong> be escaped when it doesn&apos;t refer to another key within the <code>.env</code> file: <code>\$1234</code></li>
+<li>Do not use escaped <code>\$</code> within a value when it&apos;s key is referenced by another key:</li>
+</ul>
+<p>Input:</p>
+<pre data-role="codeBlock" data-info="dosini" class="language-dosini"><code>A=\$example
+B=$A
+</code></pre><p>Output:</p>
+<pre data-role="codeBlock" data-info="dosini" class="language-dosini"><code>A=$example
+B=
+</code></pre><p>Fix:</p>
+<pre data-role="codeBlock" data-info="dosini" class="language-dosini"><code>A=example
+B=\$$A
+</code></pre><p>Output:</p>
+<pre data-role="codeBlock" data-info="dosini" class="language-dosini"><code>A=example
+B=$example
+</code></pre><h2 class="mume-header" id="faq">FAQ</h2>
+
+<h3 class="mume-header" id="should-i-commit-my-env-files">Should I commit my <code>.env</code> files?</h3>
+
+<p>No. It&apos;s <strong>strongly</strong> recommendedd not to commit your <code>.env</code> files to version control. It should only include environment-specific values such as database passwords or API keys. Your production database should have a different password than your development database.</p>
+<h3 class="mume-header" id="how-does-snackables-work-and-will-it-overwrite-already-set-or-predefined-variables">How does snackables work and will it overwrite already set or predefined variables?</h3>
+
+<p>By default, snackables will look for the <code>.env.*</code> file(s) defined within the <code>ENV_LOAD</code> variable and append them to <code>process.env</code>.</p>
+<p>For example, <code>ENV_LOAD=.env.base,.env.dev</code> has two files <code>.env.base</code> and <code>.env.dev</code>:</p>
+<pre data-role="codeBlock" data-info="json" class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">&quot;scripts&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">&quot;dev&quot;</span><span class="token operator">:</span> <span class="token string">&quot;ENV_LOAD=.env.base,.env.dev ENV_DEBUG=true node app.js&quot;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;dependencies&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">&quot;snackables&quot;</span><span class="token operator">:</span> <span class="token string">&quot;^x.x.x&quot;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</pre><p>in a local enviroment, <code>.env.base</code> may have static shared database variables:</p>
+<pre data-role="codeBlock" data-info="dosini" class="language-dosini"><code>DB_HOST=localhost
+DB_USER=root
+DB_PASS=password
+</code></pre><p>while <code>.env.dev</code> may have environment specific variables:</p>
+<pre data-role="codeBlock" data-info="dosini" class="language-dosini"><code>DB_PASS=password123
+HOST=http://localhost
+PORT=3000
+</code></pre><p>snackables will parse the files and append the ENVs in the order of how they were defined in <code>ENV_LOAD</code>. In the example above, the <code>DB_PASS</code> variables within <code>.env.base</code> would be overwritten by <code>.env.dev</code> because the file was imported last.</p>
+<p>Any ENV variables <strong>within</strong> an <code>.env</code> file can be overwritten according to their imported order, where the last <code>.env</code> import takes precendence over any previous ENVs; however ENVS that are <strong>pre-set</strong> or <strong>defined</strong> within <code>process.env</code> <strong>WILL NOT be overwritten</strong>.</p>
+<h3 class="mume-header" id="is-the-env_load-variable-required">Is the ENV_LOAD variable required?</h3>
+
+<p>To be as flexible as possible, the <code>ENV_LOAD</code> variable is not required to set ENVs to <code>process.env</code>. However, you will then be required to use this package just like you would use dotenv.</p>
+<pre data-role="codeBlock" data-info="js" class="language-javascript"><span class="token keyword">const</span> <span class="token punctuation">{</span> config <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&quot;snackables&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// import { config } from &quot;snackables&quot;;</span>
+
+<span class="token function">config</span><span class="token punctuation">(</span><span class="token punctuation">{</span> <span class="token operator">...</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</pre><h2 class="mume-header" id="contributing-guide">Contributing Guide</h2>
+
+<p>See <a href="CONTRIBUTING.md">CONTRIBUTING.md</a></p>
+<h2 class="mume-header" id="updates-log">Updates Log</h2>
+
+<p>See <a href="UPDATESLOG.md">UPDATESLOG.md</a></p>
+
+      </div>
+      
+      
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    </body></html>

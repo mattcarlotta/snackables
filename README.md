@@ -34,11 +34,11 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 
 [Config Method](#config-method)
   - [Config Options](#config-options)
-    - [Dir](#dir)
-    - [Path](#path)
-    - [Cache](#cache)
-    - [Encoding](#encoding)
-    - [Debug](#debug)
+    - [dir](#dir)
+    - [path](#path)
+    - [cache](#cache)
+    - [encoding](#encoding)
+    - [debug](#debug)
 
 [Parse Method](#parse-method)
   - [Parse Cache](#parse-cache)
@@ -111,7 +111,7 @@ Or, you can [preload](#preload) your `.env` files instead!
 
 #### ENV_LOAD
 
-By defining an `ENV_LOAD` variable within one of your package.json scripts, this will let snackables know you'd like to immediately load some ENVs when the package is imported. You can pass a single file name or a list of file names separated by commas. By default, snackables attempts to load them from within the project's **root** directory.
+By defining an `ENV_LOAD` variable within one of your package.json scripts, this will let snackables know you'd like to immediately load some `.env` files when the package is imported. You can pass a single file name or a list of file names separated by commas. By default, snackables attempts to load them from within the project's **root** directory.
 
 For example:
 
@@ -161,7 +161,7 @@ For example:
 
 #### ENV_ENCODE
 
-By defining an `ENV_ENCODE` variable within one of your package.json scripts, this will let snackables know you'd like to set the encoding mode of the `.env` file(s). The following file encode types are supported:
+By defining an `ENV_ENCODE` variable within one of your package.json scripts, this will let snackables know you'd like to set the encoding type of the `.env` file(s). The following file encode types are supported:
 
 ```
 ascii
@@ -226,7 +226,7 @@ Package.json:
 
 ## Config Method
 
-If you wish to manaully import `.env` files, then the config method will read your `.env` files, parse the contents, assign it to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env), and return an `Object` with `parsed`, `extracted` and `cachedEnvFiles` properties (the [cache](#cache) argument of `config` **must** be set to true for `cachedEnvFiles` to be utilized):
+If you wish to manaully import `.env` files, then the config method will read your `.env` files, parse the contents, assign them to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env), and return an `Object` with `parsed`, `extracted` and `cachedEnvFiles` properties (the [cache](#cache) argument of `config` **must** be set to true for `cachedEnvFiles` to be utilized):
 
 ```js
 const result = snackables.config();
@@ -240,7 +240,7 @@ Additionally, you can pass options to `config`.
 
 ### Config Options
 
-#### Dir
+#### dir
 
 Default: `process.cwd()` (root directory)
 
@@ -249,13 +249,13 @@ You may specify a single directory path if your files are located elsewhere.
 A single directory path as a `String`:
 
 ```js
-require("snackables").config({ dir: "./src" });
+require("snackables").config({ dir: "path/to/directory" });
 
 // import { config } from "snackables"
-// config({ dir: "./src" });
+// config({ dir: "path/to/directory" });
 ```
 
-#### Path
+#### path
 
 Default: `.env`
 
@@ -292,7 +292,7 @@ require("snackables").config({
 // config({ path: ["custom/path/to/.env", "custom/path/to/.env.base"] });
 ```
 
-#### Cache
+#### cache
 
 Default: `false`
 
@@ -306,7 +306,7 @@ require("snackables").config({ path: ".env", cache: true });
 ```
 
 
-#### Encoding
+#### encoding
 
 Default: `utf-8`
 
@@ -319,11 +319,11 @@ require("snackables").config({ encoding: "latin1" });
 // config({ encoding: "latin1" });
 ```
 
-#### Debug
+#### debug
 
 Default: `false`
 
-You may turn on logging to help debug why certain keys or values are not being set as you expect.
+You may turn on logging to help debug file loading.
 
 ```js
 require("snackables").config({ debug: process.env.DEBUG });
@@ -334,19 +334,24 @@ require("snackables").config({ debug: process.env.DEBUG });
 
 ## Parse Method
 
-The method that parses the contents of your `.env.*` file(s) is also available for use. It accepts a `String` or `Buffer` argument and will return an `Object` with the parsed keys and values (by default these will **not** be assigned to `process.env`). 
+If you wish to manually parse ENVs from a buffer or file, then parse accepts a `String` or `Buffer` argument and will return an `Object` with the parsed keys and values (by default these will **not** be assigned to `process.env`). 
 
 ```js
+const { readFileSync } = require("fs");
 const { parse } = require("snackables");
+// import { readFileSync } from "fs";
 // import { parse } from "snackables";
 
 const config = parse(Buffer.from("BASIC=basic")); // will return an object
 console.log(typeof config, config); // object { BASIC : 'basic' }
+
+const result = parse(readFileSync("path/to/.env.file", { encoding: "utf8" })); // will return an object
+console.log(typeof config, config); // object { KEY : 'value' }
 ```
 
 ### Parse Cache
 
-In addition to accepting a string or buffer, the parse method also accepts the `cachedEnvFiles` array as an argument  if: 
+In addition to accepting a string or buffer, the parse method also accepts the `cachedEnvFiles` array (returned by [config](#config-method)) as an argument if the follow requirements are met: 
 
 [ENV_CACHE](#env_cache) is defined or the [cache](#cache) argument is set to `true` when the `config` method is used and `process.env.LOADED_CACHE` is not defined. 
 
@@ -449,7 +454,7 @@ B=$example
 
 ### Should I commit my `.env` files?
 
-No. We **strongly** recommend against committing your `.env` files to version control. It should only include environment-specific values such as database passwords or API keys. Your production database should have a different password than your development database.
+No. It's **strongly** recommendedd not to commit your `.env` files to version control. It should only include environment-specific values such as database passwords or API keys. Your production database should have a different password than your development database.
 
 ### How does snackables work and will it overwrite already set or predefined variables?
 
@@ -484,9 +489,9 @@ HOST=http://localhost
 PORT=3000
 ```
 
-snackables will parse the files and append the ENVs in the order of how they were defined in `ENV_LOAD`. In the example above, the `DB_PASS` variables within `.env.base` would be overwritten by `.env.dev` because its file was imported last.
+snackables will parse the files and append the ENVs in the order of how they were defined in `ENV_LOAD`. In the example above, the `DB_PASS` variables within `.env.base` would be overwritten by `.env.dev` because the file was imported last.
 
-Any ENV variables **within** an `.env` file can be overwritten according to their imported order, where the last `.env` import takes precendence over any previous ENVs; however **defined or pre-set** ENVs within `process.env` **can NOT be overwritten**.
+Any ENV variables **within** an `.env` file can be overwritten according to their imported order, where the last `.env` import takes precendence over any previous ENVs; however ENVS that are **pre-set** or **defined** within `process.env` **WILL NOT be overwritten**.
 
 ### Is the ENV_LOAD variable required?
 
