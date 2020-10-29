@@ -66,13 +66,13 @@ export function parse(src: string | Buffer | CachedEnvFiles): ParsedENVs {
   // check if src is an array of precached ENVs
   if (!LOADED_CACHE && Array.isArray(src)) {
     for (let i = 0; i < src.length; i += 1) {
-      process.env = Object.assign(
-        extracted,
+      Object.assign(
+        env,
         JSON.parse(Buffer.from(src[i].contents, "base64").toString()),
         env
       );
     }
-    return process.env as ParsedENVs;
+    return env as ParsedENVs;
   }
 
   function interpolate(envValue: string): string {
@@ -154,6 +154,7 @@ export function config(options?: ConfigOptions): ConfigOutput {
   const { cwd, env } = process;
   const { ENV_CACHE } = env;
   const { log } = console;
+  const { assign } = Object;
 
   // default config options
   let dir = cwd();
@@ -199,20 +200,20 @@ export function config(options?: ConfigOptions): ConfigOutput {
           });
 
         // assigns ENVs to accumulated object
-        Object.assign(extracted, parsed);
+        assign(extracted, parsed);
 
         if (debug) log(`\x1b[90mLoaded env from ${envPath}\x1b[0m`);
       }
     } catch (err) {
       /* istanbul ignore next */
       if (err.code !== "ENOENT") {
-        log(`\x1b[33mUnable to load ${envPath}: ${err.message}.\x1b[0m`);
+        log(`\x1b[33mError loading ${envPath}: ${err.message}.\x1b[0m`);
       }
     }
   }
 
   return {
-    parsed: process.env = Object.assign({}, extracted, env),
+    parsed: assign(env, extracted, env),
     extracted,
     cachedEnvFiles: _EC_
   };
