@@ -2,6 +2,14 @@
 
 All notable updates to this project will be documented in this file. See [SemVer 2.0](https://semver.org/) for commit guidelines.
 
+## [0.0.33] - 2020-29-10
+
+### Added
+
+- Added an `ENV_DIR` variable to preload `.env` files from a custom directory
+- Added a `cache` argument to the `config` method
+- Updated README
+
 ## [0.0.32] - 2020-28-10
 
 ### Changed

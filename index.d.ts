@@ -14,6 +14,7 @@ export interface ConfigOptions {
     path?: string | string[];
     encoding?: BufferEncoding;
     debug?: string | boolean;
+    cache?: string | boolean;
 }
 export interface ConfigOutput {
     parsed: ParsedENVs;
