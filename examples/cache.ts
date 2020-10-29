@@ -1,8 +1,10 @@
 import { config, parse } from "snackables";
 
-process.env.ENV_CACHE = "true";
-
-const { cachedEnvFiles } = config({ path: ".env.base" });
+const { cachedEnvFiles } = config({
+  dir: "examples",
+  path: ".env.base",
+  cache: true
+});
 
 console.log(
   `\x1b[32mprocess.env.BASE should be assigned "hello": ${

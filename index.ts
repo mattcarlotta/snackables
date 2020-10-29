@@ -38,6 +38,7 @@ export interface ConfigOptions {
   path?: string | string[]; // path to .env file
   encoding?: BufferEncoding; // encoding of .env file
   debug?: string | boolean; // turn on logging for debugging purposes
+  cache?: string | boolean; // turn on caching
 }
 
 export interface ConfigOutput {
@@ -57,18 +58,20 @@ const _EC_: CachedEnvFiles = [];
 export function parse(src: string | Buffer | CachedEnvFiles): ParsedENVs {
   const { env } = process;
   const { LOADED_CACHE } = env;
+  const { assign } = Object;
   const extracted: ParsedENVs = {};
 
-  // check if src is an array of precached ENVs
-  if (!LOADED_CACHE && Array.isArray(src)) {
-    for (let i = 0; i < src.length; i += 1) {
-      process.env = Object.assign(
-        extracted,
-        JSON.parse(Buffer.from(src[i].contents, "base64").toString()),
-        env
-      );
-    }
-    return process.env as ParsedENVs;
+  // checks if src is an array of precached ENVs
+  if (Array.isArray(src)) {
+    // checks if process.env.LOADED_CACHE is undefined, otherwise skip reloading
+    if (!LOADED_CACHE)
+      for (let i = 0; i < src.length; i += 1) {
+        assign(
+          extracted,
+          JSON.parse(Buffer.from(src[i].contents, "base64").toString())
+        );
+      }
+    return (process.env = assign(extracted, env));
   }
 
   function interpolate(envValue: string): string {
@@ -148,7 +151,6 @@ export function parse(src: string | Buffer | CachedEnvFiles): ParsedENVs {
  */
 export function config(options?: ConfigOptions): ConfigOutput {
   const { cwd, env } = process;
-  const { ENV_CACHE } = env;
   const { log } = console;
   const { assign } = Object;
 
@@ -157,6 +159,7 @@ export function config(options?: ConfigOptions): ConfigOutput {
   let path: string | string[] = [".env"];
   let debug: string | boolean | undefined;
   let encoding: BufferEncoding = "utf-8";
+  let cache: string | boolean | undefined = false;
 
   // override default options with config options arguments
   if (options) {
@@ -164,6 +167,7 @@ export function config(options?: ConfigOptions): ConfigOutput {
     path = options.path || path;
     debug = options.debug;
     encoding = options.encoding || encoding;
+    cache = options.cache;
   }
 
   // split path into array of strings
@@ -178,10 +182,7 @@ export function config(options?: ConfigOptions): ConfigOutput {
     const envPath = join(dir, configs[i]);
     try {
       // check that the file hasn't already been cached
-      if (
-        !ENV_CACHE ||
-        (!_EC_.some(({ path }) => path === envPath) && ENV_CACHE)
-      ) {
+      if (!cache || (!_EC_.some(({ path }) => path === envPath) && cache)) {
         // checks if "envPath" is a file that exists
         statSync(envPath).isFile();
 
@@ -189,7 +190,7 @@ export function config(options?: ConfigOptions): ConfigOutput {
         const parsed = parse(readFileSync(envPath, { encoding }));
 
         // stores path and contents to internal cache
-        if (ENV_CACHE)
+        if (cache)
           _EC_.push({
             path: envPath,
             contents: Buffer.from(JSON.stringify(parsed)).toString("base64")
@@ -220,11 +221,13 @@ export function config(options?: ConfigOptions): ConfigOutput {
  */
 (function () {
   // check if ENV_LOAD is defined
-  const { ENV_LOAD, ENV_DEBUG, ENV_ENCODE } = process.env;
+  const { ENV_CACHE, ENV_DIR, ENV_LOAD, ENV_DEBUG, ENV_ENCODE } = process.env;
   if (ENV_LOAD)
     config({
+      dir: ENV_DIR,
       path: ENV_LOAD,
       debug: ENV_DEBUG,
-      encoding: ENV_ENCODE as BufferEncoding
+      encoding: ENV_ENCODE as BufferEncoding,
+      cache: ENV_CACHE
     });
 })();

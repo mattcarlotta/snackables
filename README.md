@@ -25,19 +25,23 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 
 [CLI Options](#cli-options)
   - [ENV_LOAD](#env_load)
+  - [ENV_DIR](#env_dir)
   - [ENV_DEBUG](#env_debug)
   - [ENV_ENCODE](#env_encode)
   - [ENV_CACHE](#env_cache)
-  - [Preload](#preload)
+
+[Preload](#preload)
 
 [Config Method](#config-method)
   - [Config Options](#config-options)
     - [Dir](#dir)
     - [Path](#path)
+    - [Cache](#cache)
     - [Encoding](#encoding)
     - [Debug](#debug)
 
 [Parse Method](#parse-method)
+  - [Parse Cache](#parse-cache)
   - [Parse Rules](#parse-rules)
 
 [Interpolation](#interpolation)
@@ -123,6 +127,21 @@ For example:
 }
 ```
 
+#### ENV_DIR
+
+By defining an `ENV_DIR` variable within one of your package.json scripts, this will let snackables know you'd like to load `.env` files from a custom directory.
+
+```json
+{
+  "scripts": {
+    "dev": "ENV_DIR=custom/path/to/directory ENV_LOAD=.env.base,.env.dev node app.js"
+  },
+  "dependencies": {
+    "snackables": "^x.x.x"
+  }
+}
+```
+
 #### ENV_DEBUG
 
 By defining an `ENV_DEBUG` variable within one of your package.json scripts, this will let snackables know you'd like to be in debug mode and output the results of extracting/loading ENVs.
@@ -171,12 +190,12 @@ For example:
 ```
 #### ENV_CACHE
 
-By defining `ENV_CACHE` to `true`, any `.env` file that has been previous extracted and assigned to `process.env` will be stored to temporary cache. Any attempts to reload the same file within the same running process will be skipped. 
+By defining `ENV_CACHE`, any `.env` file that has been [preloaded](#preload) will be stored to temporary cache. Any attempts to reload the same file within the same running process using [config](#config-method) will be skipped. 
 
 ```json
 {
   "scripts": {
-    "dev": "ENV_CACHE=true node app.js"
+    "dev": "ENV_LOAD=.env.dev ENV_CACHE=true node -r snackables app.js"
   },
   "dependencies": {
     "snackables": "^x.x.x"
@@ -184,9 +203,9 @@ By defining `ENV_CACHE` to `true`, any `.env` file that has been previous extrac
 }
 ```
 
-### Preload
+## Preload
 
-You can use the `--require` (`-r`) [command line option](https://nodejs.org/api/cli.html#cli_r_require_module) with `snackables` to preload your `.env` files! By doing so, you do not need to `require`/`import` the snackables package within your code.
+You can use the `--require` (`-r`) [command line option](https://nodejs.org/api/cli.html#cli_r_require_module) with `snackables` to preload your `.env` files! By doing so, you do not need to `require`/`import` the snackables package within your project.
 
 CLI:
 ```bash
@@ -207,14 +226,14 @@ Package.json:
 
 ## Config Method
 
-If you wish to manaully import `.env` files, then the config method will read your `.env` files, parse the contents, assign it to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env), and return an object: `process.env` (includes loaded ENVs) as `parsed`, an object of extracted ENVs as `extracted`, and an array of cached envs paths and contents as `cachedEnvFiles`.
+If you wish to manaully import `.env` files, then the config method will read your `.env` files, parse the contents, assign it to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env), and return an `Object` with `parsed`, `extracted` and `cachedEnvFiles` properties (the [cache](#cache) argument of `config` **must** be set to true for `cachedEnvFiles` to be utilized):
 
 ```js
 const result = snackables.config();
 
-console.log("parsed", result.parsed);
-console.log("extracted", result.extracted);
-console.log("cachedEnvFiles", result.cachedEnvFiles); // process.env.ENV_CACHE **must** be set to true
+console.log("parsed", result.parsed); // process.env with loaded ENVs
+console.log("extracted", result.extracted); // extracted ENVs within a { KEY: VALUE } object
+console.log("cachedEnvFiles", result.cachedEnvFiles); // array of file path and file parsed contents objects: [{ path: "path/to/.env", contents: parsed base64 encoded string }] 
 ```
 
 Additionally, you can pass options to `config`.
@@ -238,7 +257,7 @@ require("snackables").config({ dir: "./src" });
 
 #### Path
 
-Default: `'.env'`
+Default: `.env`
 
 You may specify custom paths if your files are located elsewhere (recommended to use **absolute** path(s) from your root directory).
 
@@ -273,6 +292,20 @@ require("snackables").config({
 // config({ path: ["custom/path/to/.env", "custom/path/to/.env.base"] });
 ```
 
+#### Cache
+
+Default: `false`
+
+You may specify whether or not to temporarily cache `.env` files once they're loaded. This is useful if you're importing snackables multiple times and attempting to load a file more than once. If the cache contains the loaded `.env` file, it will be skipped. This also works for reloading cached files using [parse](#parse-method) if the `process.env` happens to be reset to a default state.
+
+```js
+require("snackables").config({ path: ".env", cache: true });
+
+// import { config } from "snackables"
+// config({ path: ".env", cache: true });
+```
+
+
 #### Encoding
 
 Default: `utf-8`
@@ -301,9 +334,8 @@ require("snackables").config({ debug: process.env.DEBUG });
 
 ## Parse Method
 
-The method that parses the contents of your `.env.*` file(s) is also available to use. It accepts a `String` or `Buffer` arguments and will return an `Object` with the parsed keys and values. In addition, if [ENV_CACHE](#env_cache) is set and `process.env.LOADED_CACHE` is not defined, the parse method also accepts the `cachedEnvFiles` array (see [Config Method](#config-method)) as an argument; if applicable, it will reapply cached ENVs to `process.env` and return `process.env`. 
+The method that parses the contents of your `.env.*` file(s) is also available for use. It accepts a `String` or `Buffer` argument and will return an `Object` with the parsed keys and values (by default these will **not** be assigned to `process.env`). 
 
-Basic usage:
 ```js
 const { parse } = require("snackables");
 // import { parse } from "snackables";
@@ -312,17 +344,22 @@ const config = parse(Buffer.from("BASIC=basic")); // will return an object
 console.log(typeof config, config); // object { BASIC : 'basic' }
 ```
 
-Advanced usage (useful for scenarios where the `process.env` may be reset to a default state):
+### Parse Cache
+
+In addition to accepting a string or buffer, the parse method also accepts the `cachedEnvFiles` array as an argument  if: 
+
+[ENV_CACHE](#env_cache) is defined or the [cache](#cache) argument is set to `true` when the `config` method is used and `process.env.LOADED_CACHE` is not defined. 
+
+
+If the above requirements are met, parse will reapply cached ENVs properties to `process.env` and return `process.env`. 
+
 ```js
 const { config, parse } = require("snackables");
 // import { config, parse } from "snackables";
 
-// allows ENV files to be cached
-process.env.ENV_CACHE = "true";
-
 // loads ".env.base" and ".env.dev" to process.env and returns an array of cached env objects
 // cachedEnvFiles = [{ path: "path/to/.env", contents: base64 encoded string with parsed contents }]
-const { cachedEnvFiles } = config({ path: ".env.base,.env.dev" }); 
+const { cachedEnvFiles } = config({ path: ".env.base,.env.dev", cache: true }); 
 
 // parses and reapplies cached ENVs if the process.env.PROPERTY is undefined
 // returns process.env with any reapplied ENVs from cache
