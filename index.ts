@@ -1,17 +1,13 @@
 /*
   Copyright (c) 2015, Scott Motte
   All rights reserved.
-
   Redistribution and use in source and binary forms, with or without
   modification, are permitted provided that the following conditions are met:
-
   * Redistributions of source code must retain the above copyright notice, this
     list of conditions and the following disclaimer.
-
   * Redistributions in binary form must reproduce the above copyright notice,
     this list of conditions and the following disclaimer in the documentation
     and/or other materials provided with the distribution.
-
   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
   AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
   IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -66,13 +62,13 @@ export function parse(src: string | Buffer | CachedEnvFiles): ParsedENVs {
   // check if src is an array of precached ENVs
   if (!LOADED_CACHE && Array.isArray(src)) {
     for (let i = 0; i < src.length; i += 1) {
-      Object.assign(
-        env,
+      process.env = Object.assign(
+        extracted,
         JSON.parse(Buffer.from(src[i].contents, "base64").toString()),
         env
       );
     }
-    return env as ParsedENVs;
+    return process.env as ParsedENVs;
   }
 
   function interpolate(envValue: string): string {
@@ -207,13 +203,13 @@ export function config(options?: ConfigOptions): ConfigOutput {
     } catch (err) {
       /* istanbul ignore next */
       if (err.code !== "ENOENT") {
-        log(`\x1b[33mError loading ${envPath}: ${err.message}.\x1b[0m`);
+        log(`\x1b[33mUnable to load ${envPath}: ${err.message}.\x1b[0m`);
       }
     }
   }
 
   return {
-    parsed: assign(env, extracted, env),
+    parsed: process.env = assign({}, extracted, env),
     extracted,
     cachedEnvFiles: _EC_
   };
