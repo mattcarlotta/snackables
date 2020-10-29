@@ -2,6 +2,12 @@
 
 All notable updates to this project will be documented in this file. See [SemVer 2.0](https://semver.org/) for commit guidelines.
 
+## [0.0.34] - 2020-29-10
+
+### Added
+
+- Deleted `process.env.ENV_LOAD` after the `.env` files have been preloaded or imported within the same process
+
 ## [0.0.33] - 2020-29-10
 
 ### Added
