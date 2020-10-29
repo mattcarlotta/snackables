@@ -47,7 +47,7 @@ export interface ConfigOutput {
   cachedEnvFiles: CachedEnvFiles; // cached ENVs as key value pairs
 }
 
-const _EC_: CachedEnvFiles = [];
+const __CACHE__: CachedEnvFiles = [];
 
 /**
  * Parses a string, buffer, or precached envs into an object.
@@ -182,7 +182,10 @@ export function config(options?: ConfigOptions): ConfigOutput {
     const envPath = join(dir, configs[i]);
     try {
       // check that the file hasn't already been cached
-      if (!cache || (!_EC_.some(({ path }) => path === envPath) && cache)) {
+      if (
+        !cache ||
+        (!__CACHE__.some(({ path }) => path === envPath) && cache)
+      ) {
         // checks if "envPath" is a file that exists
         statSync(envPath).isFile();
 
@@ -191,7 +194,7 @@ export function config(options?: ConfigOptions): ConfigOutput {
 
         // stores path and contents to internal cache
         if (cache)
-          _EC_.push({
+          __CACHE__.push({
             path: envPath,
             contents: Buffer.from(JSON.stringify(parsed)).toString("base64")
           });
@@ -212,7 +215,7 @@ export function config(options?: ConfigOptions): ConfigOutput {
   return {
     parsed: process.env = assign({}, extracted, env),
     extracted,
-    cachedEnvFiles: _EC_
+    cachedEnvFiles: __CACHE__
   };
 }
 
