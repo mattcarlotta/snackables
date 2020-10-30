@@ -11,7 +11,7 @@ All notable updates to this project will be documented in this file. See [SemVer
 
 ### Changed
 
-- IMPROVED LOADING ENV FILES BY OVER 70%!!!!
+- IMPROVED LOADING ENV FILES BY OVER 30%!!!!
 - Changed base64 encoded cached file contents strings to simple strings
 - Made all types interfaces
 - Moved out of beta testing and into release
