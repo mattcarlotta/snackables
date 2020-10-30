@@ -52,7 +52,7 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 
 [FAQ](#faq)
   - [Should I commit my .env files?](#should-i-commit-my-env-files)
-  - [How does snackables work and will it overwrite already set or predefined variables?](#how-does-snackables-work-and-will-it-overwrite-already-set-or-predefined-variables)
+  - [How does snackables work and will it override already set or predefined variables?](#how-does-snackables-work-and-will-it-override-already-set-or-predefined-variables)
   - [Why doesn't the parse method assign Envs?](#why-doesnt-the-parse-method-assign-envs)
   - [Is the ENV_LOAD variable required?](#is-the-env_load-variable-required)
 
