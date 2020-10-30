@@ -233,7 +233,7 @@ const result = snackables.config();
 
 console.log("parsed", result.parsed); // process.env with loaded ENVs
 console.log("extracted", result.extracted); // extracted ENVs within a { KEY: VALUE } object
-console.log("cachedEnvFiles", result.cachedEnvFiles); // array of file path and file parsed contents objects: [{ path: "path/to/.env", contents: parsed base64 encoded string }] 
+console.log("cachedEnvFiles", result.cachedEnvFiles); // array of file path and file parsed contents objects: [{ path: "path/to/.env", contents: parsed contents as encoded string }] 
 ```
 
 Additionally, you can pass options to `config`.
@@ -363,7 +363,7 @@ const { config, parse } = require("snackables");
 // import { config, parse } from "snackables";
 
 // loads ".env.base" and ".env.dev" to process.env and returns an array of cached env objects
-// cachedEnvFiles = [{ path: "path/to/.env", contents: base64 encoded string with parsed contents }]
+// cachedEnvFiles = [{ path: "path/to/.env", contents: parsed contents as encoded string  }]
 const { cachedEnvFiles } = config({ path: ".env.base,.env.dev", cache: true }); 
 
 // parses and reapplies cached ENVs if the process.env.PROPERTY is undefined

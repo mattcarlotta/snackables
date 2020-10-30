@@ -2,6 +2,16 @@
 
 All notable updates to this project will be documented in this file. See [SemVer 2.0](https://semver.org/) for commit guidelines.
 
+## [1.0.0] - 2020-29-10
+
+### Changed
+
+- Changed base64 encoded cached file contents strings to simple strings
+- Added test for config warnings
+- Made all types interfaces
+- Moved out of beta testing and into release
+- Updated README
+
 ## [0.0.34] - 2020-29-10
 
 ### Added

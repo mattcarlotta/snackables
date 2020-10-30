@@ -169,4 +169,20 @@ describe("Config Method", () => {
 
     expect(parsed.AUTHOR).toEqual(AUTHOR);
   });
+
+  it("throws a warning if loading the .env fails", () => {
+    const spy = jest.spyOn(console, "log").mockImplementation();
+
+    config({
+      path: "tests/.env.utf8",
+      // @ts-ignore
+      encoding: "bad"
+    });
+
+    expect(spy.mock.calls[0][0]).toContain(
+      `Unable to load ${root}/tests/.env.utf8`
+    );
+
+    spy.mockRestore();
+  });
 });

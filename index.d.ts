@@ -2,13 +2,13 @@
 export interface ParsedENVs {
     [name: string]: string;
 }
-export declare type ProcessEnv = {
+export interface ProcessEnv {
     [key: string]: string;
-};
-export declare type CachedEnvFiles = Array<{
+}
+export interface CachedEnvFiles {
     path: string;
     contents: string;
-}>;
+}
 export interface ConfigOptions {
     dir?: string;
     path?: string | string[];
@@ -19,7 +19,7 @@ export interface ConfigOptions {
 export interface ConfigOutput {
     parsed: ParsedENVs;
     extracted: ParsedENVs;
-    cachedEnvFiles: CachedEnvFiles;
+    cachedEnvFiles: CachedEnvFiles[];
 }
 /**
  * Parses a string, buffer, or precached envs into an object.
@@ -27,7 +27,7 @@ export interface ConfigOutput {
  * @param src - contents to be parsed
  * @returns an object with keys and values based on `src`
  */
-export declare function parse(src: string | Buffer | CachedEnvFiles): ParsedENVs;
+export declare function parse(src: string | Buffer | CachedEnvFiles[]): ParsedENVs;
 /**
  * Extracts and interpolates one or multiple `.env` files into an object and assigns them to {@link https://nodejs.org/api/process.html#process_process_env | `process.env`}.
  * Example: 'KEY=value' becomes { KEY: 'value' }

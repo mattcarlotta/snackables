@@ -26,12 +26,14 @@ export interface ParsedENVs {
   [name: string]: string;
 }
 
-export type ProcessEnv = { [key: string]: string };
+export interface ProcessEnv {
+  [key: string]: string;
+}
 
-export type CachedEnvFiles = Array<{
+export interface CachedEnvFiles {
   path: string;
   contents: string;
-}>;
+}
 
 export interface ConfigOptions {
   dir?: string; // directory to env files
@@ -44,10 +46,10 @@ export interface ConfigOptions {
 export interface ConfigOutput {
   parsed: ParsedENVs; // process.env ENVs as key value pairs
   extracted: ParsedENVs; // extracted ENVs as key value pairs
-  cachedEnvFiles: CachedEnvFiles; // cached ENVs as key value pairs
+  cachedEnvFiles: CachedEnvFiles[]; // cached ENVs as key value pairs
 }
 
-const __CACHE__: CachedEnvFiles = [];
+const __CACHE__: CachedEnvFiles[] = [];
 
 /**
  * Parses a string, buffer, or precached envs into an object.
@@ -55,7 +57,7 @@ const __CACHE__: CachedEnvFiles = [];
  * @param src - contents to be parsed
  * @returns an object with keys and values based on `src`
  */
-export function parse(src: string | Buffer | CachedEnvFiles): ParsedENVs {
+export function parse(src: string | Buffer | CachedEnvFiles[]): ParsedENVs {
   const { env } = process;
   const { LOADED_CACHE } = env;
   const { assign } = Object;
@@ -66,10 +68,7 @@ export function parse(src: string | Buffer | CachedEnvFiles): ParsedENVs {
     // checks if process.env.LOADED_CACHE is undefined, otherwise skip reloading
     if (!LOADED_CACHE)
       for (let i = 0; i < src.length; i += 1) {
-        assign(
-          extracted,
-          JSON.parse(Buffer.from(src[i].contents, "base64").toString())
-        );
+        assign(extracted, JSON.parse(Buffer.from(src[i].contents).toString()));
       }
     return (process.env = assign(extracted, env));
   }
@@ -178,7 +177,7 @@ export function config(options?: ConfigOptions): ConfigOutput {
 
   // loop over configs array
   for (let i = 0; i < configs.length; i += 1) {
-    // gets config path file (append .env. if using shorthand)
+    // gets config path file
     const envPath = join(dir, configs[i]);
     try {
       // check that the file hasn't already been cached
@@ -196,7 +195,7 @@ export function config(options?: ConfigOptions): ConfigOutput {
         if (cache)
           __CACHE__.push({
             path: envPath,
-            contents: Buffer.from(JSON.stringify(parsed)).toString("base64")
+            contents: Buffer.from(JSON.stringify(parsed)).toString()
           });
 
         // assigns ENVs to accumulated object
@@ -205,7 +204,6 @@ export function config(options?: ConfigOptions): ConfigOutput {
         if (debug) log(`\x1b[90mLoaded env from ${envPath}\x1b[0m`);
       }
     } catch (err) {
-      /* istanbul ignore next */
       if (err.code !== "ENOENT") {
         log(`\x1b[33mUnable to load ${envPath}: ${err.message}.\x1b[0m`);
       }
