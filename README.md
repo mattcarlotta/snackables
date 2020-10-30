@@ -564,7 +564,11 @@ By default, Envs that are **pre-set** or **defined** within `process.env` **WILL
 
 ### Why doesn't the parse method assign Envs?
 
-Under the hood, the config method utilizes the parse method to potentially extract multiple `.env` files as it loops over paths. The config method expects parse to return an object of extracted Envs that will be accumulated with other extracted Envs. The result of these accumulated extracted Envs is then assigned to `process.env` **once**. In bench marks, assigning the individual extracted Envs to `process.env` resulted in a significant performance loss.
+With the exception of assigning pre-cached Envs (which don't require any Env interpretation/interpolation), `parse` can not automatically assign Envs as they're extracted.
+
+Why?
+
+Under the hood, the `config` method utilizes the `parse` method to extract one or multiple `.env` files as it loops over the file [path](#path)s. The `config` method expects `parse` to only return an `Object` of `extracted` or `sanitized` Envs that will be accumulated with other files' extracted/sanitized Envs. The result of these accumulated Envs is then assigned to `process.env` **once**. In bench marks, allowing the `parse` method to assign extracted Envs to `process.env` more than once resulted in a significant performance loss. 
 
 ### Is the ENV_LOAD variable required?
 
