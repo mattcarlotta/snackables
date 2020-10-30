@@ -109,7 +109,7 @@ require("snackables");
 // import 'snackables';
 ```
 
-Or, you can [preload](#preload) your `.env` files instead!
+Optionally, you can [preload](#preload) your `.env` files instead!
 
 ## CLI Options
 
