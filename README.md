@@ -26,10 +26,10 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 [CLI Options](#cli-options)
   - [ENV_LOAD](#env_load)
   - [ENV_DIR](#env_dir)
-  - [ENV_OVERRIDE](#env_override)
-  - [ENV_DEBUG](#env_debug)
   - [ENV_ENCODE](#env_encode)
+  - [ENV_OVERRIDE](#env_override)
   - [ENV_CACHE](#env_cache)
+  - [ENV_DEBUG](#env_debug)
 
 [Preload](#preload)
 
@@ -37,9 +37,9 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
   - [Config Argument Options](#config-argument-options)
     - [dir](#dir)
     - [path](#path)
+    - [encoding](#encoding)
     - [override](#override)
     - [cache](#cache)
-    - [encoding](#encoding)
     - [debug](#debug)
 
 [Parse Method](#parse-method)
@@ -146,40 +146,6 @@ By defining an `ENV_DIR` variable within one of your package.json scripts, this 
 }
 ```
 
-#### ENV_OVERRIDE
-
-By defining an `ENV_OVERRIDE` variable within one of your package.json scripts, this will let snackables know you'd like to override Envs in `process.env`.
-
-For example:
-
-```json
-{
-  "scripts": {
-    "dev": "ENV_LOAD=.env.dev ENV_DEBUG=true ENV_OVERRIDE=true node app.js"
-  },
-  "dependencies": {
-    "snackables": "^x.x.x"
-  }
-}
-```
-
-#### ENV_DEBUG
-
-By defining an `ENV_DEBUG` variable within one of your package.json scripts, this will let snackables know you'd like to be in debug mode and output the results of extracting/loading Envs.
-
-For example:
-
-```json
-{
-  "scripts": {
-    "dev": "ENV_LOAD=.env.dev ENV_DEBUG=true node app.js"
-  },
-  "dependencies": {
-    "snackables": "^x.x.x"
-  }
-}
-```
-
 #### ENV_ENCODE
 
 By defining an `ENV_ENCODE` variable within one of your package.json scripts, this will let snackables know you'd like to set the encoding type of the `.env` file(s). The following file encode types are supported:
@@ -209,6 +175,24 @@ For example:
   }
 }
 ```
+
+#### ENV_OVERRIDE
+
+By defining an `ENV_OVERRIDE` variable within one of your package.json scripts, this will let snackables know you'd like to override Envs in `process.env`.
+
+For example:
+
+```json
+{
+  "scripts": {
+    "dev": "ENV_LOAD=.env.dev ENV_DEBUG=true ENV_OVERRIDE=true node app.js"
+  },
+  "dependencies": {
+    "snackables": "^x.x.x"
+  }
+}
+```
+
 #### ENV_CACHE
 
 By defining `ENV_CACHE`, any `.env` file that has been [preloaded](#preload) will be stored to temporary cache. Any attempts to reload the same file within the same running process using [config](#config-method) will be skipped. 
@@ -217,6 +201,23 @@ By defining `ENV_CACHE`, any `.env` file that has been [preloaded](#preload) wil
 {
   "scripts": {
     "dev": "ENV_LOAD=.env.dev ENV_CACHE=true node -r snackables app.js"
+  },
+  "dependencies": {
+    "snackables": "^x.x.x"
+  }
+}
+```
+
+#### ENV_DEBUG
+
+By defining an `ENV_DEBUG` variable within one of your package.json scripts, this will let snackables know you'd like to be in debug mode and output the results of extracting/loading Envs.
+
+For example:
+
+```json
+{
+  "scripts": {
+    "dev": "ENV_LOAD=.env.dev ENV_DEBUG=true node app.js"
   },
   "dependencies": {
     "snackables": "^x.x.x"
@@ -252,9 +253,10 @@ accepts arguments as an `Object` with the following properties:
 { 
   dir?: string, 
   path?: string | string[], 
-  debug?: boolean | string, 
-  encoding?: BufferEncoding, 
-  override?: boolean 
+  encoding?: BufferEncoding,
+  override?: string | boolean,
+  cache?: string | boolean,
+  debug?: boolean | string
 }
 ```
 
@@ -324,6 +326,19 @@ require("snackables").config({
 // config({ path: ["custom/path/to/.env", "custom/path/to/.env.base"] });
 ```
 
+#### encoding
+
+Default: `utf-8`
+
+You may specify the encoding of your file containing environment variables.
+
+```js
+require("snackables").config({ encoding: "latin1" });
+
+// import { config } from "snackables"
+// config({ encoding: "latin1" });
+```
+
 #### override
 
 Default: `false`
@@ -335,7 +350,6 @@ require("snackables").config({ path: ".env", override: true });
 
 // import { config } from "snackables"
 // config({ path: ".env", require("snackables").config({ path: ".env", override: true });
-: true });
 ```
 
 #### cache
@@ -351,19 +365,6 @@ require("snackables").config({ path: ".env", cache: true });
 // config({ path: ".env", cache: true });
 ```
 
-
-#### encoding
-
-Default: `utf-8`
-
-You may specify the encoding of your file containing environment variables.
-
-```js
-require("snackables").config({ encoding: "latin1" });
-
-// import { config } from "snackables"
-// config({ encoding: "latin1" });
-```
 
 #### debug
 
