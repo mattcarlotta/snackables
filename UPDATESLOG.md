@@ -6,12 +6,12 @@ All notable updates to this project will be documented in this file. See [SemVer
 
 ### Added
 - Added an `ENV_OVERRIDE` variable to override Envs `process.env`
-- Added an `override` argument to the `config` method to override Envs `process.env`
+- Added an `override` argument to the `config` method to override Envs defined within `process.env`
 - Added test for config warnings
 
 ### Changed
 
-- IMPROVED LOADING ENV FILES BY OVER 30%!!!!
+- **IMPROVED LOADING ENV FILES BY OVER 30%!!!!**
 - Changed base64 encoded cached file contents strings to simple strings
 - Made all types interfaces
 - Moved out of beta testing and into release
