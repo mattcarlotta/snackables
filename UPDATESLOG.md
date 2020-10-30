@@ -2,14 +2,20 @@
 
 All notable updates to this project will be documented in this file. See [SemVer 2.0](https://semver.org/) for commit guidelines.
 
-## [1.0.0] - 2020-29-10
+## [1.0.0] - 2020-30-10
+
+### Added
+- Added an `ENV_OVERRIDE` variable to override Envs `process.env`
+- Added an `override` argument to the `config` method to override Envs `process.env`
+- Added test for config warnings
 
 ### Changed
 
+- IMPROVED LOADING ENV FILES BY OVER 70%!!!!
 - Changed base64 encoded cached file contents strings to simple strings
-- Added test for config warnings
 - Made all types interfaces
 - Moved out of beta testing and into release
+- Swapped parsed forEach for a for loop
 - Updated README
 
 ## [0.0.34] - 2020-29-10
@@ -66,15 +72,15 @@ All notable updates to this project will be documented in this file. See [SemVer
 
 ### Changed
 
-- Config method returns cachedEnvs, all `process.env` contents, and extracted ENVs as an object
-- Prevented ENVs in `process.env` from being overwritten
-- Parse method optionally parses cached ENV files and applies them to `process.env`
+- Config method returns cachedEnvs, all `process.env` contents, and extracted Envs as an object
+- Prevented Envs in `process.env` from being overwritten
+- Parse method optionally parses cached Env files and applies them to `process.env`
 
 ## [0.0.25] - 2020-23-10
 
 ### Added
 
-- Config method returns cached file ENVs and parsed ENVs
+- Config method returns cached file Envs and parsed Envs
 
 ## [0.0.23 - 0.0.24] - 2020-23-10
 
@@ -134,7 +140,7 @@ All notable updates to this project will be documented in this file. See [SemVer
 
 ### Added
 
-- Added support for interpolated ENVs
+- Added support for interpolated Envs
 
 ## [0.0.13] - 2020-20-10
 

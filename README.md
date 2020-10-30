@@ -26,6 +26,7 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 [CLI Options](#cli-options)
   - [ENV_LOAD](#env_load)
   - [ENV_DIR](#env_dir)
+  - [ENV_OVERRIDE](#env_override)
   - [ENV_DEBUG](#env_debug)
   - [ENV_ENCODE](#env_encode)
   - [ENV_CACHE](#env_cache)
@@ -33,15 +34,17 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 [Preload](#preload)
 
 [Config Method](#config-method)
-  - [Config Options](#config-options)
+  - [Config Argument Options](#config-argument-options)
     - [dir](#dir)
     - [path](#path)
+    - [override](#override)
     - [cache](#cache)
     - [encoding](#encoding)
     - [debug](#debug)
 
 [Parse Method](#parse-method)
   - [Parse Cache](#parse-cache)
+  - [Parse Override](#parse-override)
   - [Parse Rules](#parse-rules)
 
 [Interpolation](#interpolation)
@@ -50,6 +53,7 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 [FAQ](#faq)
   - [Should I commit my .env files?](#should-i-commit-my-env-files)
   - [How does snackables work and will it overwrite already set or predefined variables?](#how-does-snackables-work-and-will-it-overwrite-already-set-or-predefined-variables)
+  - [Why doesn't the parse method assign Envs?](#why-doesnt-the-parse-method-assign-envs)
   - [Is the ENV_LOAD variable required?](#is-the-env_load-variable-required)
 
 [Contributing Guide](#contributing-guide)
@@ -142,9 +146,26 @@ By defining an `ENV_DIR` variable within one of your package.json scripts, this 
 }
 ```
 
+#### ENV_OVERRIDE
+
+By defining an `ENV_OVERRIDE` variable within one of your package.json scripts, this will let snackables know you'd like to override Envs in `process.env`.
+
+For example:
+
+```json
+{
+  "scripts": {
+    "dev": "ENV_LOAD=.env.dev ENV_DEBUG=true ENV_OVERRIDE=true node app.js"
+  },
+  "dependencies": {
+    "snackables": "^x.x.x"
+  }
+}
+```
+
 #### ENV_DEBUG
 
-By defining an `ENV_DEBUG` variable within one of your package.json scripts, this will let snackables know you'd like to be in debug mode and output the results of extracting/loading ENVs.
+By defining an `ENV_DEBUG` variable within one of your package.json scripts, this will let snackables know you'd like to be in debug mode and output the results of extracting/loading Envs.
 
 For example:
 
@@ -226,19 +247,30 @@ Package.json:
 
 ## Config Method
 
+accepts arguments as an `Object` with the following properties: 
+```js
+{ 
+  dir?: string, 
+  path?: string | string[], 
+  debug?: boolean | string, 
+  encoding?: BufferEncoding, 
+  override?: boolean 
+}
+```
+
 If you wish to manaully import `.env` files, then the config method will read your `.env` files, parse the contents, assign them to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env), and return an `Object` with `parsed`, `extracted` and `cachedEnvFiles` properties (the [cache](#cache) argument of `config` **must** be set to true for `cachedEnvFiles` to be utilized):
 
 ```js
 const result = snackables.config();
 
-console.log("parsed", result.parsed); // process.env with loaded ENVs
-console.log("extracted", result.extracted); // extracted ENVs within a { KEY: VALUE } object
+console.log("parsed", result.parsed); // process.env with loaded Envs
+console.log("extracted", result.extracted); // extracted Envs within a { KEY: VALUE } object
 console.log("cachedEnvFiles", result.cachedEnvFiles); // array of file path and file parsed contents objects: [{ path: "path/to/.env", contents: parsed contents as encoded string }] 
 ```
 
 Additionally, you can pass options to `config`.
 
-### Config Options
+### Config Argument Options
 
 #### dir
 
@@ -292,6 +324,20 @@ require("snackables").config({
 // config({ path: ["custom/path/to/.env", "custom/path/to/.env.base"] });
 ```
 
+#### override
+
+Default: `false`
+
+You may specify whether or not to override Envs in `process.env`. 
+
+```js
+require("snackables").config({ path: ".env", override: true });
+
+// import { config } from "snackables"
+// config({ path: ".env", require("snackables").config({ path: ".env", override: true });
+: true });
+```
+
 #### cache
 
 Default: `false`
@@ -334,7 +380,13 @@ require("snackables").config({ debug: process.env.DEBUG });
 
 ## Parse Method
 
-If you wish to manually parse ENVs from a buffer or file, then parse accepts a `String` or `Buffer` argument and will return an `Object` with the parsed keys and values (by default these will **not** be assigned to `process.env`). 
+accepts two arguments: 
+```
+src: string | Buffer | CacheEnvFiles, 
+override: string | boolean)
+```
+
+If you wish to manually parse Envs from a buffer or file, then parse accepts a `string` or `Buffer` argument as the first argument that will return an `Object` with the parsed keys and values (these will **NOT** be assigned to `process.env`). 
 
 ```js
 const { readFileSync } = require("fs");
@@ -351,12 +403,12 @@ console.log(typeof config, config); // object { KEY : 'value' }
 
 ### Parse Cache
 
-In addition to accepting a string or buffer, the parse method also accepts the `cachedEnvFiles` array (returned by [config](#config-method)) as an argument if the follow requirements are met: 
+In addition, the parse method also accepts the `cachedEnvFiles` array (returned by [config](#config-method)) as the first argument if the follow requirements are met: 
 
-[ENV_CACHE](#env_cache) is defined or the [cache](#cache) argument is set to `true` when the `config` method is used and `process.env.LOADED_CACHE` is not defined. 
+[ENV_CACHE](#env_cache) is defined for preloading or the [cache](#cache) argument is set to `true` when the `config` method is used and `process.env.LOADED_CACHE` is not defined. 
 
 
-If the above requirements are met, parse will reapply cached ENVs properties to `process.env` and return `process.env`. 
+If the above requirements are met, parse will **reapply** cached Envs properties to `process.env` and return `process.env`. 
 
 ```js
 const { config, parse } = require("snackables");
@@ -366,8 +418,8 @@ const { config, parse } = require("snackables");
 // cachedEnvFiles = [{ path: "path/to/.env", contents: parsed contents as encoded string  }]
 const { cachedEnvFiles } = config({ path: ".env.base,.env.dev", cache: true }); 
 
-// parses and reapplies cached ENVs if the process.env.PROPERTY is undefined
-// returns process.env with any reapplied ENVs from cache
+// parses and reapplies cached Envs if the process.env.PROPERTY is undefined
+// returns process.env with any reapplied Envs from cache
 const reappliedProcessEnv = parse(cachedEnvFiles); 
 console.log(reappliedProcessEnv) 
 
@@ -377,6 +429,23 @@ process.env.LOADED_CACHE = "true";
 // since process.env.LOADED_CACHE is defined, cache is skipped and process.env is returned as is
 const originalProcessEnv = parse(cachedEnvFiles); 
 console.log(originalProcessEnv) 
+```
+
+### Parse Override
+
+If you wish to extract and potentially override Envs in `process.env`, then you can pass `override` as a second argument to parse (these will **NOT** be assigned to `process.env`).
+
+```js
+const { readFileSync } = require("fs");
+const { parse } = require("snackables");
+// import { readFileSync } from "fs";
+// import { parse } from "snackables";
+
+const config = parse(Buffer.from("BASIC=basic"), override: true); // will return an object
+console.log(typeof config, config); // object { BASIC : 'basic' }
+
+const result = parse(readFileSync("path/to/.env.file", { encoding: "utf8" }), override: true); // will return an object
+console.log(typeof config, config); // object { KEY : 'value' }
 ```
 
 ### Parse Rules
@@ -456,7 +525,7 @@ B=$example
 
 No. It's **strongly** recommendedd not to commit your `.env` files to version control. It should only include environment-specific values such as database passwords or API keys. Your production database should have a different password than your development database.
 
-### How does snackables work and will it overwrite already set or predefined variables?
+### How does snackables work and will it override already set or predefined variables?
 
 By default, snackables will look for the `.env.*` file(s) defined within the `ENV_LOAD` variable and append them to `process.env`.
 
@@ -489,13 +558,17 @@ HOST=http://localhost
 PORT=3000
 ```
 
-snackables will parse the files and append the ENVs in the order of how they were defined in `ENV_LOAD`. In the example above, the `DB_PASS` variables within `.env.base` would be overwritten by `.env.dev` because the file was imported last.
+snackables will parse the files and append the Envs in the order of how they were defined in `ENV_LOAD`. In the example above, the `DB_PASS` variables within `.env.base` would be overidden by `.env.dev` because the file was imported last.
 
-Any ENV variables **within** an `.env` file can be overwritten according to their imported order, where the last `.env` import takes precendence over any previous ENVs; however ENVS that are **pre-set** or **defined** within `process.env` **WILL NOT be overwritten**.
+By default, Envs that are **pre-set** or **defined** within `process.env` **WILL NOT be overidden**. If you wish to override variables in `process.env` see [ENV_OVERRIDE](#env_override) or [Config Override](#override) or [Parse Override](#parse-override).
+
+### Why doesn't the parse method assign Envs?
+
+Under the hood, the config method utilizes the parse method to potentially extract multiple `.env` files as it loops over paths. The config method expects parse to return an object of extracted Envs that will be accumulated with other extracted Envs. The result of these accumulated extracted Envs is then assigned to `process.env` **once**. In bench marks, assigning the individual extracted Envs to `process.env` resulted in a significant performance loss.
 
 ### Is the ENV_LOAD variable required?
 
-To be as flexible as possible, the `ENV_LOAD` variable is not required to set ENVs to `process.env`. However, you will then be required to use this package just like you would use dotenv.
+To be as flexible as possible, the `ENV_LOAD` variable is not required to set Envs to `process.env`. However, you will then be required to use this package just like you would use dotenv.
 
 ```js
 const { config } = require("snackables");

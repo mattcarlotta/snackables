@@ -1,17 +1,22 @@
 import { readFileSync, statSync } from "fs";
 import { join } from "path";
 
-export interface ParsedENVs {
-  [name: string]: string;
+export interface ParsedEnvs {
+  [name: string]: string; // parsed Envs as KEY=VALUE pairs
 }
 
 export interface ProcessEnv {
-  [key: string]: string;
+  [key: string]: string; // process.env
+}
+
+export interface ParsedOutput {
+  extracted: ParsedEnvs;
+  sanitized: ParsedEnvs;
 }
 
 export interface CachedEnvFiles {
-  path: string;
-  contents: string;
+  path: string; // loaded .env file path
+  contents: string; // parsed file to buffer string
 }
 
 export interface ConfigOptions {
@@ -20,12 +25,13 @@ export interface ConfigOptions {
   encoding?: BufferEncoding; // encoding of .env file
   debug?: string | boolean; // turn on logging for debugging purposes
   cache?: string | boolean; // turn on caching
+  override?: string | boolean; // override process.envs
 }
 
 export interface ConfigOutput {
-  parsed: ParsedENVs; // process.env ENVs as key value pairs
-  extracted: ParsedENVs; // extracted ENVs as key value pairs
-  cachedEnvFiles: CachedEnvFiles[]; // cached ENVs as key value pairs
+  parsed: ParsedEnvs; // process.env Envs as key value pairs
+  extracted: ParsedEnvs; // extracted Envs as key value pairs
+  cachedEnvFiles: CachedEnvFiles[]; // cached Envs as key value pairs
 }
 
 const __CACHE__: CachedEnvFiles[] = [];
@@ -36,13 +42,17 @@ const __CACHE__: CachedEnvFiles[] = [];
  * @param src - contents to be parsed
  * @returns an object with keys and values based on `src`
  */
-export function parse(src: string | Buffer | CachedEnvFiles[]): ParsedENVs {
+export function parse(
+  src: string | Buffer | CachedEnvFiles[],
+  override?: string | boolean
+): ParsedEnvs {
   const { env } = process;
   const { LOADED_CACHE } = env;
   const { assign } = Object;
-  const extracted: ParsedENVs = {};
+  const extracted: ParsedEnvs = {};
+  const sanitized: ParsedEnvs = {};
 
-  // checks if src is an array of precached ENVs
+  // checks if src is an array of precached Envs
   if (Array.isArray(src)) {
     // checks if process.env.LOADED_CACHE is undefined, otherwise skip reloading
     if (!LOADED_CACHE)
@@ -83,41 +93,44 @@ export function parse(src: string | Buffer | CachedEnvFiles[]): ParsedENVs {
         }, envValue);
   }
 
-  // convert Buffers before splitting into lines and processing
-  src
-    .toString()
-    .split(/\n|\r|\r\n/)
-    .forEach(line => {
-      // matching "KEY' and 'VAL' in 'KEY=VAL'
-      const keyValueArr = line.match(/^\s*([\w.-]+)\s*=\s*(.*)?\s*$/);
-      // matched?
-      if (keyValueArr) {
-        // default undefined or missing values to empty string
-        let value = keyValueArr[2] || "";
-        const end = value.length - 1;
-        const isDoubleQuoted = value[0] === '"' && value[end] === '"';
-        const isSingleQuoted = value[0] === "'" && value[end] === "'";
+  // converts Buffers before splitting into lines and processing
+  const keyValues = src.toString().split(/\n|\r|\r\n/);
 
-        // if single or double quoted, remove quotes
-        if (isSingleQuoted || isDoubleQuoted) {
-          value = value.substring(1, end);
+  // loops over key value pairs
+  for (let i = 0; i < keyValues.length; i += 1) {
+    // finds matching "KEY' and 'VAL' in 'KEY=VAL'
+    const keyValueArr = keyValues[i].match(/^\s*([\w.-]+)\s*=\s*(.*)?\s*$/);
 
-          // if double quoted, expand newlines
-          if (isDoubleQuoted) value = value.replace(/\\n/g, "\n");
-        } else {
-          // remove surrounding whitespace
-          value = value.trim();
-        }
+    if (keyValueArr) {
+      // default undefined or missing values to empty string
+      let value = keyValueArr[2] || "";
+      const end = value.length - 1;
+      const isDoubleQuoted = value[0] === '"' && value[end] === '"';
+      const isSingleQuoted = value[0] === "'" && value[end] === "'";
 
-        // interpolate value from .env or process.env
-        value = interpolate(value);
+      // if single or double quoted, remove quotes
+      if (isSingleQuoted || isDoubleQuoted) {
+        value = value.substring(1, end);
 
-        // prevent the extracted value from overwriting a process.env variable
-        if (!env[keyValueArr[1]]) extracted[keyValueArr[1]] = value;
+        // if double quoted, expand newlines
+        if (isDoubleQuoted) value = value.replace(/\\n/g, "\n");
+      } else {
+        // remove surrounding whitespace
+        value = value.trim();
       }
-    });
 
-  return extracted;
+      // interpolate value from process.env or .env
+      value = interpolate(value);
+
+      // assigns what was initially extracted from the file
+      extracted[keyValueArr[1]] = value;
+
+      // prevents the extracted value from overwriting a process.env variable
+      if (!env[keyValueArr[1]]) sanitized[keyValueArr[1]] = value;
+    }
+  }
+
+  return override ? extracted : sanitized;
 }
 
 /**
@@ -125,7 +138,7 @@ export function parse(src: string | Buffer | CachedEnvFiles[]): ParsedENVs {
  * Example: 'KEY=value' becomes { KEY: 'value' }
  *
  * @param options - accepts: { dir: string, path: string | string[], debug: boolean, encoding: | "ascii" | "utf8" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary"| "hex" }
- * @returns a single parsed object with parsed ENVs as { key: value } pairs, a single extracted object with extracted ENVS as { key: value } pairs, and an array of cached ENVs as { path: string, contents: string} pairs
+ * @returns a single parsed object with parsed Envs as { key: value } pairs, a single extracted object with extracted Envs as { key: value } pairs, and an array of cached Envs as { path: string, contents: string} pairs
  */
 export function config(options?: ConfigOptions): ConfigOutput {
   const { cwd, env } = process;
@@ -136,6 +149,7 @@ export function config(options?: ConfigOptions): ConfigOutput {
   let dir = cwd();
   let path: string | string[] = [".env"];
   let debug: string | boolean | undefined;
+  let override: string | boolean | undefined;
   let encoding: BufferEncoding = "utf-8";
   let cache: string | boolean | undefined = false;
 
@@ -146,13 +160,14 @@ export function config(options?: ConfigOptions): ConfigOutput {
     debug = options.debug;
     encoding = options.encoding || encoding;
     cache = options.cache;
+    override = options.override;
   }
 
   // split path into array of strings
   const configs = Array.isArray(path) ? path : path.split(",");
 
   // initializes ENV object
-  const extracted: ParsedENVs = {};
+  const extracted: ParsedEnvs = {};
 
   // loop over configs array
   for (let i = 0; i < configs.length; i += 1) {
@@ -167,17 +182,17 @@ export function config(options?: ConfigOptions): ConfigOutput {
         // checks if "envPath" is a file that exists
         statSync(envPath).isFile();
 
-        // reads and parses ENVS from .env file
-        const parsed = parse(readFileSync(envPath, { encoding }));
+        // reads and parses Envs from .env file
+        const parsed = parse(readFileSync(envPath, { encoding }), override);
 
-        // stores path and contents to internal cache
+        // stores path and parsed file contents to internal cache
         if (cache)
           __CACHE__.push({
             path: envPath,
             contents: Buffer.from(JSON.stringify(parsed)).toString()
           });
 
-        // assigns ENVs to accumulated object
+        // assigns Envs to accumulated object
         assign(extracted, parsed);
 
         if (debug) log(`\x1b[90mLoaded env from ${envPath}\x1b[0m`);
@@ -190,7 +205,7 @@ export function config(options?: ConfigOptions): ConfigOutput {
   }
 
   return {
-    parsed: process.env = assign({}, extracted, env),
+    parsed: assign(env, extracted),
     extracted,
     cachedEnvFiles: __CACHE__
   };
@@ -201,14 +216,22 @@ export function config(options?: ConfigOptions): ConfigOutput {
  */
 (function () {
   // check if ENV_LOAD is defined
-  const { ENV_CACHE, ENV_DIR, ENV_LOAD, ENV_DEBUG, ENV_ENCODE } = process.env;
+  const {
+    ENV_CACHE,
+    ENV_DIR,
+    ENV_LOAD,
+    ENV_DEBUG,
+    ENV_ENCODE,
+    ENV_OVERRIDE
+  } = process.env;
   if (ENV_LOAD) {
     config({
       dir: ENV_DIR,
       path: ENV_LOAD,
       debug: ENV_DEBUG,
       encoding: ENV_ENCODE as BufferEncoding,
-      cache: ENV_CACHE
+      cache: ENV_CACHE,
+      override: ENV_OVERRIDE
     });
     // prevent the IFFE from reloading the .env files
     delete process.env.ENV_LOAD;
