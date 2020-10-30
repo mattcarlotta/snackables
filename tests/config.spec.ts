@@ -1,5 +1,5 @@
 import { config } from "../index";
-import type { ParsedENVs } from "../index";
+import type { ParsedEnvs } from "../index";
 
 const root = process.cwd();
 
@@ -82,6 +82,22 @@ describe("Config Method", () => {
     spy.mockRestore();
   });
 
+  it("accepts an override argument to write over process.env", () => {
+    const person = "Bob";
+    process.env.PERSON = person;
+
+    expect(process.env.PERSON).toEqual(person);
+
+    const { extracted } = config({
+      path: "tests/.env.override",
+      override: true
+    });
+
+    const overridenPerson = "Jane";
+    expect(extracted.PERSON).toEqual(overridenPerson);
+    expect(process.env.PERSON).toEqual(overridenPerson);
+  });
+
   it("allows non-existent files to silently fail", () => {
     const spy = jest.spyOn(console, "log").mockImplementation();
 
@@ -93,7 +109,7 @@ describe("Config Method", () => {
   });
 
   describe("Interpolation", () => {
-    let extracted: ParsedENVs;
+    let extracted: ParsedEnvs;
     beforeAll(() => {
       process.env.MACHINE = "node";
       extracted = config({ path: "tests/.env.interp" }).extracted;
@@ -168,5 +184,21 @@ describe("Config Method", () => {
     );
 
     expect(parsed.AUTHOR).toEqual(AUTHOR);
+  });
+
+  it("throws a warning if loading the .env fails", () => {
+    const spy = jest.spyOn(console, "log").mockImplementation();
+
+    config({
+      path: "tests/.env.utf8",
+      // @ts-ignore
+      encoding: "bad"
+    });
+
+    expect(spy.mock.calls[0][0]).toContain(
+      `Unable to load ${root}/tests/.env.utf8`
+    );
+
+    spy.mockRestore();
   });
 });
