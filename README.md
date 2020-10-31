@@ -10,8 +10,8 @@
   <a href="https://codecov.io/gh/mattcarlotta/snackables/branch/main">
     <img src="https://img.shields.io/codecov/c/github/mattcarlotta/snackables?style=for-the-badge&labelColor=000000">
   </a>
-  <a href="https://github.com/mattcarlotta/snackables/blob/master/LICENSE">
-    <img src="https://img.shields.io/github/license/mattcarlotta/snackables?style=for-the-badge&labelColor=000000">
+  <a href="https://www.npmjs.com/package/snackables">
+    <img src="https://img.shields.io/npm/dm/snackables?style=for-the-badge&labelColor=000000">
   </a>
 </p>
 
