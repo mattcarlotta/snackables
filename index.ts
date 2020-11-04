@@ -16,9 +16,11 @@ export type CachedEnvFiles = Array<{
 
 export type Option = string | boolean | undefined;
 
+export type Path = string | string[];
+
 export interface ConfigOptions {
   dir?: string; // directory to env files
-  path?: string | string[]; // path to .env file
+  path?: Path; // path to .env file
   encoding?: BufferEncoding; // encoding of .env file
   override?: Option; // override process.envs
   cache?: Option; // turn on caching
@@ -148,7 +150,7 @@ export function config(options?: ConfigOptions): ConfigOutput {
 
   // default config options
   let dir = process.cwd();
-  let path: string | string[] = [".env"];
+  let path: Path = [".env"];
   let debug: Option;
   let override: Option;
   let encoding: BufferEncoding = "utf-8";
