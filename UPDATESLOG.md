@@ -2,6 +2,17 @@
 
 All notable updates to this project will be documented in this file. See [SemVer 2.0](https://semver.org/) for commit guidelines.
 
+## [1.0.2] - 2020-04-11
+
+### Added
+
+- Added `index.d.ts` to `.gitignore`
+
+### Changed
+
+- Reduced build size
+- Refactored types
+
 ## [1.0.2] - 2020-03-11
 
 ### Changed

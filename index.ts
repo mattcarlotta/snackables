@@ -14,13 +14,15 @@ export interface CachedEnvFiles {
   contents: string; // parsed file to buffer string
 }
 
+export type Option = string | boolean | undefined;
+
 export interface ConfigOptions {
   dir?: string; // directory to env files
   path?: string | string[]; // path to .env file
   encoding?: BufferEncoding; // encoding of .env file
-  override?: string | boolean; // override process.envs
-  cache?: string | boolean; // turn on caching
-  debug?: string | boolean; // turn on logging for debugging purposes
+  override?: Option; // override process.envs
+  cache?: Option; // turn on caching
+  debug?: Option; // turn on logging for debugging purposes
 }
 
 export interface ConfigOutput {
@@ -40,7 +42,7 @@ const __CACHE__: CachedEnvFiles[] = [];
  */
 export function parse(
   src: string | Buffer | CachedEnvFiles[],
-  override?: string | boolean
+  override?: Option
 ): ParsedEnvs {
   const { env } = process;
   const { LOADED_CACHE } = env;
@@ -59,7 +61,7 @@ export function parse(
       for (let i = 0; i < src.length; i += 1) {
         assign(extracted, JSON.parse(Buffer.from(src[i].contents).toString()));
       }
-    return (process.env = assign(extracted, env));
+    return assign(env, extracted);
   }
 
   function interpolate(envValue: string): string {
@@ -141,17 +143,16 @@ export function parse(
  * @returns a single parsed object with parsed Envs as { key: value } pairs, a single extracted object with extracted Envs as { key: value } pairs, and an array of cached Envs as { path: string, contents: string } pairs
  */
 export function config(options?: ConfigOptions): ConfigOutput {
-  const { cwd, env } = process;
   const { log } = console;
   const { assign } = Object;
 
   // default config options
-  let dir = cwd();
+  let dir = process.cwd();
   let path: string | string[] = [".env"];
-  let debug: string | boolean | undefined;
-  let override: string | boolean | undefined;
+  let debug: Option;
+  let override: Option;
   let encoding: BufferEncoding = "utf-8";
-  let cache: string | boolean | undefined = false;
+  let cache: Option;
 
   // override default options with config options arguments
   if (options) {
@@ -205,7 +206,7 @@ export function config(options?: ConfigOptions): ConfigOutput {
   }
 
   return {
-    parsed: assign(env, extracted),
+    parsed: assign(process.env, extracted),
     extracted,
     cachedEnvFiles: __CACHE__
   };
