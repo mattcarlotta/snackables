@@ -9,10 +9,10 @@ export interface ProcessEnv {
   [key: string]: string; // process.env
 }
 
-export interface CachedEnvFiles {
+export type CachedEnvFiles = Array<{
   path: string; // loaded .env file path
   contents: string; // parsed file to buffer string
-}
+}>;
 
 export type Option = string | boolean | undefined;
 
@@ -26,22 +26,22 @@ export interface ConfigOptions {
 }
 
 export interface ConfigOutput {
-  parsed: ParsedEnvs; // process.env Envs as key value pairs
+  parsed: ProcessEnv; // process.env Envs as key value pairs
   extracted: ParsedEnvs; // extracted Envs as key value pairs
-  cachedEnvFiles: CachedEnvFiles[]; // cached Envs as key value pairs
+  cachedEnvFiles: CachedEnvFiles; // cached Envs as key value pairs
 }
 
-const __CACHE__: CachedEnvFiles[] = [];
+const __CACHE__: CachedEnvFiles = [];
 
 /**
  * Parses a string, buffer, or precached envs into an object.
  *
- * @param src - contents to be parsed (string | Buffer | CachedEnvFiles[])
+ * @param src - contents to be parsed (string | Buffer | CachedEnvFiles)
  * @param override - allows extracted Envs to be parsed regardless if process.env has the properties defined (string | boolean)
  * @returns an object with keys and values from `src`
  */
 export function parse(
-  src: string | Buffer | CachedEnvFiles[],
+  src: string | Buffer | CachedEnvFiles,
   override?: Option
 ): ParsedEnvs {
   const { env } = process;
