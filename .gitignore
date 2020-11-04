@@ -3,3 +3,4 @@
 node_modules
 coverage
 .cc_token
+index.d.ts

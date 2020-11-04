@@ -1,3 +1,32 @@
+/**
+ * @license
+ * BSD 2-Clause "Simplified" License
+ *
+ * Copyright (c) 2015, Scott Motte
+ *
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * Redistributions of source code must retain the above copyright notice, this
+ * list of conditions and the following disclaimer.
+ *
+ * Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
+ * and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 import { readFileSync, statSync } from "fs";
 import { join } from "path";
 
@@ -9,38 +38,42 @@ export interface ProcessEnv {
   [key: string]: string; // process.env
 }
 
-export interface CachedEnvFiles {
+export type CachedEnvFiles = Array<{
   path: string; // loaded .env file path
   contents: string; // parsed file to buffer string
-}
+}>;
+
+export type Option = string | boolean | undefined;
+
+export type Path = string | string[];
 
 export interface ConfigOptions {
   dir?: string; // directory to env files
-  path?: string | string[]; // path to .env file
+  path?: Path; // path to .env file
   encoding?: BufferEncoding; // encoding of .env file
-  override?: string | boolean; // override process.envs
-  cache?: string | boolean; // turn on caching
-  debug?: string | boolean; // turn on logging for debugging purposes
+  override?: Option; // override process.envs
+  cache?: Option; // turn on caching
+  debug?: Option; // turn on logging for debugging purposes
 }
 
 export interface ConfigOutput {
-  parsed: ParsedEnvs; // process.env Envs as key value pairs
+  parsed: ProcessEnv; // process.env Envs as key value pairs
   extracted: ParsedEnvs; // extracted Envs as key value pairs
-  cachedEnvFiles: CachedEnvFiles[]; // cached Envs as key value pairs
+  cachedEnvFiles: CachedEnvFiles; // cached Envs as key value pairs
 }
 
-const __CACHE__: CachedEnvFiles[] = [];
+const __CACHE__: CachedEnvFiles = [];
 
 /**
  * Parses a string, buffer, or precached envs into an object.
  *
- * @param src - contents to be parsed (string | Buffer | CachedEnvFiles[])
+ * @param src - contents to be parsed (string | Buffer | CachedEnvFiles)
  * @param override - allows extracted Envs to be parsed regardless if process.env has the properties defined (string | boolean)
  * @returns an object with keys and values from `src`
  */
 export function parse(
-  src: string | Buffer | CachedEnvFiles[],
-  override?: string | boolean
+  src: string | Buffer | CachedEnvFiles,
+  override?: Option
 ): ParsedEnvs {
   const { env } = process;
   const { LOADED_CACHE } = env;
@@ -59,7 +92,7 @@ export function parse(
       for (let i = 0; i < src.length; i += 1) {
         assign(extracted, JSON.parse(Buffer.from(src[i].contents).toString()));
       }
-    return (process.env = assign(extracted, env));
+    return assign(env, extracted);
   }
 
   function interpolate(envValue: string): string {
@@ -141,17 +174,16 @@ export function parse(
  * @returns a single parsed object with parsed Envs as { key: value } pairs, a single extracted object with extracted Envs as { key: value } pairs, and an array of cached Envs as { path: string, contents: string } pairs
  */
 export function config(options?: ConfigOptions): ConfigOutput {
-  const { cwd, env } = process;
   const { log } = console;
   const { assign } = Object;
 
   // default config options
-  let dir = cwd();
-  let path: string | string[] = [".env"];
-  let debug: string | boolean | undefined;
-  let override: string | boolean | undefined;
+  let dir = process.cwd();
+  let path: Path = [".env"];
+  let debug: Option;
+  let override: Option;
   let encoding: BufferEncoding = "utf-8";
-  let cache: string | boolean | undefined = false;
+  let cache: Option;
 
   // override default options with config options arguments
   if (options) {
@@ -205,7 +237,7 @@ export function config(options?: ConfigOptions): ConfigOutput {
   }
 
   return {
-    parsed: assign(env, extracted),
+    parsed: assign(process.env, extracted),
     extracted,
     cachedEnvFiles: __CACHE__
   };
