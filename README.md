@@ -578,7 +578,17 @@ With the exception of assigning pre-cached Envs (which don't require any Env int
 
 Why?
 
-Under the hood, the `config` method utilizes the `parse` method to extract one or multiple `.env` files as it loops over the file [path](#config-path)s. The `config` method expects `parse` to return a single `Object` of `extracted` or `sanitized` Envs that will be accumulated with other files' extracted/sanitized Envs. The result of these accumulated Envs is then assigned to `process.env` **once**. In bench marks, allowing the `parse` method to assign extracted Envs to `process.env` more than once resulted in a significant performance loss. 
+Under the hood, the `config` method utilizes the `parse` method to extract one or multiple `.env` files as it loops over the config's [path](#config-path)s argument. The `config` method expects `parse` to return a single `Object` of `extracted` or `sanitized` Envs that will be accumulated with other files' extracted/sanitized Envs. The result of these accumulated Envs is then assigned to `process.env` **once** -- this approach has the added benefit of prioritizing Envs  without using **any** additional logic since the last set of extracted Envs automatically override any previous Envs (thanks to [Object.assign](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign#Merging_objects_with_same_properties)). While allowing Envs to be assigned multiple times to `process.env` doesn't appear to be much different in terms of performance, it requires a bit more additional overhead logic to determine which `.env` has priority and whether or not to *conditionally* apply them (including times when you might want to parse Envs, but not neccesarily assign them). A workaround to this limitation is to simply apply them yourself:
+
+```js
+const { parse } = require("snackables");
+// import { parse } from "snackables";
+
+const parsed = parse(Buffer.from("BASIC=basic")); // parse/interpolate Envs not defined in process.env
+// const parsed = parse(Buffer.from("BASIC=basic"), override: true); // parse/interpolate and override any Envs in process.env
+
+Object.assign(process.env, parsed)
+```
 
 ### Is the ENV_LOAD variable required?
 
