@@ -233,7 +233,7 @@ You can use the `--require` (`-r`) [command line option](https://nodejs.org/api/
 
 CLI:
 ```bash
-$ ENV_LOAD=dev node -r snackables app.js
+$ ENV_LOAD=.env.dev node -r snackables app.js
 ```
 
 Package.json:
@@ -250,7 +250,7 @@ Package.json:
 
 ## Config Method
 
-If you wish to manaully import `.env` files, then the config method will read your `.env` files, parse the contents, assign them to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env), and return an `Object` with `parsed`, `extracted` and `cachedEnvFiles` properties (the [cache](#cache) argument of `config` **must** be set to true for `cachedEnvFiles` to be utilized):
+If you wish to manaully import `.env` files, then the config method will read your `.env` files, parse the contents, assign them to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env), and return an `Object` with `parsed`, `extracted` and `cachedEnvFiles` properties (the [cache](#config-cache) argument of `config` **must** be set to true for `cachedEnvFiles` to be utilized):
 
 ```js
 const result = snackables.config();
@@ -415,7 +415,7 @@ console.log(typeof config, config); // object { KEY : 'value' }
 
 For edge cases, the parse method also accepts the `cachedEnvFiles` array (returned by [config](#config-method)) as the first argument if the follow requirements are met: 
 
-[ENV_CACHE](#env_cache) is defined or the [cache](#cache) argument is set to `true` when the `config` method is used and `process.env.LOADED_CACHE` is not defined. 
+[ENV_CACHE](#env_cache) is defined or the [cache](#config-cache) argument is set to `true` when the `config` method is used and `process.env.LOADED_CACHE` is not defined. 
 
 
 If the above requirements are met, parse will **reapply** cached Envs properties to `process.env` and return `process.env`. 
@@ -570,7 +570,7 @@ PORT=3000
 
 snackables will parse the files and append the Envs in the order of how they were defined in `ENV_LOAD`. In the example above, the `DB_PASS` variable within `.env.base` would be overidden by `.env.dev` because `.env.dev` file was imported last and, as a result, its `DB_PASS` will be assigned to `process.env`.
 
-By default, Envs that are **pre-set** or **defined** within `process.env` **WILL NOT be overidden**. If you wish to override variables in `process.env` see [ENV_OVERRIDE](#env_override) or [Config Override](#override) or [Parse Override](#parse-override).
+By default, Envs that are **pre-set** or **defined** within `process.env` **WILL NOT be overidden**. If you wish to override variables in `process.env` see [ENV_OVERRIDE](#env_override) or [Config Override](#config-override) or [Parse Override](#parse-override).
 
 ### Why doesn't the parse method automatically assign Envs?
 
@@ -578,7 +578,7 @@ With the exception of assigning pre-cached Envs (which don't require any Env int
 
 Why?
 
-Under the hood, the `config` method utilizes the `parse` method to extract one or multiple `.env` files as it loops over the file [path](#path)s. The `config` method expects `parse` to return a single `Object` of `extracted` or `sanitized` Envs that will be accumulated with other files' extracted/sanitized Envs. The result of these accumulated Envs is then assigned to `process.env` **once**. In bench marks, allowing the `parse` method to assign extracted Envs to `process.env` more than once resulted in a significant performance loss. 
+Under the hood, the `config` method utilizes the `parse` method to extract one or multiple `.env` files as it loops over the file [path](#config-path)s. The `config` method expects `parse` to return a single `Object` of `extracted` or `sanitized` Envs that will be accumulated with other files' extracted/sanitized Envs. The result of these accumulated Envs is then assigned to `process.env` **once**. In bench marks, allowing the `parse` method to assign extracted Envs to `process.env` more than once resulted in a significant performance loss. 
 
 ### Is the ENV_LOAD variable required?
 
