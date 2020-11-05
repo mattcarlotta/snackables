@@ -416,7 +416,7 @@ console.log(typeof results, results); // object { KEY : 'value' }
 
 #### Parse cache
 
-For edge cases, the parse method also accepts the `cachedEnvFiles` array (returned by [config](#config-method)) as the first argument if the follow requirements are met: 
+For edge cases, the parse method also accepts the `cachedEnvFiles` array (returned by [config](#config-method)) as the first argument if the following requirements are met: 
 
 [ENV_CACHE](#env_cache) is defined or the [cache](#config-cache) argument is set to `true` when the `config` method is used and `process.env.LOADED_CACHE` is not defined. 
 
