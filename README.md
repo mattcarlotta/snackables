@@ -409,8 +409,8 @@ const { parse } = require("snackables");
 const config = parse(Buffer.from("BASIC=basic")); // will return an object
 console.log(typeof config, config); // object { BASIC : 'basic' }
 
-const result = parse(readFileSync("path/to/.env.file", { encoding: "utf8" })); // will return an object
-console.log(typeof config, config); // object { KEY : 'value' }
+const results = parse(readFileSync("path/to/.env.file", { encoding: "utf8" })); // will return an object
+console.log(typeof results, results); // object { KEY : 'value' }
 ```
 
 
