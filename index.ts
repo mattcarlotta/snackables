@@ -73,15 +73,13 @@ export function parse(src: string | Buffer, override?: Option): ParsedEnvs {
 
   function substitute(envValue: string): string {
     // find interpolated values with $(KEY)
-    const matches = envValue.match(
-      /\$\((?:[^)(]+|\((?:[^)(]+|\([^)(]*\))*\))*\)/g
-    );
+    const matches = envValue.match(/\$\(([^)]+)\)/g);
 
     return !matches
       ? envValue
       : matches.reduce((newEnv: string, match: string): string => {
           // parts = ["$string", "@"| ":" | "/", " ", "strippedstring", index: n, input: "$string", groups ]
-          const parts = /(.?)\$\(?([a-zA-Z0-9_ |\-'"/^[\]]+)?\)?/g.exec(match);
+          const parts = /(.?)\$\(([^)]+)\)/g.exec(match);
 
           let value = "";
           try {
