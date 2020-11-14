@@ -109,4 +109,29 @@ describe("Parse Method", () => {
     );
     expect(RNPayload).toEqual(expectedPayload);
   });
+
+  it("can parse single command-line substitutions", () => {
+    let result = parse(
+      Buffer.from(
+        "MESSAGE=$(echo 'Welcome To The Mad House' | sed 's/[^A-Z]//g')"
+      )
+    );
+
+    expect(result.MESSAGE).toEqual("WTTMH");
+  });
+
+  it("can parse multiple command-line substitutions", () => {
+    const result = parse(Buffer.from(`ADMIN=$(echo 'Bob')@$(echo "Smith")`));
+
+    expect(result.ADMIN).toEqual("Bob@Smith");
+  });
+
+  it("can handle invalid command-line substitutions", () => {
+    const spy = jest.spyOn(console, "log").mockImplementation();
+
+    parse(Buffer.from("INVALIDCOMMAND=$(invalid)"));
+
+    expect(spy.mock.calls[0][0]).toContain("Command failed: invalid");
+    spy.mockRestore();
+  });
 });

@@ -2,6 +2,18 @@
 
 All notable updates to this project will be documented in this file. See [SemVer 2.0](https://semver.org/) for commit guidelines.
 
+## [2.0.0] - 2020-13-11
+
+### Added
+
+- Added support for single and multi command line `$()` substitutions
+
+### Changed
+
+- Removed cache
+- Changed `path` to `paths`
+- Fixed README
+
 ## [1.0.4] - 2020-04-11
 
 ### Changed

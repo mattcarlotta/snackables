@@ -4,7 +4,7 @@ process.env.TESTING = "false";
 
 console.log(`\x1b[32mprocess.env.TESTING: ${process.env.TESTING}\x1b[0m`);
 
-config({ dir: "examples", path: ".env.test", debug: true, override: true });
+config({ dir: "examples", paths: ".env.test", debug: true, override: true });
 
 console.log(`\x1b[32mprocess.env.TESTING: ${process.env.TESTING}\x1b[0m`);
 
