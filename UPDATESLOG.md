@@ -6,14 +6,14 @@ All notable updates to this project will be documented in this file. See [SemVer
 
 ### Added
 
-- Added support for single and multi command line `$()` substitutions
-- Added support for interpolations that refer to command line substitutions
+- Added support for single and multi command line substitutions
+- Added support for key interpolations that may refer to command line substitutions
 
 ### Changed
 
 - Removed cache
 - Changed `path` to `paths`
-- Fixed README
+- Updated README
 
 ## [1.0.4] - 2020-04-11
 
