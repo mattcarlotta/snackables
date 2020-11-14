@@ -2,6 +2,19 @@
 
 All notable updates to this project will be documented in this file. See [SemVer 2.0](https://semver.org/) for commit guidelines.
 
+## [2.0.0] - 2020-14-11
+
+### Added
+
+- Added support for single and multi command line substitutions
+- Added support for key interpolations that may refer to command line substitutions
+
+### Changed
+
+- Removed cache
+- Changed `path` to `paths`
+- Updated README
+
 ## [1.0.4] - 2020-04-11
 
 ### Changed

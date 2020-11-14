@@ -31,7 +31,6 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
   - [ENV_DIR](#env_dir)
   - [ENV_ENCODE](#env_encode)
   - [ENV_OVERRIDE](#env_override)
-  - [ENV_CACHE](#env_cache)
   - [ENV_DEBUG](#env_debug)
 
 [Preload](#preload)
@@ -39,16 +38,14 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 [Config Method](#config-method)
   - [Argument Options](#config-argument-options)
     - [dir](#config-dir)
-    - [path](#config-path)
+    - [paths](#config-paths)
     - [encoding](#config-encoding)
     - [override](#config-override)
-    - [cache](#config-cache)
     - [debug](#config-debug)
 
 [Parse Method](#parse-method)
   - [Argument Options](#parse-argument-options)
     - [src](#parse-src)
-    - [cache](#parse-cache)
     - [override](#parse-override)
   - [Rules](#parse-rules)
 
@@ -77,9 +74,9 @@ yarn add snackables
 
 ## Usage
 
-In a CLI or within your package.json, under the `scripts` property, define an `ENV_LOAD` variable and either add a single file `ENV_LOAD=.env.base` or add multiple files separated by commas `ENV_LOAD=.env.base,.env.local,.env.dev,..etc` before running a process. Snackables loads `.env` files according to their defined order (left to right), where the last imported file will take precedence over any previously imported files.
+In a CLI or within your package.json, under the `scripts` property, define an `ENV_LOAD` variable and either add a single file `ENV_LOAD=.env.base` or add multiple files separated by commas `ENV_LOAD=.env.base,.env.local,...etc` before running a process. Snackables loads `.env` files according to their defined order (left to right), where the last imported file will take precedence over any previously imported files.
 
-For example, `.env.*` files can be loaded by their filename (assuming they're located in the projects root):
+For example, `.env.*` files can be loaded by their filename (assuming they're located in the project's root):
 
 ```json
 {
@@ -93,7 +90,7 @@ For example, `.env.*` files can be loaded by their filename (assuming they're lo
 }
 ```
 
-or they can be loaded by their path and filename:
+or they can be loaded by their paths and filename:
 
 ```json
 {
@@ -118,9 +115,19 @@ Optionally, you can [preload](#preload) your `.env` files instead!
 
 ## CLI Options
 
+By utilizing any of the Env variables defined below, you will only need to import the base package to automatically load Envs:
+
+```js
+require("snackables")
+
+// import "snackables"
+```
+
+Note: Defining any of the Env variables below **DO NOT** change the default behavior of `config` and `parse` methods.
+
 #### ENV_LOAD
 
-By defining an `ENV_LOAD` variable within one of your package.json scripts, this will let snackables know you'd like to immediately load some `.env` files when the package is imported. You can pass a single file name or a list of file names separated by commas. By default, snackables attempts to load them from within the project's **root** directory.
+By defining an `ENV_LOAD` variable, this will let snackables know you'd like to immediately load some `.env` files when the package is imported. You can pass a single file name or a list of file names separated by commas. By default, snackables attempts to load them from within the project's **root** directory.
 
 For example:
 
@@ -138,7 +145,7 @@ For example:
 
 #### ENV_DIR
 
-By defining an `ENV_DIR` variable within one of your package.json scripts, this will let snackables know you'd like to load `.env` files from a custom directory.
+By defining an `ENV_DIR` variable, this will let snackables know you'd like to load `.env` files from a custom directory.
 
 ```json
 {
@@ -153,7 +160,7 @@ By defining an `ENV_DIR` variable within one of your package.json scripts, this 
 
 #### ENV_ENCODE
 
-By defining an `ENV_ENCODE` variable within one of your package.json scripts, this will let snackables know you'd like to set the encoding type of the `.env` file(s). The following file encode types are supported:
+By defining an `ENV_ENCODE` variable, this will let snackables know you'd like to set the encoding type of the `.env` file(s). The following file encode types are supported:
 
 ```
 ascii
@@ -183,7 +190,7 @@ For example:
 
 #### ENV_OVERRIDE
 
-By defining an `ENV_OVERRIDE` variable within one of your package.json scripts, this will let snackables know you'd like to override Envs in `process.env`.
+By defining an `ENV_OVERRIDE` variable, this will let snackables know you'd like to override Envs in `process.env`.
 
 For example:
 
@@ -191,21 +198,6 @@ For example:
 {
   "scripts": {
     "dev": "ENV_LOAD=.env.dev ENV_DEBUG=true ENV_OVERRIDE=true node app.js"
-  },
-  "dependencies": {
-    "snackables": "^x.x.x"
-  }
-}
-```
-
-#### ENV_CACHE
-
-By defining `ENV_CACHE`, any `.env` file that has been [preloaded](#preload) will be stored to temporary cache. Any attempts to reload the same file within the same running process using [config](#config-method) will be skipped. 
-
-```json
-{
-  "scripts": {
-    "dev": "ENV_LOAD=.env.dev ENV_CACHE=true node -r snackables app.js"
   },
   "dependencies": {
     "snackables": "^x.x.x"
@@ -253,17 +245,16 @@ Package.json:
 
 ## Config Method
 
-If you wish to manaully import `.env` files, then the config method will read your `.env` files, parse the contents, assign them to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env), and return an `Object` with `parsed`, `extracted` and `cachedEnvFiles` properties (the [cache](#config-cache) argument of `config` **must** be set to true for `cachedEnvFiles` to be utilized):
+If you wish to manaully import `.env` files, then the config method will read your `.env` files, parse the contents, assign them to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env), and return an `Object` with `parsed` and `extracted` Envs:
 
 ```js
 const result = snackables.config();
 
 console.log("parsed", result.parsed); // process.env with loaded Envs
 console.log("extracted", result.extracted); // extracted Envs within a { KEY: VALUE } object
-console.log("cachedEnvFiles", result.cachedEnvFiles); // array of file path and file parsed contents objects: [{ path: "path/to/.env", contents: parsed contents as encoded string }] 
 ```
 
-Additionally, you can pass options to `config`.
+Additionally, you can pass [argument options](#config-argument-options) to `config`.
 
 ### Config Argument Options
 
@@ -271,64 +262,71 @@ config accepts a single `Object` argument with the following properties:
 ```js
 { 
   dir?: string, 
-  path?: string | string[], 
+  paths?: string | string[], 
   encoding?: BufferEncoding,
-  override?: string | boolean,
-  cache?: string | boolean,
+  override?: boolean | string,
   debug?: boolean | string
 }
 ```
 
 #### Config dir
 
-Default: `process.cwd()` (root directory)
+Default: `process.cwd()` (project root directory)
 
 You may specify a single directory path if your files are located elsewhere.
 
 A single directory path as a `string`:
 
 ```js
-require("snackables").config({ dir: "path/to/directory" });
+require("snackables").config({ dir: "custom/path/to/directory" });
 
 // import { config } from "snackables"
-// config({ dir: "path/to/directory" });
+// config({ dir: "custom/path/to/directory" });
 ```
 
-#### Config path
+#### Config paths
 
-Default: `.env`
+Default: `[".env"]`
 
 You may specify custom paths if your files are located elsewhere (recommended to use **absolute** path(s) from your root directory).
 
 A single file path as a `string`:
 
 ```js
-require("snackables").config({ path: "custom/path/to/.env" });
+require("snackables").config({ paths: "custom/path/to/.env" });
 
 // import { config } from "snackables"
-// config({ path: "custom/path/to/.env" });
+// config({ paths: "custom/path/to/.env" });
 ```
 
 Multiple file paths as a single `string` separated by commas:
 
 ```js
 require("snackables").config({
-  path: "custom/path/to/.env,custom/path/to/.env.base"
+  paths: "custom/path/to/.env,custom/path/to/.env.base"
 });
 
 // import { config } from "snackables"
-// config({ path: "custom/path/to/.env,custom/path/to/.env.base" });
+// config({ paths: "custom/path/to/.env,custom/path/to/.env.base" });
 ```
 
 Or multiple file paths as an `Array` of `string`s:
 
 ```js
 require("snackables").config({
-  path: ["custom/path/to/.env", "custom/path/to/.env.base"]
+  paths: ["custom/path/to/.env", "custom/path/to/.env.base"]
 });
 
 // import { config } from "snackables"
-// config({ path: ["custom/path/to/.env", "custom/path/to/.env.base"] });
+// config({ paths: ["custom/path/to/.env", "custom/path/to/.env.base"] });
+```
+
+It's highly recommended that you utilize [dir](#config-dir) if you're loading from a single custom directory:
+```js
+require("snackables").config({ dir: "custom/path/to/directory", paths: [".env", ".env.base"] });
+
+// import { config } from "snackables"
+// config({ dir: "custom/path/to/directory", paths: [".env", ".env.base"] });
 ```
 
 #### Config encoding
@@ -351,54 +349,40 @@ Default: `false`
 You may specify whether or not to override Envs in `process.env`. 
 
 ```js
-require("snackables").config({ path: ".env", override: true });
+require("snackables").config({ override: true });
 
 // import { config } from "snackables"
-// config({ path: ".env", require("snackables").config({ path: ".env", override: true });
+// config({ override: true });
 ```
-
-#### Config cache
-
-Default: `false`
-
-You may specify whether or not to temporarily cache `.env` files once they're loaded. This is useful if you're importing snackables multiple times and attempting to load a file more than once. If the cache contains the loaded `.env` file, it will be skipped. This also works for reloading cached files using [parse](#parse-method) if the `process.env` happens to be reset to a default state.
-
-```js
-require("snackables").config({ path: ".env", cache: true });
-
-// import { config } from "snackables"
-// config({ path: ".env", cache: true });
-```
-
 
 #### Config debug
 
-Default: `false`
+Default: `undefined`
 
 You may turn on logging to help debug file loading.
 
 ```js
-require("snackables").config({ debug: process.env.DEBUG });
+require("snackables").config({ debug: true });
 
 // import { config } from "snackables"
-// config({ debug: process.env.DEBUG });
+// config({ debug: true });
 ```
 
 ## Parse Method
 
-If you wish to manually parse Envs from a Buffer or file or cache, then parse will read a string, Buffer, or even CachedEnvFiles and parse/assign their contents.
+If you wish to manually parse Envs, then you can utilize `parse` to read a string or Buffer and parse their contents.
 
 ### Parse Argument Options
 
 parse accepts two arguments in the following order: 
 ```
-src: string | Buffer | CacheEnvFiles, 
-override: string | boolean
+src: string | Buffer, 
+override: boolean | string
 ```
 
 #### Parse src
 
-For most use cases, you'll want to pass parse a `string` or `Buffer` as the first argument which returns an `extracted` or `sanitized` parsed keys/values as a single `Object` (these will **NOT** be assigned to `process.env`. [Why not?](#why-doesnt-the-parse-method-automatically-assign-envs)). 
+For some use cases, you may want to pass parse a `string` or `Buffer` which returns parsed `extracted` keys/values as a single `Object`. These will **NOT** be assigned to `process.env`. [Why not?](#why-doesnt-the-parse-method-automatically-assign-envs)
 
 ```js
 const { readFileSync } = require("fs");
@@ -413,40 +397,11 @@ const results = parse(readFileSync("path/to/.env.file", { encoding: "utf8" })); 
 console.log(typeof results, results); // object { KEY : 'value' }
 ```
 
-
-#### Parse cache
-
-For edge cases, the parse method also accepts the `cachedEnvFiles` array (returned by [config](#config-method)) as the first argument if the following requirements are met: 
-
-[ENV_CACHE](#env_cache) is defined or the [cache](#config-cache) argument is set to `true` when the `config` method is used and `process.env.LOADED_CACHE` is not defined. 
-
-
-If the above requirements are met, parse will **reapply** cached Envs properties to `process.env` and return `process.env`. 
-
-```js
-const { config, parse } = require("snackables");
-// import { config, parse } from "snackables";
-
-// loads ".env.base" and ".env.dev" to process.env and returns an array of cached env objects
-// cachedEnvFiles = [{ path: "path/to/.env", contents: parsed contents as encoded string  }]
-const { cachedEnvFiles } = config({ path: ".env.base,.env.dev", cache: true }); 
-
-// parses and reapplies cached Envs if the process.env.PROPERTY is undefined
-// returns process.env with any reapplied Envs from cache
-const reappliedProcessEnv = parse(cachedEnvFiles); 
-console.log(reappliedProcessEnv) 
-
-// this lets snackables know not to reload from cache
-process.env.LOADED_CACHE = "true"; 
-
-// since process.env.LOADED_CACHE is defined, cache is skipped and process.env is returned as is
-const originalProcessEnv = parse(cachedEnvFiles); 
-console.log(originalProcessEnv) 
-```
+Note: If you're attempting to parse Envs that have already been defined within `process.env`, then you must pass `parse` an [override](#parse-override) argument.
 
 #### Parse override
 
-If you wish to extract and potentially override Envs in `process.env`, then you can pass `override` as a second argument to parse (these will **NOT** be assigned to `process.env`. [Why not?](#why-doesnt-the-parse-method-automatically-assign-envs)).
+If you wish to extract and potentially override Envs in `process.env`, then you can pass a `boolean` or `string` (passing `"false"` will still be truthy) as a second argument to parse. These will **NOT** be assigned to `process.env`. [Why not?](#why-doesnt-the-parse-method-automatically-assign-envs)
 
 ```js
 const { readFileSync } = require("fs");
@@ -470,10 +425,9 @@ The parsing method currently supports the following rules:
 - lines beginning with `#` are treated as comments
 - empty values become empty strings (`EMPTY=` becomes `{EMPTY: ''}`)
 - inner quotes are maintained (think JSON) (`JSON={"foo": "bar"}` becomes `{JSON:"{\"foo\": \"bar\"}"`)
-- whitespace is removed from both ends of unquoted values (see more on [`trim`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string/Trim)) (`FOO= some value ` becomes `{FOO: 'some value'}`)
 - single and double quoted values are escaped (`SINGLE_QUOTE='quoted'` becomes `{SINGLE_QUOTE: "quoted"}`)
 - single and double quoted values maintain whitespace from both ends (`FOO=" some value "` becomes `{FOO: ' some value '}`)
-- double quoted values expand new lines (`MULTILINE="new\nline"` becomes
+- double quoted values expand new lines `MULTILINE="new\nline"` becomes
 
 ```
 {MULTILINE: 'new
@@ -482,7 +436,9 @@ line'}
 
 ## Interpolation
 
-You may want to interpolate ENV values based upon a `process.env` value or a key within the `.env` file. To interpolate a value, simply define it with `$KEY` or `${KEY}`, for example:
+Env values can be interpolated based upon a `process.env` value, a `KEY` within the `.env` file or a command line substitution. 
+
+To interpolate a value from `process.env` or `.env`, simply define it with either `$KEY` or within brackets `${KEY}`, for example:
 
 Input:
 ```dosini
@@ -498,6 +454,20 @@ MESSAGE=Hello
 INTERP_MESSAGE=Hello World
 INTERP_MESSAGE_BRACKETS=Hello World
 ENVIRONMENT=development
+```
+
+To interpolate a command line substitution, simply define it within parentheses `$(KEY)` for example:
+
+Input:
+```dosini
+USER=$(whoami)
+MULTICOMMAND=$(echo 'I Would Have Been Your Daddy' | sed 's/[^A-Z]//g')
+```
+
+Output:
+```dosini
+USER=Jane
+MULTICOMMAND=IWHBYD
 ```
 
 ### Interpolation Rules
@@ -555,7 +525,7 @@ For example, `ENV_LOAD=.env.base,.env.dev` has two files `.env.base` and `.env.d
 }
 ```
 
-in a local enviroment, `.env.base` may have static shared database variables:
+in a local environment, `.env.base` may have static shared database variables:
 
 ```dosini
 DB_HOST=localhost
@@ -577,11 +547,11 @@ By default, Envs that are **pre-set** or **defined** within `process.env` **WILL
 
 ### Why doesn't the parse method automatically assign Envs?
 
-With the exception of assigning pre-cached Envs (which don't require any Env interpretation/interpolation), `parse` can not automatically assign Envs as they're extracted.
+In short, `parse` can not automatically assign Envs as they're extracted.
 
 Why?
 
-Under the hood, the `config` method utilizes the `parse` method to extract one or multiple `.env` files as it loops over the config's [path](#config-path)s argument. The `config` method expects `parse` to return a single `Object` of `extracted` or `sanitized` Envs that will be accumulated with other files' extracted/sanitized Envs. The result of these accumulated Envs is then assigned to `process.env` **once** -- this approach has the added benefit of prioritizing Envs  without using **any** additional logic since the last set of extracted Envs automatically override any previous Envs (thanks to [Object.assign](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign#Merging_objects_with_same_properties)). While allowing Envs to be assigned multiple times to `process.env` doesn't appear to be much different in terms of performance, it requires a bit more additional overhead logic to determine which `.env` has priority and whether or not to *conditionally* apply them (including times when you might want to parse Envs, but not neccesarily assign them). A workaround to this limitation is to simply apply them yourself:
+Under the hood, the `config` method utilizes the `parse` method to extract one or multiple `.env` files as it loops over the `config` [paths](#config-paths) argument. The `config` method expects `parse` to return a single `Object` of `extracted` Envs that will be accumulated with other files' extracted/sanitized Envs. The result of these accumulated Envs is then assigned to `process.env` **once** -- this approach has the added benefit of prioritizing Envs  without using **any** additional logic since the last set of extracted Envs automatically override any previous Envs (thanks to [Object.assign](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign#Merging_objects_with_same_properties)). While allowing Envs to be assigned multiple times to `process.env` doesn't appear to be much different in terms of performance, it requires a bit more additional overhead logic to determine which `.env` has priority and whether or not to *conditionally* apply them (including times when you might want to parse Envs, but not neccesarily assign them). A workaround to this limitation is to simply apply them yourself:
 
 ```js
 const { parse } = require("snackables");

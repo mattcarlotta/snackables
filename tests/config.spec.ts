@@ -24,8 +24,8 @@ describe("Config Method", () => {
     );
   });
 
-  it("accepts a path argument as a string", () => {
-    const { extracted } = config({ path: "tests/.env.base" });
+  it("accepts a paths argument as a string", () => {
+    const { extracted } = config({ paths: "tests/.env.base" });
 
     expect(extracted).toEqual(
       expect.objectContaining({
@@ -34,8 +34,8 @@ describe("Config Method", () => {
     );
   });
 
-  it("accepts a path argument as a string of files with commas", () => {
-    const { extracted } = config({ path: "tests/.env.base,tests/.env.test" });
+  it("accepts a paths argument as a string of files with commas", () => {
+    const { extracted } = config({ paths: "tests/.env.base,tests/.env.test" });
 
     expect(extracted).toEqual(
       expect.objectContaining({
@@ -44,8 +44,8 @@ describe("Config Method", () => {
     );
   });
 
-  it("accepts a path argument as an array", () => {
-    const { extracted } = config({ path: ["tests/.env.path"] });
+  it("accepts a paths argument as an array", () => {
+    const { extracted } = config({ paths: ["tests/.env.path"] });
 
     expect(extracted).toEqual(
       expect.objectContaining({
@@ -57,7 +57,7 @@ describe("Config Method", () => {
   it("accepts an encoding argument", () => {
     const { extracted } = config({
       dir: "tests",
-      path: ".env.utf8",
+      paths: ".env.utf8",
       encoding: "utf-8"
     });
 
@@ -71,13 +71,13 @@ describe("Config Method", () => {
   it("accepts a debug argument", () => {
     const spy = jest.spyOn(console, "log").mockImplementation();
 
-    config({ path: "tests/.env.basic", debug: true });
+    config({ paths: "tests/.env.basic", debug: true });
 
     expect(spy.mock.calls[0][0]).toContain(
       `Loaded env from ${root}/tests/.env.basic`
     );
 
-    config({ path: "tests/.env.invalid", debug: true });
+    config({ paths: "tests/.env.invalid", debug: true });
 
     spy.mockRestore();
   });
@@ -89,7 +89,7 @@ describe("Config Method", () => {
     expect(process.env.PERSON).toEqual(person);
 
     const { extracted } = config({
-      path: "tests/.env.override",
+      paths: "tests/.env.override",
       override: true
     });
 
@@ -101,7 +101,7 @@ describe("Config Method", () => {
   it("allows non-existent files to silently fail", () => {
     const spy = jest.spyOn(console, "log").mockImplementation();
 
-    config({ path: "tests/.env.invalid" });
+    config({ paths: "tests/.env.invalid" });
 
     expect(spy).not.toHaveBeenCalled();
 
@@ -112,7 +112,7 @@ describe("Config Method", () => {
     let extracted: ParsedEnvs;
     beforeAll(() => {
       process.env.MACHINE = "node";
-      extracted = config({ path: "tests/.env.interp" }).extracted;
+      extracted = config({ paths: "tests/.env.interp" }).extracted;
     });
 
     it("interops .env keys", () => {
@@ -174,7 +174,7 @@ describe("Config Method", () => {
     process.env.AUTHOR = AUTHOR;
 
     const { extracted, parsed } = config({
-      path: "tests/.env.write,tests/.env.overwrite"
+      paths: "tests/.env.write,tests/.env.overwrite"
     });
 
     expect(extracted).toEqual(
@@ -190,7 +190,8 @@ describe("Config Method", () => {
     const spy = jest.spyOn(console, "log").mockImplementation();
 
     config({
-      path: "tests/.env.utf8",
+      paths: "tests/.env.utf8",
+      debug: true,
       // @ts-ignore
       encoding: "bad"
     });

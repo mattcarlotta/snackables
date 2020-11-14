@@ -83,12 +83,12 @@ describe("Parse Method", () => {
     expect(parsed.SPACED_KEY).toEqual("parsed");
   });
 
-  it("should parse a buffer into an object", () => {
+  it("parses a buffer into an object", () => {
     const payload = parse(Buffer.from("BUFFER=true"));
     expect(payload.BUFFER).toEqual("true");
   });
 
-  it("can parse (\\r) line endings", () => {
+  it("parses (\\r) line endings", () => {
     const expectedPayload = {
       SERVER: "localhost",
       PASSWORD: "password",
@@ -108,5 +108,39 @@ describe("Parse Method", () => {
       Buffer.from("SERVER=localhost\r\nPASSWORD=password\r\nDB=tests\r\n")
     );
     expect(RNPayload).toEqual(expectedPayload);
+  });
+
+  it("parses single command-line substitutions", () => {
+    let result = parse(
+      Buffer.from(
+        "MESSAGE=$(echo 'Welcome To The Mad House' | sed 's/[^A-Z]//g')"
+      )
+    );
+
+    expect(result.MESSAGE).toEqual("WTTMH");
+  });
+
+  it("parses multiple command-line substitutions", () => {
+    const result = parse(Buffer.from(`ADMIN=$(echo 'Bob') $(echo "Smith")`));
+
+    expect(result.ADMIN).toEqual("Bob Smith");
+  });
+
+  it("parses and interopolates command-line substitutions", () => {
+    const result = parse(
+      Buffer.from(`ADMIN=$(echo 'Bob')@$(echo "Smith")\nDBADMIN=$ADMIN`)
+    );
+
+    expect(result.ADMIN).toEqual("Bob@Smith");
+    expect(result.DBADMIN).toEqual("Bob@Smith");
+  });
+
+  it("handles invalid command-line substitutions", () => {
+    const spy = jest.spyOn(console, "log").mockImplementation();
+
+    parse(Buffer.from("INVALIDCOMMAND=$(invalid)"));
+
+    expect(spy.mock.calls[0][0]).toContain("Command failed: invalid");
+    spy.mockRestore();
   });
 });
