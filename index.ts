@@ -82,7 +82,7 @@ export function parse(src: string | Buffer, override?: Option): ParsedEnvs {
       : matches.reduce((newEnv: string, match: string): string => {
           /*
             parts = [
-              "$string" | "${string}" | "$(string)", 
+              "$string" | "${string}" | "$(string)",
               "@"| ":" | "/",
               " ",
               "strippedstring",
