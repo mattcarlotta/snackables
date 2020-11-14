@@ -71,54 +71,49 @@ export function parse(src: string | Buffer, override?: Option): ParsedEnvs {
   // initialize extracted Envs object
   const extracted: ParsedEnvs = {};
 
-  function substitute(envValue: string): string {
-    // find interpolated values with $(KEY)
-    const matches = envValue.match(/\$\(([^)]+)\)/g);
-
-    return !matches
-      ? envValue
-      : matches.reduce((newEnv: string, match: string): string => {
-          // parts = ["$string", "@"| ":" | "/", " ", "strippedstring", index: n, input: "$string", groups ]
-          const parts = /(.?)\$\(([^)]+)\)/g.exec(match);
-
-          let value = "";
-          try {
-            value = execSync(parts![2], {
-              stdio: "pipe"
-            })
-              .toString()
-              .trim();
-          } catch (e) {
-            console.log(e.message);
-          }
-
-          return newEnv.replace(parts![0].substring(parts![1].length), value);
-        }, envValue);
-  }
-
   function interpolate(envValue: string): string {
+    // find interpolated values with $(KEY)
+    let matches = envValue.match(/\$\(([^)]+)\)/g);
+
     // find interpolated values with $KEY or ${KEY}
-    const matches = envValue.match(/(.?\${?(?:[a-zA-Z0-9_]+)?}?)/g);
+    if (!matches) matches = envValue.match(/(.?\${?(?:[a-zA-Z0-9_]+)?}?)/g);
 
     return !matches
       ? envValue
       : matches.reduce((newEnv: string, match: string): string => {
           // parts = ["$string", "@"| ":" | "/", " ", "strippedstring", index: n, input: "$string", groups ]
-          const parts = /(.?)\${?([a-zA-Z0-9_]+)?}?/g.exec(match);
+          // matches lines against $(command)
+          let parts = /(.?)\$\(([^)]+)\)/g.exec(match);
 
-          let value, replacePart;
+          // matches lines against $command or ${command}
+          if (!parts) parts = /(.?)\${?([a-zA-Z0-9_]+)?}?/g.exec(match);
+
+          const line = parts![0];
+          let value = "",
+            replacePart = line.substring(parts![1].length);
 
           // if prefix is escaped
           if (parts![1] === "\\") {
-            // remove escaped characters
-            replacePart = parts![0];
+            // removes escaped characters
+            replacePart = line;
             value = replacePart.replace("\\$", "$");
-          } else {
-            // else remove prefix character
-            replacePart = parts![0].substring(parts![1].length);
 
-            // substitute commands from extracted values
-            value = substitute(extracted[parts![2]] || "");
+            // else if lines contains "(" and ")"
+          } else if (line[1] === "(" && line[line.length - 1] === ")") {
+            // attempts to substitute command lines
+            try {
+              value = execSync(parts![2], {
+                stdio: "pipe"
+              })
+                .toString()
+                .trim();
+            } catch (e) {
+              console.log(e.message);
+            }
+
+            // else interpolate value
+          } else {
+            // substitute commands from extracted values and/or
             // interpolate value from process or extracted object
             value = interpolate(env[parts![2]] || extracted[parts![2]] || "");
           }
@@ -153,8 +148,7 @@ export function parse(src: string | Buffer, override?: Option): ParsedEnvs {
         value = value.trim();
       }
 
-      // substitute value from command line
-      value = substitute(value);
+      // substitute value from command line or
       // interpolate value from process.env or .env
       value = interpolate(value);
 
