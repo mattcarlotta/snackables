@@ -100,6 +100,7 @@ export function parse(src: string | Buffer, override?: Option): ParsedEnvs {
           const line = parts![0];
           const command = parts![1];
           const stripped = parts![2];
+
           let value = "",
             replacePart = line.substring(command.length);
 
