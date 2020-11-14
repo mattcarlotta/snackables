@@ -126,7 +126,7 @@ describe("Parse Method", () => {
     expect(result.ADMIN).toEqual("Bob Smith");
   });
 
-  it("parses interopolate command-line substitutions", () => {
+  it("parses and interopolates command-line substitutions", () => {
     const result = parse(
       Buffer.from(`ADMIN=$(echo 'Bob')@$(echo "Smith")\nDBADMIN=$ADMIN`)
     );
