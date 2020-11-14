@@ -99,6 +99,7 @@ export function parse(src: string | Buffer, override?: Option): ParsedEnvs {
 
           const line = parts![0];
           const command = parts![1];
+          const stripped = parts![2];
           let value = "",
             replacePart = line.substring(command.length);
 
@@ -112,7 +113,7 @@ export function parse(src: string | Buffer, override?: Option): ParsedEnvs {
           } else if (line[1] === "(" && line[line.length - 1] === ")") {
             // attempts to substitute command line
             try {
-              value = execSync(parts![2], {
+              value = execSync(stripped, {
                 stdio: "pipe"
               })
                 .toString()
@@ -126,7 +127,7 @@ export function parse(src: string | Buffer, override?: Option): ParsedEnvs {
             // substitute commands from extracted values and/or
             // interpolate value from process or extracted object or empty string
             value = interpolate(
-              process.env[parts![2]] || extracted[parts![2]] || value
+              process.env[stripped] || extracted[stripped] || value
             );
           }
 
