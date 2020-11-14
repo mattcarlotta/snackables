@@ -76,7 +76,7 @@ yarn add snackables
 
 In a CLI or within your package.json, under the `scripts` property, define an `ENV_LOAD` variable and either add a single file `ENV_LOAD=.env.base` or add multiple files separated by commas `ENV_LOAD=.env.base,.env.local,.env.dev,..etc` before running a process. Snackables loads `.env` files according to their defined order (left to right), where the last imported file will take precedence over any previously imported files.
 
-For example, `.env.*` files can be loaded by their filename (assuming they're located in the projects root):
+For example, `.env.*` files can be loaded by their filename (assuming they're located in the project's root):
 
 ```json
 {
@@ -244,7 +244,7 @@ console.log("parsed", result.parsed); // process.env with loaded Envs
 console.log("extracted", result.extracted); // extracted Envs within a { KEY: VALUE } object
 ```
 
-Additionally, you can pass options to `config`.
+Additionally, you can pass [options](#config-argument-options) to `config`.
 
 ### Config Argument Options
 
@@ -254,7 +254,7 @@ config accepts a single `Object` argument with the following properties:
   dir?: string, 
   paths?: string | string[], 
   encoding?: BufferEncoding,
-  override?: string | boolean,
+  override?: boolean | string,
   debug?: boolean | string
 }
 ```
@@ -268,10 +268,10 @@ You may specify a single directory path if your files are located elsewhere.
 A single directory path as a `string`:
 
 ```js
-require("snackables").config({ dir: "path/to/directory" });
+require("snackables").config({ dir: "custom/path/to/directory" });
 
 // import { config } from "snackables"
-// config({ dir: "path/to/directory" });
+// config({ dir: "cusotm/path/to/directory" });
 ```
 
 #### Config paths
@@ -352,14 +352,14 @@ require("snackables").config({ debug: true });
 
 ## Parse Method
 
-If you wish to manually parse Envs, then parse will read a string or Buffer and parse their contents.
+If you wish to manually parse Envs, then you can utilize `parse` to read a string or Buffer and parse their contents.
 
 ### Parse Argument Options
 
 parse accepts two arguments in the following order: 
 ```
 src: string | Buffer, 
-override: string | boolean
+override: boolean | string
 ```
 
 #### Parse src
@@ -408,7 +408,7 @@ The parsing method currently supports the following rules:
 - whitespace is removed from both ends of unquoted values (see more on [`trim`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string/Trim)) (`FOO= some value ` becomes `{FOO: 'some value'}`)
 - single and double quoted values are escaped (`SINGLE_QUOTE='quoted'` becomes `{SINGLE_QUOTE: "quoted"}`)
 - single and double quoted values maintain whitespace from both ends (`FOO=" some value "` becomes `{FOO: ' some value '}`)
-- double quoted values expand new lines (`MULTILINE="new\nline"` becomes
+- double quoted values expand new lines `MULTILINE="new\nline"` becomes
 
 ```
 {MULTILINE: 'new
