@@ -2,11 +2,12 @@
 
 All notable updates to this project will be documented in this file. See [SemVer 2.0](https://semver.org/) for commit guidelines.
 
-## [2.0.0] - 2020-13-11
+## [2.0.0] - 2020-14-11
 
 ### Added
 
 - Added support for single and multi command line `$()` substitutions
+- Added support for interpolations that refer to command line substitutions
 
 ### Changed
 

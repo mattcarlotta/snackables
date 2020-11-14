@@ -83,11 +83,9 @@ export function parse(src: string | Buffer, override?: Option): ParsedEnvs {
           // parts = ["$string", "@"| ":" | "/", " ", "strippedstring", index: n, input: "$string", groups ]
           const parts = /(.?)\$\(?([a-zA-Z0-9_ |\-'"/^[\]]+)?\)?/g.exec(match);
 
-          /* istanbul ignore next */
-          if (!parts) return newEnv;
           let value = "";
           try {
-            value = execSync(parts[2], {
+            value = execSync(parts![2], {
               stdio: "pipe"
             })
               .toString()
@@ -96,7 +94,7 @@ export function parse(src: string | Buffer, override?: Option): ParsedEnvs {
             console.log(e.message);
           }
 
-          return newEnv.replace(parts[0].substring(parts[1].length), value);
+          return newEnv.replace(parts![0].substring(parts![1].length), value);
         }, envValue);
   }
 
@@ -110,21 +108,21 @@ export function parse(src: string | Buffer, override?: Option): ParsedEnvs {
           // parts = ["$string", "@"| ":" | "/", " ", "strippedstring", index: n, input: "$string", groups ]
           const parts = /(.?)\${?([a-zA-Z0-9_]+)?}?/g.exec(match);
 
-          /* istanbul ignore next */
-          if (!parts) return newEnv;
-
           let value, replacePart;
 
           // if prefix is escaped
-          if (parts[1] === "\\") {
+          if (parts![1] === "\\") {
             // remove escaped characters
-            replacePart = parts[0];
+            replacePart = parts![0];
             value = replacePart.replace("\\$", "$");
           } else {
             // else remove prefix character
-            replacePart = parts[0].substring(parts[1].length);
-            // interpolate value from process or extracted object or empty string
-            value = interpolate(env[parts[2]] || extracted[parts[2]] || "");
+            replacePart = parts![0].substring(parts![1].length);
+
+            // substitute commands from extracted values
+            value = substitute(extracted[parts![2]] || "");
+            // interpolate value from process or extracted object
+            value = interpolate(env[parts![2]] || extracted[parts![2]] || "");
           }
 
           return newEnv.replace(replacePart, value);
@@ -146,28 +144,6 @@ export function parse(src: string | Buffer, override?: Option): ParsedEnvs {
       const isDoubleQuoted = value[0] === '"' && value[end] === '"';
       const isSingleQuoted = value[0] === "'" && value[end] === "'";
 
-      // const commandSubstitution = value.match(COMMAND);
-
-      // if (commandSubstitution) {
-      //   for (let i = 0; i < commandSubstitution.length; i += 1) {
-      //     try {
-      //       const command = commandSubstitution[i];
-      //       const result = execSync(command.substring(2, command.length - 1), {
-      //         stdio: "pipe"
-      //       })
-      //         .toString()
-      //         .trim();
-
-      //       value = value.replace(COMMAND, result);
-      //     } catch (e) {
-      //       console.log(e.message);
-      //     }
-      //   }
-      // }
-
-      // substitute value from command line
-      value = substitute(value);
-
       // if single or double quoted, remove quotes
       if (isSingleQuoted || isDoubleQuoted) {
         value = value.substring(1, end);
@@ -179,10 +155,12 @@ export function parse(src: string | Buffer, override?: Option): ParsedEnvs {
         value = value.trim();
       }
 
+      // substitute value from command line
+      value = substitute(value);
       // interpolate value from process.env or .env
       value = interpolate(value);
 
-      // assigns what was initially extracted from the file
+      // assigns what was initially extracted from the file or
       // prevents the extracted value from overriding a process.env variable
       if (override || !env[keyValueArr[1]]) extracted[keyValueArr[1]] = value;
     }
