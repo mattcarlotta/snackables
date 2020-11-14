@@ -121,9 +121,9 @@ describe("Parse Method", () => {
   });
 
   it("parses multiple command-line substitutions", () => {
-    const result = parse(Buffer.from(`ADMIN=$(echo 'Bob')$(echo "Smith")`));
+    const result = parse(Buffer.from(`ADMIN=$(echo 'Bob') $(echo "Smith")`));
 
-    expect(result.ADMIN).toEqual("BobSmith");
+    expect(result.ADMIN).toEqual("Bob Smith");
   });
 
   it("parses interopolate command-line substitutions", () => {
