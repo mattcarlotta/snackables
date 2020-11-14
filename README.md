@@ -261,7 +261,7 @@ config accepts a single `Object` argument with the following properties:
 
 #### Config dir
 
-Default: `process.cwd()` (root directory)
+Default: `process.cwd()` (project root directory)
 
 You may specify a single directory path if your files are located elsewhere.
 
@@ -276,7 +276,7 @@ require("snackables").config({ dir: "path/to/directory" });
 
 #### Config paths
 
-Default: `.env`
+Default: `[".env"]`
 
 You may specify custom paths if your files are located elsewhere (recommended to use **absolute** path(s) from your root directory).
 
@@ -339,15 +339,15 @@ require("snackables").config({ override: true });
 
 #### Config debug
 
-Default: `false`
+Default: `undefined`
 
 You may turn on logging to help debug file loading.
 
 ```js
-require("snackables").config({ debug: process.env.DEBUG });
+require("snackables").config({ debug: true });
 
 // import { config } from "snackables"
-// config({ debug: process.env.DEBUG });
+// config({ debug: true });
 ```
 
 ## Parse Method
@@ -364,7 +364,7 @@ override: string | boolean
 
 #### Parse src
 
-For most use cases, you'll want to pass parse a `string` or `Buffer` as the first argument which returns an `extracted` or `sanitized` parsed keys/values as a single `Object` (these will **NOT** be assigned to `process.env`. [Why not?](#why-doesnt-the-parse-method-automatically-assign-envs)). 
+For most use cases, you'll want to pass parse a `string` or `Buffer` as the first argument which returns parsed `extracted` keys/values as a single `Object` (these will **NOT** be assigned to `process.env`. [Why not?](#why-doesnt-the-parse-method-automatically-assign-envs)). 
 
 ```js
 const { readFileSync } = require("fs");
@@ -417,7 +417,9 @@ line'}
 
 ## Interpolation
 
-You may want to interpolate ENV values based upon a `process.env` value or a key within the `.env` file. To interpolate a value, simply define it with `$KEY` or `${KEY}`, for example:
+Env values can be interpolated based upon a `process.env` value, a `KEY` within the `.env` file or a command line substitution. 
+
+To interpolate a value from `process.env` or `.env`, simply define it with either `$KEY` or within brackets `${KEY}`, for example:
 
 Input:
 ```dosini
@@ -433,6 +435,20 @@ MESSAGE=Hello
 INTERP_MESSAGE=Hello World
 INTERP_MESSAGE_BRACKETS=Hello World
 ENVIRONMENT=development
+```
+
+To interpolate a command line substitution, simply define it within parentheses `$(KEY)` for example:
+
+Input:
+```dosini
+USER=$(whoami)
+MULTICOMMAND=$(echo 'I Would Have Been Your Daddy' | sed 's/[^A-Z]//g')
+```
+
+Output:
+```dosini
+USER=Jane
+MULTICOMMAND=IWHBYD
 ```
 
 ### Interpolation Rules
@@ -490,7 +506,7 @@ For example, `ENV_LOAD=.env.base,.env.dev` has two files `.env.base` and `.env.d
 }
 ```
 
-in a local enviroment, `.env.base` may have static shared database variables:
+in a local environment, `.env.base` may have static shared database variables:
 
 ```dosini
 DB_HOST=localhost
@@ -516,7 +532,7 @@ In short, `parse` can not automatically assign Envs as they're extracted.
 
 Why?
 
-Under the hood, the `config` method utilizes the `parse` method to extract one or multiple `.env` files as it loops over the config's [paths](#config-paths) argument. The `config` method expects `parse` to return a single `Object` of `extracted` or `sanitized` Envs that will be accumulated with other files' extracted/sanitized Envs. The result of these accumulated Envs is then assigned to `process.env` **once** -- this approach has the added benefit of prioritizing Envs  without using **any** additional logic since the last set of extracted Envs automatically override any previous Envs (thanks to [Object.assign](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign#Merging_objects_with_same_properties)). While allowing Envs to be assigned multiple times to `process.env` doesn't appear to be much different in terms of performance, it requires a bit more additional overhead logic to determine which `.env` has priority and whether or not to *conditionally* apply them (including times when you might want to parse Envs, but not neccesarily assign them). A workaround to this limitation is to simply apply them yourself:
+Under the hood, the `config` method utilizes the `parse` method to extract one or multiple `.env` files as it loops over the `config` [paths](#config-paths) argument. The `config` method expects `parse` to return a single `Object` of `extracted` Envs that will be accumulated with other files' extracted/sanitized Envs. The result of these accumulated Envs is then assigned to `process.env` **once** -- this approach has the added benefit of prioritizing Envs  without using **any** additional logic since the last set of extracted Envs automatically override any previous Envs (thanks to [Object.assign](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign#Merging_objects_with_same_properties)). While allowing Envs to be assigned multiple times to `process.env` doesn't appear to be much different in terms of performance, it requires a bit more additional overhead logic to determine which `.env` has priority and whether or not to *conditionally* apply them (including times when you might want to parse Envs, but not neccesarily assign them). A workaround to this limitation is to simply apply them yourself:
 
 ```js
 const { parse } = require("snackables");

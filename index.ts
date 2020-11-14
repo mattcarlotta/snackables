@@ -66,11 +66,10 @@ export interface ConfigOutput {
  */
 
 export function parse(src: string | Buffer, override?: Option): ParsedEnvs {
-  const { env } = process;
-
   // initialize extracted Envs object
   const extracted: ParsedEnvs = {};
 
+  // interpts lines from command line, process.env or .env
   function interpolate(envValue: string): string {
     // find interpolated values with $(KEY)
     let matches = envValue.match(/\$\(([^)]+)\)/g);
@@ -81,7 +80,17 @@ export function parse(src: string | Buffer, override?: Option): ParsedEnvs {
     return !matches
       ? envValue
       : matches.reduce((newEnv: string, match: string): string => {
-          // parts = ["$string", "@"| ":" | "/", " ", "strippedstring", index: n, input: "$string", groups ]
+          /*
+            parts = [
+              "$string" | "${string}" | "$(string)", 
+              "@"| ":" | "/",
+              " ",
+              "strippedstring",
+              index: n,
+              input: "$string",
+              groups
+            ]
+          */
           // matches lines against $(command)
           let parts = /(.?)\$\(([^)]+)\)/g.exec(match);
 
@@ -89,18 +98,19 @@ export function parse(src: string | Buffer, override?: Option): ParsedEnvs {
           if (!parts) parts = /(.?)\${?([a-zA-Z0-9_]+)?}?/g.exec(match);
 
           const line = parts![0];
+          const command = parts![1];
           let value = "",
-            replacePart = line.substring(parts![1].length);
+            replacePart = line.substring(command.length);
 
           // if prefix is escaped
-          if (parts![1] === "\\") {
+          if (command === "\\") {
             // removes escaped characters
             replacePart = line;
             value = replacePart.replace("\\$", "$");
 
-            // else if lines contains "(" and ")"
+            // else if line contains "(" and ")"
           } else if (line[1] === "(" && line[line.length - 1] === ")") {
-            // attempts to substitute command lines
+            // attempts to substitute command line
             try {
               value = execSync(parts![2], {
                 stdio: "pipe"
@@ -114,8 +124,10 @@ export function parse(src: string | Buffer, override?: Option): ParsedEnvs {
             // else interpolate value
           } else {
             // substitute commands from extracted values and/or
-            // interpolate value from process or extracted object
-            value = interpolate(env[parts![2]] || extracted[parts![2]] || "");
+            // interpolate value from process or extracted object or empty string
+            value = interpolate(
+              process.env[parts![2]] || extracted[parts![2]] || value
+            );
           }
 
           return newEnv.replace(replacePart, value);
@@ -144,17 +156,12 @@ export function parse(src: string | Buffer, override?: Option): ParsedEnvs {
         // if double quoted, expand newlines
         if (isDoubleQuoted) value = value.replace(/\\n/g, "\n");
       } else {
-        // remove surrounding whitespace
-        value = value.trim();
+        value = interpolate(value);
       }
 
-      // substitute value from command line or
-      // interpolate value from process.env or .env
-      value = interpolate(value);
-
-      // assigns what was initially extracted from the file or
       // prevents the extracted value from overriding a process.env variable
-      if (override || !env[keyValueArr[1]]) extracted[keyValueArr[1]] = value;
+      if (override || !process.env[keyValueArr[1]])
+        extracted[keyValueArr[1]] = value;
     }
   }
 
@@ -210,7 +217,7 @@ export function config(options?: ConfigOptions): ConfigOutput {
 
       if (debug) log(`\x1b[90mLoaded env from ${envPath}\x1b[0m`);
     } catch (err) {
-      if (err.code !== "ENOENT" || debug)
+      if (debug)
         log(`\x1b[33mUnable to load ${envPath}: ${err.message}.\x1b[0m`);
     }
   }
