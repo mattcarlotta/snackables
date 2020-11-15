@@ -411,10 +411,10 @@ const { parse } = require("snackables");
 // import { readFileSync } from "fs";
 // import { parse } from "snackables";
 
-const config = parse(Buffer.from("BASIC=basic"), override: true); // will return an object
+const config = parse(Buffer.from("BASIC=basic"), true); // will return an object
 console.log(typeof config, config); // object { BASIC : 'basic' }
 
-const result = parse(readFileSync("path/to/.env.file", { encoding: "utf8" }), override: true); // will return an object
+const result = parse(readFileSync("path/to/.env.file", { encoding: "utf8" }), true); // will return an object
 console.log(typeof result, result); // object { OVERRIDEKEY : 'value' }
 ```
 
@@ -560,7 +560,7 @@ const { parse } = require("snackables");
 // import { parse } from "snackables";
 
 const parsed = parse(Buffer.from("BASIC=basic")); // parse/interpolate Envs not defined in process.env
-// const parsed = parse(Buffer.from("BASIC=basic"), override: true); // parse/interpolate and override any Envs in process.env
+// const parsed = parse(Buffer.from("BASIC=basic"), true); // parse/interpolate and override any Envs in process.env
 
 Object.assign(process.env, parsed)
 ```
