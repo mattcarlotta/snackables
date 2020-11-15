@@ -39,7 +39,7 @@ export interface ProcessEnv {
   [key: string]: string; // process.env
 }
 
-export type Option = string | boolean | undefined;
+export type Option = boolean | string | undefined;
 
 export type Path = string | string[];
 
@@ -65,40 +65,28 @@ export interface ConfigOutput {
  */
 
 export function parse(src: string | Buffer, override?: Option): ParsedEnvs {
+  const { env } = process;
   // initialize extracted Envs object
   const extracted: ParsedEnvs = {};
 
   // interpts lines from command line, process.env or .env
   function interpolate(envValue: string): string {
-    // find interpolated values with $(KEY)
-    let matches = envValue.match(/\$\(([^)]+)\)/g);
-
-    // find interpolated values with $KEY or ${KEY}
-    if (!matches) matches = envValue.match(/(.?\${?(?:[a-zA-Z0-9_]+)?}?)/g);
+    // find interpolated values with $(KEY) or with $KEY/${KEY}
+    const matches =
+      envValue.match(/\$\(([^)]+)\)/g) ||
+      envValue.match(/(.?\${?(?:[a-zA-Z0-9_]+)?}?)/g);
 
     return !matches
       ? envValue
       : matches.reduce((newEnv: string, match: string): string => {
-          /*
-            parts = [
-              "$string" | "${string}" | "$(string)",
-              "@"| ":" | "/",
-              " ",
-              "strippedstring",
-              index: n,
-              input: "$string",
-              groups
-            ]
-          */
-          // matches lines against $(command)
-          let parts = /(.?)\$\(([^)]+)\)/g.exec(match);
+          // matches lines against $(command) or $command/${command}
+          const parts =
+            /(.?)\$\(([^)]+)\)/g.exec(match) ||
+            /(.?)\${?([a-zA-Z0-9_]+)?}?/g.exec(match);
 
-          // matches lines against $command or ${command}
-          if (!parts) parts = /(.?)\${?([a-zA-Z0-9_]+)?}?/g.exec(match);
-
-          const line = parts![0];
-          const command = parts![1];
-          const stripped = parts![2];
+          const line = parts![0],
+            command = parts![1],
+            stripped = parts![2];
 
           let value = "",
             replacePart = line.substring(command.length);
@@ -126,9 +114,7 @@ export function parse(src: string | Buffer, override?: Option): ParsedEnvs {
           } else {
             // substitute commands from extracted values and/or
             // interpolate value from process or extracted object or empty string
-            value = interpolate(
-              process.env[stripped] || extracted[stripped] || value
-            );
+            value = interpolate(env[stripped] || extracted[stripped] || value);
           }
 
           return newEnv.replace(replacePart, value);
@@ -161,8 +147,7 @@ export function parse(src: string | Buffer, override?: Option): ParsedEnvs {
       }
 
       // prevents the extracted value from overriding a process.env variable
-      if (override || !process.env[keyValueArr[1]])
-        extracted[keyValueArr[1]] = value;
+      if (override || !env[keyValueArr[1]]) extracted[keyValueArr[1]] = value;
     }
   }
 
@@ -173,7 +158,7 @@ export function parse(src: string | Buffer, override?: Option): ParsedEnvs {
  * Extracts and interpolates one or multiple `.env` files into an object and assigns them to {@link https://nodejs.org/api/process.html#process_process_env | `process.env`}.
  * Example: 'KEY=value' becomes { KEY: 'value' }
  *
- * @param options - accepts: { dir: string, paths: string | string[], encoding: | "ascii" | "utf8" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary"| "hex", override: string | boolean, debug: string | boolean }
+ * @param options - accepts: { dir: string, paths: string | string[], encoding: | "ascii" | "utf8" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary"| "hex", override: boolean | string, debug: boolean | string }
  * @returns a single parsed object with parsed Envs as { key: value } pairs and a single extracted object with extracted Envs as { key: value } pairs
  */
 export function config(options?: ConfigOptions): ConfigOutput {

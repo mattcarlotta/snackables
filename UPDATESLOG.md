@@ -2,6 +2,17 @@
 
 All notable updates to this project will be documented in this file. See [SemVer 2.0](https://semver.org/) for commit guidelines.
 
+## [2.0.1] - 2020-14-11
+
+### Added
+
+- Added command line substitution example
+
+### Changed
+
+- Reduced bundle size
+- Updated source comments
+
 ## [2.0.0] - 2020-14-11
 
 ### Added
