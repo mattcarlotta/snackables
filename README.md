@@ -26,6 +26,8 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 
 [Usage](#usage)
 
+[Examples](https://github.com/mattcarlotta/snackables-examples)
+
 [CLI Options](#cli-options)
   - [ENV_LOAD](#env_load)
   - [ENV_DIR](#env_dir)
