@@ -477,6 +477,7 @@ MULTICOMMAND=IWHBYD
 - Values can be interpolated based upon a `process.env` value: `BASIC=$NODE_ENV` || `BASIC=${NODE_ENV}`
 - Values in `process.env` take precedence over interpolated values in `.env` files
 - Interpolated values can't be referenced across multiple `.env`s, instead they must only be referenced within the same file
+- Commandline substitutions can **NOT** contain inner bash commands: `EX=$(info=$(uname -a); echo $info;)`, instead they should be offloaded to `.sh` files:  `EX=$(bash ./path/to/info.sh)`
 - The `$` character **must** be escaped when it doesn't refer to another key within the `.env` file: `\$1234`
 - Do not use escaped `\$` within a value when it's key is referenced by another key: 
 
