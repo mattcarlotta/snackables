@@ -26,50 +26,48 @@
   OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 import { readFileSync, statSync } from "fs";
 import { join } from "path";
 import { execSync } from "child_process";
 
 export interface ParsedEnvs {
-  [name: string]: string; // parsed Envs as KEY=VALUE pairs
+  [name: string]: string; // parsed Envs as { KEY: "value" } pairs
 }
 
 export interface ProcessEnv {
-  [key: string]: string; // process.env
+  [key: string]: string; // process.env Envs
 }
 
-export type Option = boolean | string | undefined;
+export type Option = boolean | string | undefined; // config option
 
-export type Path = string | string[];
+export type Path = string | string[]; // config paths argument
 
 export interface ConfigOptions {
   dir?: string; // directory to env files
-  paths?: Path; // paths to .env file
-  encoding?: BufferEncoding; // encoding of .env file
-  override?: Option; // override process.envs
+  paths?: Path; // paths to .env files
+  encoding?: BufferEncoding; // encoding of .env files
+  override?: Option; // override Envs in process.env
   debug?: Option; // turn on logging for debugging purposes
 }
 
 export interface ConfigOutput {
-  parsed: ProcessEnv; // process.env Envs as key value pairs
-  extracted: ParsedEnvs; // extracted Envs as key value pairs
+  parsed: ProcessEnv; // process.env Envs as { KEY: "value" } pairs
+  extracted: ParsedEnvs; // extracted Envs as { KEY: "value" } pairs
 }
 
 /**
  * Parses a string or buffer of Envs into an object.
  *
- * @param src - contents to be parsed (string | Buffer)
- * @param override - allows extracted Envs to be parsed regardless if process.env has the properties defined (string | boolean)
- * @returns an object with keys and values from `src`
+ * @param {string | Buffer} src - contents to be parsed (string | Buffer)
+ * @param {boolean | string} override - allows extracted Envs to be parsed regardless if `process.env` has the properties defined (boolean | string)
+ * @returns {object} a single object of all { key: value } pairs from `src`
  */
-
 export function parse(src: string | Buffer, override?: Option): ParsedEnvs {
   const { env } = process;
   // initialize extracted Envs object
   const extracted: ParsedEnvs = {};
 
-  // interpts lines from command line, process.env or .env
+  // interprets lines from command line, process.env or .env
   function interpolate(envValue: string): string {
     // find interpolated values with $(KEY) or with $KEY/${KEY}
     const matches =
@@ -103,11 +101,9 @@ export function parse(src: string | Buffer, override?: Option): ParsedEnvs {
             try {
               value = execSync(stripped, {
                 stdio: "pipe"
-              })
-                .toString()
-                .trim();
-            } catch (e) {
-              console.log(e.message);
+              }).toString();
+            } catch (err) {
+              console.log(`\x1b[31m${err.message}\x1b[0m`);
             }
 
             // else interpolate value
@@ -117,7 +113,7 @@ export function parse(src: string | Buffer, override?: Option): ParsedEnvs {
             value = interpolate(env[stripped] || extracted[stripped] || value);
           }
 
-          return newEnv.replace(replacePart, value);
+          return newEnv.replace(replacePart, value.trim());
         }, envValue);
   }
 
@@ -156,10 +152,10 @@ export function parse(src: string | Buffer, override?: Option): ParsedEnvs {
 
 /**
  * Extracts and interpolates one or multiple `.env` files into an object and assigns them to {@link https://nodejs.org/api/process.html#process_process_env | `process.env`}.
- * Example: 'KEY=value' becomes { KEY: 'value' }
+ * Example: 'KEY=value' becomes { KEY: "value" }
  *
- * @param options - accepts: { dir: string, paths: string | string[], encoding: | "ascii" | "utf8" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary"| "hex", override: boolean | string, debug: boolean | string }
- * @returns a single parsed object with parsed Envs as { key: value } pairs and a single extracted object with extracted Envs as { key: value } pairs
+ * @param {object} options - accepts: { `dir`: string, `paths`: string | string[], `encoding`: BufferEncoding, `override`: boolean | string, `debug`: boolean | string }
+ * @returns {object} a single object with `parsed` and `extracted` Envs as { KEY: "value" } pairs
  */
 export function config(options?: ConfigOptions): ConfigOutput {
   const { log } = console;
@@ -218,7 +214,6 @@ export function config(options?: ConfigOptions): ConfigOutput {
  * Immediately loads a single or multiple `.env` file contents into {@link https://nodejs.org/api/process.html#process_process_env | `process.env`} when the package is preloaded or imported.
  */
 (function () {
-  // check if ENV_LOAD is defined
   const {
     ENV_DIR,
     ENV_LOAD,
@@ -226,6 +221,8 @@ export function config(options?: ConfigOptions): ConfigOutput {
     ENV_ENCODE,
     ENV_OVERRIDE
   } = process.env;
+
+  // checks if ENV_LOAD is defined and automatically calls config with Env variables
   if (ENV_LOAD) {
     config({
       dir: ENV_DIR,
