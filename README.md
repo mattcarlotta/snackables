@@ -458,6 +458,28 @@ INTERP_MESSAGE_BRACKETS=Hello World
 ENVIRONMENT=development
 ```
 
+To interpolate a value with a **single** fallback use the `|` symbol beside a `$KEY` or `${KEY}`, for example:
+
+Input:
+```dosini
+DEFAULT=Hello
+INTERP_MESSAGE=$MESSAGE|Hello World
+INTERP_MESSAGE_BRACKETS=${MESSAGE|Hello} World
+FALLBACK_VALUE=$UNDEFINED_KEY|Hello
+FALLBACK_VALUE_BRAKCETS=${UNDEFINED_KEY|Hello}
+FALLBACK_VALUE_WITH_INTERP=$UNDEFINED_KEY|$DEFAULT
+```
+
+Output:
+```dosini
+MESSAGE=Hello
+INTERP_MESSAGE=Hello World
+INTERP_MESSAGE_BRACKETS=Hello World
+FALLBACK_VALUE=Hello
+FALLBACK_VALUE_BRAKCETS=Hello
+FALLBACK_VALUE_WITH_INTERP=Hello
+```
+
 To interpolate a command line substitution, simply define it within parentheses `$(KEY)` for example:
 
 Input:
@@ -477,7 +499,8 @@ MULTICOMMAND=IWHBYD
 - Values can be interpolated based upon a `process.env` value: `BASIC=$NODE_ENV` || `BASIC=${NODE_ENV}`
 - Values in `process.env` take precedence over interpolated values in `.env` files
 - Interpolated values can't be referenced across multiple `.env`s, instead they must only be referenced within the same file
-- Commandline substitutions can **NOT** contain inner bash variables: `EX=$(info=$(uname -a); echo $info;)`, instead they should be offloaded to `.sh` files:  `EX=$(bash ./path/to/info.sh)`
+- Command line substitutions can **NOT** contain inner bash variables: `EX=$(info=$(uname -a); echo $info;)`, instead they should be offloaded to `.sh` files:  `EX=$(bash ./path/to/info.sh)`
+- Fallback values can **NOT** be used with command line substitutions
 - The `$` character **must** be escaped when it doesn't refer to another key within the `.env` file: `\$1234`
 - Do not use escaped `\$` within a value when it's key is referenced by another key: 
 

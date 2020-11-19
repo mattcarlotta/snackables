@@ -72,7 +72,7 @@ export function parse(src: string | Buffer, override?: Option): ParsedEnvs {
     // find interpolated values with $(KEY) or with $KEY/${KEY}
     const matches =
       envValue.match(/\$\(([^)]+)\)/g) ||
-      envValue.match(/(.?\${?(?:[a-zA-Z0-9_]+)?}?)/g);
+      envValue.match(/(.?\${?(?:[a-zA-Z0-9_|]+)?}?)/g);
 
     return !matches
       ? envValue
@@ -80,7 +80,7 @@ export function parse(src: string | Buffer, override?: Option): ParsedEnvs {
           // matches lines against $(command) or $command/${command}
           const parts =
             /(.?)\$\(([^)]+)\)/g.exec(match) ||
-            /(.?)\${?([a-zA-Z0-9_]+)?}?/g.exec(match);
+            /(.?)\${?([a-zA-Z0-9_|]+)?}?/g.exec(match);
 
           const line = parts![0],
             command = parts![1],
@@ -89,15 +89,12 @@ export function parse(src: string | Buffer, override?: Option): ParsedEnvs {
           let value = "",
             replacePart = line.substring(command.length);
 
-          // if prefix is escaped
           if (command === "\\") {
             // removes escaped characters
             replacePart = line;
             value = replacePart.replace("\\$", "$");
-
-            // else if line contains "(" and ")"
           } else if (line[1] === "(" && line[line.length - 1] === ")") {
-            // attempts to substitute command line
+            // attempts to substitute commands
             try {
               value = execSync(stripped, {
                 stdio: "pipe"
@@ -105,12 +102,14 @@ export function parse(src: string | Buffer, override?: Option): ParsedEnvs {
             } catch (err) {
               console.log(`\x1b[31m${err.message}\x1b[0m`);
             }
-
-            // else interpolate value
           } else {
-            // substitute commands from extracted values and/or
-            // interpolate value from process or extracted object or empty string
-            value = interpolate(env[stripped] || extracted[stripped] || value);
+            // split values for "|": ["key", "default"]
+            const defaultValue = stripped.split("|");
+            const key = defaultValue[0],
+              fallbackValue = defaultValue[1] || "";
+
+            // interpolate value from process or extracted object or fallback value
+            value = interpolate(env[key] || extracted[key] || fallbackValue);
           }
 
           return newEnv.replace(replacePart, value.trim());
@@ -126,24 +125,28 @@ export function parse(src: string | Buffer, override?: Option): ParsedEnvs {
     const keyValueArr = keyValues[i].match(/^\s*([\w.-]+)\s*=\s*(.*)?\s*$/);
 
     if (keyValueArr) {
-      // default undefined or missing values to empty string
-      let value = keyValueArr[2] || "";
-      const end = value.length - 1;
-      const isDoubleQuoted = value[0] === '"' && value[end] === '"';
-      const isSingleQuoted = value[0] === "'" && value[end] === "'";
-
-      // if single or double quoted, remove quotes
-      if (isSingleQuoted || isDoubleQuoted) {
-        value = value.substring(1, end);
-
-        // if double quoted, expand newlines
-        if (isDoubleQuoted) value = value.replace(/\\n/g, "\n");
-      } else {
-        value = interpolate(value);
-      }
+      const key = keyValueArr[1];
 
       // prevents the extracted value from overriding a process.env variable
-      if (override || !env[keyValueArr[1]]) extracted[keyValueArr[1]] = value;
+      if (override || !env[key]) {
+        let value = keyValueArr[2] || "";
+        const end = value.length - 1;
+        const isDoubleQuoted = value[0] === '"' && value[end] === '"';
+        const isSingleQuoted = value[0] === "'" && value[end] === "'";
+
+        // if single or double quoted, remove quotes
+        if (isSingleQuoted || isDoubleQuoted) {
+          value = value.substring(1, end);
+
+          // if double quoted, expand newlines
+          if (isDoubleQuoted) value = value.replace(/\\n/g, "\n");
+        } else {
+          value = interpolate(value);
+        }
+
+        // set value to extracted object
+        extracted[key] = value;
+      }
     }
   }
 

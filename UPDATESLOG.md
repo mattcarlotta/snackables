@@ -2,6 +2,17 @@
 
 All notable updates to this project will be documented in this file. See [SemVer 2.0](https://semver.org/) for commit guidelines.
 
+## [2.1.0] - 2020-19-11
+
+### Added
+
+- Fallback values are supported using `|`
+- Added fallback support to README
+
+### Changed
+
+- Refactored logic to increase performance by 15-25%
+
 ## [2.0.3] - 2020-15-11
 
 ### Changed
