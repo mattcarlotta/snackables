@@ -140,7 +140,7 @@ describe("Config Method", () => {
       );
     });
 
-    it("interops mixed ENV with or without brackets values", () => {
+    it("interops mixed Envs with or without brackets values", () => {
       expect(extracted).toEqual(
         expect.objectContaining({
           MONGOLAB_URI:
@@ -159,7 +159,17 @@ describe("Config Method", () => {
       );
     });
 
-    it("doesn't interp escaped $ keys", () => {
+    it("interopolate '$' keys with default", () => {
+      expect(extracted).toEqual(
+        expect.objectContaining({
+          WITH_DEFAULT_VALUE: "basic",
+          WITH_DEFAULT_UNDEFINED: "default",
+          WITH_DEFAULT_UNDEFINED_INTERP: "test"
+        })
+      );
+    });
+
+    it("doesn't interopolate escaped '$' keys", () => {
       expect(extracted).toEqual(
         expect.objectContaining({
           ESCAPED_EXPAND: "$ESCAPED",

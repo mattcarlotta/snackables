@@ -110,6 +110,22 @@ describe("Parse Method", () => {
     expect(RNPayload).toEqual(expectedPayload);
   });
 
+  it("parses default substitutions", () => {
+    const result = parse(
+      Buffer.from(
+        `DEFAULT_VALUE=\${DEFAULT|hello}\nDEFAULT_EXAMPLE=$DEFAULT|hello\nENVNMT=$UNDFINED|$NODE_ENV`
+      )
+    );
+
+    expect(result).toEqual(
+      expect.objectContaining({
+        DEFAULT_VALUE: "hello",
+        DEFAULT_EXAMPLE: "hello",
+        ENVNMT: "test"
+      })
+    );
+  });
+
   it("parses single command-line substitutions", () => {
     let result = parse(
       Buffer.from(
