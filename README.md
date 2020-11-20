@@ -438,7 +438,7 @@ line'}
 
 ## Interpolation
 
-Env values can be interpolated based upon a `process.env` value, a `KEY` within the `.env` file or a command line substitution. 
+Env values can be interpolated based upon a `process.env` value, a `KEY` within the `.env` file, a command line substitution and/or a fallback value. 
 
 To interpolate a value from `process.env` or `.env`, simply define it with either `$KEY` or within brackets `${KEY}`, for example:
 
