@@ -1,6 +1,7 @@
 name: Publish Workflow
 on:
   push:
+    types: [labeled]
     branches:
       - main
 
