@@ -6,7 +6,9 @@ on:
 
 jobs:
   publish:
-    if: "!contains(github.event.commits[0].message, '[skip-ci]')"
+    if: |
+      !contains(github.event.commits[0].message, '[skip-ci]') ||
+      !contains(github.head_ref, '[skip-ci]')
     runs-on: ubuntu-latest
 
     steps:
