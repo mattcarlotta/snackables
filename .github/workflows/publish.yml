@@ -8,7 +8,7 @@ jobs:
   publish:
     if: |
       !contains(github.event.commits[0].message, '[skip-ci]') ||
-      !contains(github.event.pull_request.title, '[skip-ci]')
+      ${{ github.event.label.name == 'skip-ci' }}
     runs-on: ubuntu-latest
 
     steps:
