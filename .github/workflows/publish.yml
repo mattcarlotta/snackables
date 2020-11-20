@@ -1,7 +1,6 @@
 name: Publish Workflow
 on:
   push:
-    types: [labeled]
     branches:
       - main
 
@@ -9,7 +8,7 @@ jobs:
   publish:
     if: |
       !contains(github.event.commits[0].message, '[skip-ci]') ||
-      github.event_name == 'push' && !contains(github.event.label.name, 'skip-ci')
+      !contains(github.event.pull_request.labels.*.name, 'skip-ci')
     runs-on: ubuntu-latest
 
     steps:
