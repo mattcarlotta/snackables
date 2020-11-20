@@ -458,7 +458,7 @@ INTERP_MESSAGE_BRACKETS=Hello World
 ENVIRONMENT=development
 ```
 
-To interpolate a value with a **single** fallback use the `|` symbol beside a `$KEY` or `${KEY}`, for example:
+To interpolate a value with a **single** fallback use the `|` symbol beside a `$KEY` or inside a `${KEY}`, for example:
 
 Input:
 ```dosini
