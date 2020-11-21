@@ -462,7 +462,7 @@ To interpolate a value with a **single** fallback value use the `|` symbol besid
 
 Input:
 ```dosini
-DEFAULT=Hello
+MESSAGE=Hello
 INTERP_MESSAGE=$MESSAGE|Hello World
 INTERP_MESSAGE_BRACKETS=${MESSAGE|Hello} World
 FALLBACK_VALUE=$UNDEFINED_KEY|Hello
