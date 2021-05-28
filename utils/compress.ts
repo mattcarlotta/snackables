@@ -1,4 +1,5 @@
 import fs from "fs";
+import { join } from "path";
 import { minify } from "terser";
 
 const options = {
@@ -18,11 +19,31 @@ const options = {
 
 (async () => {
   try {
-    const { code } = await minify(
-      fs.readFileSync("index.js", { encoding: "utf-8" }),
-      options
-    );
-    if (code) fs.writeFileSync("index.js", code, { encoding: "utf-8" });
+    const dirs = [
+      "assignEnvs",
+      "config",
+      "fileExists",
+      "getFilePath",
+      "importFile",
+      "load",
+      "log",
+      "parse",
+      ""
+    ];
+
+    for (let i = 0; i < dirs.length; i += 1) {
+      const file = `${dirs[i]}/index.js`;
+
+      const filePath = join(process.cwd(), file);
+
+      /* eslint-disable no-await-in-loop */
+      const { code } = await minify(
+        fs.readFileSync(filePath, { encoding: "utf-8" }),
+        options
+      );
+
+      if (code) fs.writeFileSync(filePath, code, { encoding: "utf-8" });
+    }
   } catch (error) {
     console.error(error);
     process.exit(1);
