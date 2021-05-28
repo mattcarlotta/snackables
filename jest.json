@@ -9,7 +9,8 @@
   "testPathIgnorePatterns": [
     "<rootDir>/coverage",
     "<rootDir>/node_modules",
-    "<rootDir>/types"
+    "<rootDir>/types",
+    "<rootDir>/utils"
   ],
-  "collectCoverageFrom": ["index.ts"]
+  "collectCoverageFrom": ["**/*.ts", "!**/*d.ts", "!utils/*.ts"]
 }

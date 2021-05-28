@@ -2,6 +2,18 @@
 
 All notable updates to this project will be documented in this file. See [SemVer 2.0](https://semver.org/) for commit guidelines.
 
+## [3.0.0] - 2021-28-05
+
+### Added
+
+- Added support for an `env.config.(m)js` file to load Env values 
+- Added templated support for ES modules (not integrated yet)
+- Added node engines to `package.json` to support Node v12+
+
+### Changed
+
+- Folder structure to be more modular
+
 ## [2.1.0] - 2020-19-11
 
 ### Added
