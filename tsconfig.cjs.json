@@ -1,16 +1,10 @@
 {
   "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "module": "ESNext",
-    "target": "ESNext"
-  },
   "exclude": [
     ".github",
     "coverage",
     "node_modules",
     "tests",
-    "compress.ts",
-    "__tests__",
     "**/__tests__",
     "**/*.spec.ts",
     "utils"

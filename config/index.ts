@@ -1,5 +1,6 @@
 import { readFileSync } from "fs";
 import parse from "parse";
+import assignEnvs from "../assignEnvs";
 import getFilePath from "../getFilePath";
 import fileExists from "../fileExists";
 import { logMessage, logWarning } from "../log";
@@ -19,8 +20,6 @@ import type {
  * @returns {object} a single object with `parsed` and `extracted` Envs as { KEY: "value" } pairs
  */
 export default function config(options?: ConfigOptions): ConfigOutput {
-  const { assign } = Object;
-
   // default config options
   let dir = process.cwd();
   let paths: Path = [".env"];
@@ -49,25 +48,22 @@ export default function config(options?: ConfigOptions): ConfigOutput {
     const envPath = getFilePath(configs[i], dir);
     try {
       // checks if "envPath" is a file that exists
-      if (!fileExists(envPath)) throw String("File or folder doesn't exist");
+      if (!fileExists(envPath)) throw String("File doesn't exist");
 
       // reads and parses Envs from .env file
       const parsed = parse(readFileSync(envPath, { encoding }), override);
 
       // assigns Envs to accumulated object
-      assign(extracted, parsed);
+      Object.assign(extracted, parsed);
 
-      if (debug) logMessage(`\x1b[90mLoaded env from ${envPath}\x1b[0m`);
+      if (debug) logMessage(`Loaded env from ${envPath}`);
     } catch (err) {
-      if (debug)
-        logWarning(
-          `\x1b[33mUnable to load ${envPath}: ${err.toString()}.\x1b[0m`
-        );
+      if (debug) logWarning(`Unable to load ${envPath}: ${err.toString()}.`);
     }
   }
 
   return {
-    parsed: assign(process.env, extracted),
+    parsed: assignEnvs(extracted),
     extracted
   };
 }

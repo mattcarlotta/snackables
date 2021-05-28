@@ -42,7 +42,7 @@ export declare function config(options?: ConfigOptions): ConfigOutput;
 
 
 /**
- * Loads a config `env.config.(m)js` file from the project root directory.
+ * Loads a config object from the `env.config.(m)js` file based upon `LOAD_ENV`.
  *
  * @param {string} env - the environment to be loaded
  * @returns {Promise<ConfigArgs | void>} a promise that resolves a config file as { key: value } pairs to be used with the `config` function

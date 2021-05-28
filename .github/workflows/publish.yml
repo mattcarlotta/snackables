@@ -41,17 +41,17 @@ jobs:
 
       - name: Run Lint
         id: lint
-        run: yarn lint
+        run: yarn l
 
       - name: Run Tests
         id: tests
         if: steps.lint.exit_code == 0
-        run: yarn test:cov
+        run: yarn t:cov
 
       - name: Create Local Build
         id: build
         if: steps.tests.exit_code == 0
-        run: yarn build
+        run: yarn b
 
       - name: Publish to NPM
         id: publish

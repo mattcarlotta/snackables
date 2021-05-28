@@ -20,15 +20,6 @@
     "strict": true,
     "target": "es5"
   },
-  "files": ["./index.ts"],
   "include": ["**/*.ts", "./types/index.d.ts"],
-  "exclude": [
-    ".github",
-    "coverage",
-    "examples",
-    "node_modules",
-    "lib",
-    "tests",
-    "compress.ts"
-  ]
+  "exclude": [".github", "coverage", "node_modules", "tests", "utils"]
 }

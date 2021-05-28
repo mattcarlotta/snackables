@@ -5,7 +5,7 @@ import importFile from "../importFile";
 import type { ConfigArgs } from "../types/index";
 
 /**
- * Loads a config `env.config.(m)js` file from the project root directory.
+ * Loads a config object from the `env.config.(m)js` file based upon `LOAD_ENV`.
  *
  * @param {string} env - the environment to be loaded
  * @returns {Promise<ConfigArgs | void>} a promise that resolves a config file as { key: value } pairs to be used with the `config` function
@@ -28,7 +28,7 @@ export default async function load(env: string): Promise<ConfigArgs | void> {
     const configArgs = config[env];
     if (!configArgs)
       throw String(
-        `Unable to locate a '${env}' configuration within env.config.`
+        `Unable to locate a '${env}' configuration within 'env.config.(m)js'!`
       );
 
     return configArgs as ConfigArgs;

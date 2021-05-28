@@ -1,4 +1,5 @@
 import { execSync } from "child_process";
+import { logWarning } from "../log";
 import type { Option, ParsedEnvs } from "../types/index";
 
 /**
@@ -49,7 +50,7 @@ export default function parse(
                 stdio: "pipe"
               }).toString();
             } catch (err) {
-              console.log(`\x1b[31m${err.message}\x1b[0m`);
+              logWarning(`\x1b[31m${err.message}\x1b[0m`);
             }
           } else {
             // split values for "|": ["key", "default"]

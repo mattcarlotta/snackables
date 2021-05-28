@@ -1,5 +1,12 @@
 import fs from "fs";
-import { parse } from "../index";
+import parse from "../index";
+import { logWarning } from "../../log";
+
+jest.mock("../../log", () => ({
+  __esModule: true,
+  logMessage: jest.fn(),
+  logWarning: jest.fn()
+}));
 
 const parsed = parse(fs.readFileSync("tests/.env", { encoding: "utf8" }));
 
@@ -152,11 +159,8 @@ describe("Parse Method", () => {
   });
 
   it("handles invalid command-line substitutions", () => {
-    const spy = jest.spyOn(console, "log").mockImplementation();
-
     parse(Buffer.from("INVALIDCOMMAND=$(invalid)"));
 
-    expect(spy.mock.calls[0][0]).toContain("Command failed: invalid");
-    spy.mockRestore();
+    expect(logWarning).toHaveBeenCalledTimes(1);
   });
 });

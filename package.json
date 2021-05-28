@@ -9,15 +9,16 @@
     "index.js",
     "config/index.js",
     "parse/index.js",
-    "index.d.ts"
+    "load/index.js",
+    "types/index.d.ts"
   ],
-  "types": "index.d.ts",
+  "types": "types/index.d.ts",
   "scripts": {
-    "build": "tsc && ts-node compress.ts",
-    "lint": "eslint ./ --ext .ts,.js",
-    "test": "rimraf index.js && jest --config ./jest.json",
-    "test:cov": "rimraf index.js && jest --config ./jest.json --coverage",
-    "test:watch": "rimraf index.js && jest --config ./jest.json --watchAll"
+    "b": "tsc --p ./tsconfig.cjs.json && ts-node compress.ts",
+    "l": "eslint ./ --ext .ts,.js",
+    "t": "rimraf index.js && jest --config ./jest.json",
+    "t:cov": "rimraf index.js && jest --config ./jest.json --coverage",
+    "t:watch": "rimraf index.js && jest --config ./jest.json --watchAll"
   },
   "repository": {
     "type": "git",
