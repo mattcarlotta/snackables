@@ -1,5 +1,4 @@
 **/coverage
 *.json
 *.js
-lib
 node_modules

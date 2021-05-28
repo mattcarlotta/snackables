@@ -1,12 +1,14 @@
 {
   "name": "snackables",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "description": "Loading byte sized ENVs made simple.",
   "main": "lib/index.js",
   "sideEffects": false,
   "homepage": "https://github.com/mattcarlotta/snackables",
   "files": [
     "index.js",
+    "config/index.js",
+    "parse/index.js",
     "index.d.ts"
   ],
   "types": "index.d.ts",
@@ -34,6 +36,9 @@
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/mattcarlotta/snackables/issues"
+  },
+  "engines": {
+    "node": ">=12"
   },
   "devDependencies": {
     "@types/enzyme": "^3.10.8",
