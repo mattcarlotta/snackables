@@ -168,7 +168,7 @@ module.exports = {
 }
 ```
 
-**env.config.mjs**
+**env.config.mjs** (beta)
 ```js
 const config = {
   "development": {
@@ -247,7 +247,7 @@ module.exports = {
 }
 ```
 
-**env.config.mjs**
+**env.config.mjs** (beta)
 ```js
 const config = {
   "development": {
