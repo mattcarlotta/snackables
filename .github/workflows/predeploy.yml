@@ -53,7 +53,12 @@ jobs:
         if: steps.linttype.exit_code == 0
         run: yarn t
 
-      - name: Create Local Build
-        id: build
+      - name: Create CJS Build
+        id: buildcjs
         if: steps.tests.exit_code == 0
         run: yarn b
+
+      - name: Create ESM Build
+        id: buildesm
+        if: steps.buildcjs.exit_code == 0
+        run: yarn b:esm

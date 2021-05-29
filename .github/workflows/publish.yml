@@ -53,15 +53,20 @@ jobs:
         if: steps.linttype.exit_code == 0
         run: yarn t:cov
 
-      - name: Create Local Build
-        id: build
+      - name: Create CJS Build
+        id: buildcjs
         if: steps.tests.exit_code == 0
         run: yarn b
+
+      - name: Create ESM Build
+        id: buildesm
+        if: steps.buildcjs.exit_code == 0
+        run: yarn b:esm
 
       - name: Publish to NPM
         id: publish
         uses: JS-DevTools/npm-publish@v1
-        if: steps.tests.build == 0
+        if: steps.buildesm.build == 0
         with:
           token: ${{ secrets.TOKEN }}
 
