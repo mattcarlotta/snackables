@@ -20,7 +20,7 @@ const options = {
 const compress = async (dir?: string): Promise<void> => {
   try {
     const dirs = [
-      "assignEnvs",
+      "assign",
       "config",
       "fileExists",
       "getFilePath",
