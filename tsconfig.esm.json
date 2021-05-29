@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "esnext",
+    "target": "esnext",
+    "outDir": "./esm"
+  },
+  "exclude": [
+    "__tests__",
+    ".github",
+    "coverage",
+    "node_modules",
+    "tests",
+    "types",
+    "utils"
+  ]
+}

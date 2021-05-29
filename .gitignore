@@ -1,6 +1,6 @@
 *.log*
-*.js
 node_modules
 coverage
 .cc_token
-index.d.ts
+esm
+index.js

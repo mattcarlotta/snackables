@@ -1,9 +1,21 @@
-import { config } from "../index";
-import type { ParsedEnvs } from "../index";
+import config from "../config/index";
+import { logMessage, logWarning } from "../log";
+import type { ParsedEnvs } from "../types/index";
+
+jest.mock("../log", () => ({
+  __esModule: true,
+  logMessage: jest.fn(),
+  logWarning: jest.fn()
+}));
 
 const root = process.cwd();
 
 describe("Config Method", () => {
+  beforeEach(() => {
+    (logMessage as jest.Mock).mockClear();
+    (logWarning as jest.Mock).mockClear();
+  });
+
   it("loads a default .env file", () => {
     const { extracted } = config();
 
@@ -69,17 +81,13 @@ describe("Config Method", () => {
   });
 
   it("accepts a debug argument", () => {
-    const spy = jest.spyOn(console, "log").mockImplementation();
-
     config({ paths: "tests/.env.basic", debug: true });
 
-    expect(spy.mock.calls[0][0]).toContain(
+    expect(logMessage).toHaveBeenCalledWith(
       `Loaded env from ${root}/tests/.env.basic`
     );
 
     config({ paths: "tests/.env.invalid", debug: true });
-
-    spy.mockRestore();
   });
 
   it("accepts an override argument to write over process.env", () => {
@@ -99,13 +107,10 @@ describe("Config Method", () => {
   });
 
   it("allows non-existent files to silently fail", () => {
-    const spy = jest.spyOn(console, "log").mockImplementation();
-
     config({ paths: "tests/.env.invalid" });
 
-    expect(spy).not.toHaveBeenCalled();
-
-    spy.mockRestore();
+    expect(logMessage).not.toHaveBeenCalled();
+    expect(logWarning).not.toHaveBeenCalled();
   });
 
   describe("Interpolation", () => {
@@ -197,8 +202,6 @@ describe("Config Method", () => {
   });
 
   it("throws a warning if loading the .env fails", () => {
-    const spy = jest.spyOn(console, "log").mockImplementation();
-
     config({
       paths: "tests/.env.utf8",
       debug: true,
@@ -206,10 +209,8 @@ describe("Config Method", () => {
       encoding: "bad"
     });
 
-    expect(spy.mock.calls[0][0]).toContain(
-      `Unable to load ${root}/tests/.env.utf8`
+    expect(logWarning).toHaveBeenCalledWith(
+      expect.stringContaining(`Unable to load ${root}/tests/.env.utf8`)
     );
-
-    spy.mockRestore();
   });
 });

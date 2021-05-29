@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "diagnostics": true,
-    "declaration": true,
+    "declaration": false,
     "noEmitOnError": true,
     "allowJs": true,
     "alwaysStrict": true,
@@ -9,7 +9,6 @@
     "baseUrl": ".",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "lib": ["es5"],
     "module": "commonjs",
     "moduleResolution": "node",
     "noEmit": false,
@@ -17,19 +16,9 @@
     "noUnusedParameters": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "sourceMap": false,
     "strict": true,
     "target": "es5"
   },
-  "files": ["./index.ts"],
   "include": ["**/*.ts"],
-  "exclude": [
-    ".github",
-    "coverage",
-    "examples",
-    "node_modules",
-    "lib",
-    "tests",
-    "compress.ts"
-  ]
+  "exclude": [".github", "coverage", "node_modules"]
 }

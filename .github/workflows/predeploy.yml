@@ -39,16 +39,26 @@ jobs:
           steps.cache-yarn-cache.outputs.cache-hit != 'true' ||
           steps.cache-node-modules.outputs.cache-hit != 'true'
 
-      - name: Run Lint
+      - name: Run Lint Source
         id: lint
-        run: yarn lint
+        run: yarn l
+
+      - name: Run Lint Type
+        id: linttype
+        if: steps.lint.exit_code == 0
+        run: yarn l:type
 
       - name: Run Tests
         id: tests
-        if: steps.lint.exit_code == 0
-        run: yarn test
+        if: steps.linttype.exit_code == 0
+        run: yarn t
 
-      - name: Create Local Build
-        id: build
+      - name: Create CJS Build
+        id: buildcjs
         if: steps.tests.exit_code == 0
-        run: yarn build
+        run: yarn b
+
+      - name: Create ESM Build
+        id: buildesm
+        if: steps.buildcjs.exit_code == 0
+        run: yarn b:esm

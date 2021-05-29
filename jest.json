@@ -1,16 +1,17 @@
 {
   "testEnvironment": "node",
-  "moduleDirectories": ["<rootDir>", "<rootDir>tests", "node_modules"],
+  "moduleDirectories": ["<rootDir>", "node_modules"],
   "transform": {
     "^.+\\.ts?$": "ts-jest"
   },
-  "testMatch": ["**/tests/**/*.spec.ts"],
+  "testMatch": ["**/*.spec.ts"],
   "transformIgnorePatterns": ["^.+\\.js$"],
   "testPathIgnorePatterns": [
     "<rootDir>/coverage",
-    "<rootDir>/examples",
+    "<rootDir>/esm",
     "<rootDir>/node_modules",
-    "<rootDir>/types"
+    "<rootDir>/types",
+    "<rootDir>/utils"
   ],
-  "collectCoverageFrom": ["index.ts"]
+  "collectCoverageFrom": ["**/*.ts", "!**/*d.ts", "!utils/*.ts"]
 }
