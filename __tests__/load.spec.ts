@@ -1,5 +1,5 @@
-import load from "../index";
-import { logWarning } from "../../log";
+import load from "../load/index";
+import { logWarning } from "../log";
 
 jest.mock("../../log", () => ({
   __esModule: true,

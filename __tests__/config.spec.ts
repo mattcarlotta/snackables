@@ -1,5 +1,7 @@
-import config from "../index";
-import type { ParsedEnvs } from "../../types/index";
+import config from "../config/index";
+import type { ParsedEnvs } from "../types/index";
+
+// TODO Fix console.log mocks to log mocks
 
 const root = process.cwd();
 

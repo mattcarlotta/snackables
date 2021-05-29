@@ -1,8 +1,8 @@
 import fs from "fs";
-import parse from "../index";
-import { logWarning } from "../../log";
+import parse from "../parse";
+import { logWarning } from "../log";
 
-jest.mock("../../log", () => ({
+jest.mock("../log", () => ({
   __esModule: true,
   logMessage: jest.fn(),
   logWarning: jest.fn()
