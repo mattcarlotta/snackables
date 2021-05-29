@@ -20,7 +20,6 @@
     "esm"
   ],
   "types": "types/index.d.ts",
-  "type": "module",
   "scripts": {
     "b": "tsc --p ./tsconfig.cjs.json && ts-node ./utils/compressCJS.ts",
     "b:esm": "tsc --p ./tsconfig.esm.json && ts-node ./utils/compressESM.ts",
