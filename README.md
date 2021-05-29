@@ -628,7 +628,7 @@ config(esmConfigArgs) // parses .env.dev and assigns it to process.env
 
 #### Load dir
 
-For some use cases, you may want to manually load a **env.config.(m)js** file **not** located at the project's root directory and pass its arguments to the [config method](#config-method). To do so, pass `load` an environment name as the first argument and a directory name as a second argument:
+For some use cases, you may want to manually load an **env.config.(m)js** file **not** located at the project's root directory and pass its arguments to the [config method](#config-method). To do so, pass `load` an environment name as the first argument and a directory name as a second argument:
 
 ```js
 const { config, load } = require("snackables");
