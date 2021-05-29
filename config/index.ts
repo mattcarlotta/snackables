@@ -1,6 +1,6 @@
 import { readFileSync } from "fs";
 import parse from "parse";
-import assignEnvs from "../assignEnvs";
+import assign from "../assign";
 import getFilePath from "../getFilePath";
 import fileExists from "../fileExists";
 import { logMessage, logWarning } from "../log";
@@ -58,7 +58,7 @@ export default function config(options?: ConfigOptions): ConfigOutput {
   }
 
   return {
-    parsed: assignEnvs(extracted),
+    parsed: assign(extracted),
     extracted
   };
 }

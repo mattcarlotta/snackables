@@ -1,5 +1,5 @@
 import { expectType } from "tsd";
-import { config, load, parse } from "snackables";
+import { assign, config, load, parse } from "snackables";
 import type { ConfigOptions, ParsedEnvs, ProcessEnv } from "snackables";
 
 const env = config();
@@ -24,4 +24,6 @@ expectType<string>(envConfig["dir"] as string);
 
 expectType<ParsedEnvs>(parse("NODE_ENV=production\nDB_HOST=a.b.c"));
 
-expectType<ParsedEnvs>(parse(Buffer.from("JUSTICE=league\n")));
+const parsedEnvs = parse(Buffer.from("JUSTICE=league\n"));
+expectType<ParsedEnvs>(parsedEnvs);
+expectType<ProcessEnv>(assign(parsedEnvs))

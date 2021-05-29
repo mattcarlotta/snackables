@@ -18,7 +18,29 @@
   </a>
 </p>
 
-Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-expand](https://github.com/motdotla/dotenv-expand), snackables is a simple to use [zero-dependency](https://bundlephobia.com/result?p=snackables@) package module that automatically loads environment variables from a predefined `ENV_LOAD` variable. When it comes to `.env` file naming, snackables is unopinionated, so you can name them anything you'd like or you can follow the [The Twelve-Factor App](https://12factor.net/config) methodology.
+Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-expand](https://github.com/motdotla/dotenv-expand), snackables is a simple to use [zero-dependency](https://bundlephobia.com/result?p=snackables@) package module that automatically loads environment variables from a predefined Env variable. When it comes to `.env` file naming, snackables is unopinionated, so you can name them anything you'd like or you can follow the [The Twelve-Factor App](https://12factor.net/config) methodology.
+
+## Why snackables?
+
+✔️ Loads `.env` files between **40-70%** faster than dotenv and dotenv config: [demo](https://github.com/mattcarlotta/snackables-v-dotenv-v-next)
+
+✔️ Typescript source with included declarations
+
+✔️ Zero dependencies
+
+✔️ Compiled and minified CommonJS ES5
+
+✔️ Experimental ES module support (beta)
+
+✔️ Unopinionated about `.env` naming
+
+✔️ Supports loading multiple `.env` files at once
+
+✔️ Supports [Env interpolations](#interpolation)
+
+✔️ Supports [preloading](#preload)
+
+✔️ Supports loading Envs via an [Env Configuration File](#env-configuration-file) or by an [ENV_LOAD](#env_load) variable
 
 ## Quick Links
 
@@ -28,7 +50,10 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 
 [Examples](https://github.com/mattcarlotta/snackables-examples)
 
+[Env Configuration File](#env-configuration-file)
+
 [CLI Options](#cli-options)
+  - [LOAD_CONFIG](#load_config)
   - [ENV_LOAD](#env_load)
   - [ENV_DIR](#env_dir)
   - [ENV_ENCODE](#env_encode)
@@ -51,6 +76,11 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
     - [override](#parse-override)
   - [Rules](#parse-rules)
 
+[Load Method](#load-method)
+  - [Argument Options](#load-argument-options)
+    - [env](#load-env)
+    - [dir](#load-dir)
+
 [Interpolation](#interpolation)
   - [Interpolation Rules](#interpolation-rules)
 
@@ -58,7 +88,7 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
   - [Should I commit my .env files?](#should-i-commit-my-env-files)
   - [How does snackables work and will it override already set or predefined variables?](#how-does-snackables-work-and-will-it-override-already-set-or-predefined-variables)
   - [Why doesn't the parse method automatically assign Envs?](#why-doesnt-the-parse-method-automatically-assign-envs)
-  - [Is the ENV_LOAD variable required?](#is-the-env_load-variable-required)
+  - [Are the Env variables required?](#are-the-env-variables-required)
 
 [Contributing Guide](#contributing-guide)
 
@@ -70,21 +100,21 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 # with npm
 npm install snackables
 
-# or with Yarn
+# or with yarn
 yarn add snackables
 ```
 
 ## Usage
 
-In a CLI or within your package.json, under the `scripts` property, define an `ENV_LOAD` variable and either add a single file `ENV_LOAD=.env.base` or add multiple files separated by commas `ENV_LOAD=.env.base,.env.local,...etc` before running a process. Snackables loads `.env` files according to their defined order (left to right), where the last imported file will take precedence over any previously imported files.
+In a CLI or within your package.json, under the `scripts` property, define [Env variables](#cli-options) before running a process. Snackables loads `.env` files according to their defined order (left to right), where the last imported file will take precedence over any previously imported files.
 
-For example, `.env.*` files can be loaded by their filename (assuming they're located in the project's root):
+For example, `.env.*` files can loaded by an [Env Configuration File](#env-configuration-file) file via [LOAD_CONFIG](#load_config):
 
 ```json
 {
   "scripts": {
-    "dev": "ENV_LOAD=.env.base node test.js",
-    "staging": "ENV_LOAD=.env.base,.env.staging node app.js"
+    "dev": "LOAD_COFNIG=development node test.js",
+    "staging": "LOAD_COFNIG=staging node app.js"
   },
   "dependencies": {
     "snackables": "^x.x.x"
@@ -92,13 +122,13 @@ For example, `.env.*` files can be loaded by their filename (assuming they're lo
 }
 ```
 
-or they can be loaded by their paths and filename:
+Or, `.env.*` files can be loaded by their filename (assuming they're located in the project's root) via [ENV_LOAD](#env_load):
 
 ```json
 {
   "scripts": {
-    "dev": "ENV_LOAD=custom/path/to/.env.base node test.js",
-    "staging": "ENV_LOAD=custom/path/to/.env.base,custom/path/to/.env.staging node app.js"
+    "dev": "ENV_LOAD=.env.base node test.js",
+    "staging": "ENV_LOAD=.env.base,.env.staging node app.js"
   },
   "dependencies": {
     "snackables": "^x.x.x"
@@ -115,9 +145,92 @@ require("snackables");
 
 Optionally, you can [preload](#preload) your `.env` files instead!
 
+## Env Configuration File
+
+The easiest and cleanest way to load `.env` files is to create an **env.config.(m)js** file located at the **project's current working root directory** that exports an object which follows the [config argument options](#config-argument-options) pattern. The environment naming is unopinionated -- they can be named anything you'd like (for example: `dev`, `staging`, `prepublish`, etc) -- however, the name must match one of environments specified in the configuration file:
+
+**env.config.js**
+```js
+module.exports = {
+  "development": {
+    "debug": true,
+    "paths": [".env.base", ".env.dev"],
+    "override": true
+  },
+  "production": {
+    "paths": ".env.prod",
+  },
+  "test": {
+    "dir": "custom/path/to/directory",
+    "paths": [".env.base", ".env.dev"],
+  }
+}
+```
+
+Then in your `package.json`, add a [LOAD_CONFIG](#load_config) variable to load one of the configurations by an environment name:
+```json
+{
+  "scripts": {
+    "dev": "LOAD_CONFIG=development node app.js"
+  },
+  "dependencies": {
+    "snackables": "^x.x.x"
+  }
+}
+```
+
+Then, either [preload](#preload) or import the `snackables` package as early as possible to load the `development` Envs.
+
+```json
+{
+ "development": {
+    "debug": true,
+    "paths": [".env.base", ".env.dev"],
+    "override": true
+  }
+}
+```
+
 ## CLI Options
 
-By utilizing any of the Env variables defined below, you will only need to import the base package to automatically load Envs:
+#### LOAD_CONFIG
+
+By defining a `LOAD_CONFIG` variable, this will let snackables know you'ld like to load an **env.config.(m)js** file according to a defined environment name. The environment naming is unopinionated -- they can be named anything you'd like (for example: `dev`, `staging`, `prepublish`, etc) -- however, the name must match one of environments specified in the configuration file.
+
+```json
+{
+  "scripts": {
+    "dev": "LOAD_CONFIG=development node app.js"
+  },
+  "dependencies": {
+    "snackables": "^x.x.x"
+  }
+}
+```
+
+**env.config.js**
+```js
+module.exports = {
+  "development": {
+    "debug": true,
+    "paths": [".env.base", ".env.dev"],
+    "override": true
+  },
+  "production": {
+    "paths": ".env.prod",
+  },
+  "test": {
+    "dir": "custom/path/to/directory",
+    "paths": [".env.base", ".env.dev"],
+  }
+}
+```
+
+⚠️ The Env variables listed below will take precendence over `LOAD_CONFIG`. For example, if you mistakely use `LOAD_CONFIG` with `ENV_LOAD`, then `ENV_LOAD` will take precendence.
+
+---
+
+By utilizing any of the Env variables defined below, you will only need to [preload](#preload) or import the base package to automatically load Envs:
 
 ```js
 require("snackables")
@@ -125,7 +238,7 @@ require("snackables")
 // import "snackables"
 ```
 
-Note: Defining any of the Env variables below **DO NOT** change the default behavior of `config` and `parse` methods.
+Note: Defining any of the Env variables below **WILL NOT** change the default behavior of `config`, `load` or `parse` methods.
 
 #### ENV_LOAD
 
@@ -230,14 +343,14 @@ You can use the `--require` (`-r`) [command line option](https://nodejs.org/api/
 
 CLI:
 ```bash
-$ ENV_LOAD=.env.dev node -r snackables app.js
+$ LOAD_CONFIG=dev node -r snackables app.js
 ```
 
 Package.json:
 ```json
 {
   "scripts": {
-    "dev": "ENV_LOAD=.env.dev node -r snackables app.js"
+    "dev": "LOAD_CONFIG=dev node -r snackables app.js"
   },
   "dependencies": {
     "snackables": "^x.x.x"
@@ -379,7 +492,7 @@ If you wish to manually parse Envs, then you can utilize `parse` to read a strin
 parse accepts two arguments in the following order: 
 ```
 src: string | Buffer, 
-override: boolean | string
+override: boolean | string | undefined
 ```
 
 #### Parse src
@@ -434,6 +547,62 @@ The parsing method currently supports the following rules:
 ```
 {MULTILINE: 'new
 line'}
+```
+
+## Load Method
+
+If you wish to manually load the **env.config.(m)js** file, then you can utilize the `load` method. Please note that this only **asynchronously** loads the configuration file and will not automatically assign Envs; instead, you'll have to manually pass its arguments to the [config method](#config-method).
+
+### Load Argument Options
+
+load accepts two arguments in the following order: 
+```
+env: string, 
+dir: string | undefined
+```
+
+#### Load env
+
+For some use cases, you may want to manually load the **env.config.(m)js** file and pass its arguments to the [config method](#config-method). To do so, pass `load` an environment name as the first argument:
+
+```js
+const { config, load } = require("snackables");
+// import { config, load } from "snackables";
+
+// CommonJS
+(async () => {
+  const configArgs = await load("development"); // will return an object of config arguments
+  console.log(typeof configArgs, configArgs) // object { paths: ".env.dev", debug: true }
+
+  config(configArgs) // parses .env.dev and assigns it to process.env
+})();
+
+// ESM (top-level await)
+const esmConfigArgs = await load("development"); // will return an object of config arguments
+console.log(typeof esmConfigArgs, esmConfigArgs) // object { paths: ".env.dev", debug: true }
+config(esmConfigArgs) // parses .env.dev and assigns it to process.env
+```
+
+#### Load dir
+
+For some use cases, you may want to manually load a **env.config.(m)js** file **not** located at the project's root directory and pass its arguments to the [config method](#config-method). To do so, pass `load` an environment name as the first argument and a directory name as a second argument:
+
+```js
+const { config, load } = require("snackables");
+// import { config, load } from "snackables";
+
+// CommonJS
+(async () => {
+  const configArgs = await load("development", "path/to/custom/directory"); // will return an object of config arguments
+  console.log(typeof configArgs, configArgs) // object { paths: ".env.dev", debug: true }
+
+  config(configArgs) // parses .env.dev and assigns it to process.env
+})();
+
+// ESM (top-level await)
+const esmConfigArgs = await load("development", "path/to/custom/directory"); // will return an object of config arguments
+console.log(typeof esmConfigArgs, esmConfigArgs) // object { paths: ".env.dev", debug: true }
+config(esmConfigArgs) // parses .env.dev and assigns it to process.env
 ```
 
 ## Interpolation
@@ -538,12 +707,12 @@ No. It's **strongly** recommended not to commit your `.env` files to version con
 
 By default, snackables will look for the `.env.*` file(s) defined within the `ENV_LOAD` variable and append them to `process.env`.
 
-For example, `ENV_LOAD=.env.base,.env.dev` has two files `.env.base` and `.env.dev`:
+For example, `LOAD_CONFIG=development` loads two files `.env.base` and `.env.dev`:
 
 ```json
 {
   "scripts": {
-    "dev": "ENV_LOAD=.env.base,.env.dev ENV_DEBUG=true node app.js"
+    "dev": "LOAD_CONFIG=development node app.js"
   },
   "dependencies": {
     "snackables": "^x.x.x"
@@ -580,16 +749,16 @@ Why?
 Under the hood, the `config` method utilizes the `parse` method to extract one or multiple `.env` files as it loops over the `config` [paths](#config-paths) argument. The `config` method expects `parse` to return a single `Object` of `extracted` Envs that will be accumulated with other files' extracted/sanitized Envs. The result of these accumulated Envs is then assigned to `process.env` **once** -- this approach has the added benefit of prioritizing Envs  without using **any** additional logic since the last set of extracted Envs automatically override any previous Envs (thanks to [Object.assign](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign#Merging_objects_with_same_properties)). While allowing Envs to be assigned multiple times to `process.env` doesn't appear to be much different in terms of performance, it requires a bit more additional overhead logic to determine which `.env` has priority and whether or not to *conditionally* apply them (including times when you might want to parse Envs, but not neccesarily assign them). A workaround to this limitation is to simply apply them yourself:
 
 ```js
-const { parse } = require("snackables");
-// import { parse } from "snackables";
+const { assign, parse } = require("snackables");
+// import { assignEnvs, parse } from "snackables";
 
 const parsed = parse(Buffer.from("BASIC=basic")); // parse/interpolate Envs not defined in process.env
 // const parsed = parse(Buffer.from("BASIC=basic"), true); // parse/interpolate and override any Envs in process.env
 
-Object.assign(process.env, parsed)
+assign(parsed) // assigns parse Envs to process.env;
 ```
 
-### Is the ENV_LOAD variable required?
+### Are the Env variables required?
 
 To be as flexible as possible, the `ENV_LOAD` variable is not required to set Envs to `process.env`. However, you will then be required to use this package similarly to how you would use dotenv.
 

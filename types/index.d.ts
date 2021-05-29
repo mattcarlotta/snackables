@@ -25,6 +25,13 @@ export interface ConfigOutput {
 }
 
 /**
+ * A utility function to assign Envs to `process.env`.
+ *
+ * @param config - ParsedEnvs
+ */
+ export declare function assign(config: ParsedEnvs): ProcessEnv;
+
+/**
  * Extracts and interpolates one or multiple `.env` files into an object and assigns them to {@link https://nodejs.org/api/process.html#process_process_env | `process.env`}.
  * Example: 'KEY=value' becomes { KEY: "value" }
  *
@@ -56,6 +63,7 @@ export declare function parse(src: string | Buffer, override?: Option): ParsedEn
 
 /** Default import library declarations */
 declare const snackables: {
+  assign: typeof assign;
   config: typeof config;
   load: typeof load;
   parse: typeof parse;

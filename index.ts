@@ -1,6 +1,7 @@
 import config from "./config";
 import parse from "./parse";
 import load from "./load";
+import assign from "./assign";
 import type { ConfigOptions } from "./types/index";
 
 /**
@@ -49,9 +50,10 @@ import type { ConfigOptions } from "./types/index";
   }
 })();
 
-export { config, load, parse };
+export { assign, config, load, parse };
 
 const snackables = {
+  assign,
   config,
   load,
   parse

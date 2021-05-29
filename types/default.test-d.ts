@@ -24,4 +24,6 @@ expectType<string>(envConfig["dir"] as string);
 
 expectType<ParsedEnvs>(snackables.parse("NODE_ENV=production\nDB_HOST=a.b.c"));
 
-expectType<ParsedEnvs>(snackables.parse(Buffer.from("JUSTICE=league\n")));
+const parsedEnvs = snackables.parse(Buffer.from("JUSTICE=league\n"));
+expectType<ParsedEnvs>(parsedEnvs);
+expectType<ProcessEnv>(snackables.assign(parsedEnvs))
