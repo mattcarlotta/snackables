@@ -24,7 +24,7 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 
 ✔️ Loads `.env` files between **40%-70%** faster than dotenv and dotenv config: [demo](https://github.com/mattcarlotta/snackables-v-dotenv-v-next)
 
-✔️ Typescript source with included declarations
+✔️ Typescript source with included type declarations
 
 ✔️ Zero dependencies
 
