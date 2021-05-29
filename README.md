@@ -168,6 +168,26 @@ module.exports = {
 }
 ```
 
+**env.config.mjs**
+```js
+const config = {
+  "development": {
+    "debug": true,
+    "paths": [".env.base", ".env.dev"],
+    "override": true
+  },
+  "production": {
+    "paths": ".env.prod",
+  },
+  "test": {
+    "dir": "custom/path/to/directory",
+    "paths": [".env.base", ".env.dev"],
+  }
+}
+
+export default config;
+```
+
 Then in your `package.json`, add a [LOAD_CONFIG](#load_config) variable to load one of the configurations by an environment name:
 ```json
 {
@@ -225,6 +245,26 @@ module.exports = {
     "paths": [".env.base", ".env.dev"],
   }
 }
+```
+
+**env.config.mjs**
+```js
+const config = {
+  "development": {
+    "debug": true,
+    "paths": [".env.base", ".env.dev"],
+    "override": true
+  },
+  "production": {
+    "paths": ".env.prod",
+  },
+  "test": {
+    "dir": "custom/path/to/directory",
+    "paths": [".env.base", ".env.dev"],
+  }
+}
+
+export default config;
 ```
 
 ⚠️ The Env variables listed below will take precendence over `LOAD_CONFIG`. For example, if you mistakely use `LOAD_CONFIG` with `ENV_LOAD`, then `ENV_LOAD` will take precendence.
