@@ -7,7 +7,7 @@ All notable updates to this project will be documented in this file. See [SemVer
 ### Added
 
 - Added support for an `env.config.(m)js` file to load Env values 
-- Added templated support for ES modules (not integrated yet)
+- Added experimental support for ES modules
 - Added node engines to `package.json` to support Node v12+
 
 ### Changed
