@@ -17,7 +17,7 @@ const options = {
   }
 };
 
-(async () => {
+const compress = async (dir?: string): Promise<void> => {
   try {
     const dirs = [
       "assignEnvs",
@@ -32,7 +32,7 @@ const options = {
     ];
 
     for (let i = 0; i < dirs.length; i += 1) {
-      const file = `${dirs[i]}/index.js`;
+      const file = `${dir}${dirs[i]}/index.js`;
 
       const filePath = join(process.cwd(), file);
 
@@ -48,4 +48,6 @@ const options = {
     console.error(error);
     process.exit(1);
   }
-})();
+};
+
+export default compress;
