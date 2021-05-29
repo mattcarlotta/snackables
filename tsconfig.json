@@ -19,6 +19,6 @@
     "strict": true,
     "target": "es5"
   },
-  "include": ["**/*.ts", "./types/index.d.ts"],
+  "include": ["**/*.ts"],
   "exclude": [".github", "coverage", "node_modules"]
 }
