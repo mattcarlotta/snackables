@@ -2,6 +2,12 @@
 
 All notable updates to this project will be documented in this file. See [SemVer 2.0](https://semver.org/) for commit guidelines.
 
+## [3.0.1] - 2021-29-05
+
+### Changed
+
+- Fix invalid `parse` import in `config` file
+
 ## [3.0.0] - 2021-28-05
 
 ### Added
