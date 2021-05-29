@@ -2,7 +2,7 @@ import { logWarning } from "log";
 import getFilePath from "../getFilePath";
 import fileExists from "../fileExists";
 import importFile from "../importFile";
-import type { ConfigArgs } from "../types/index";
+import type { ConfigOptions } from "../types/index";
 
 /**
  * Loads a config object from the `env.config.(m)js` file based upon `LOAD_ENV`.
@@ -15,7 +15,7 @@ import type { ConfigArgs } from "../types/index";
 export default async function load(
   env: string,
   dir?: string
-): Promise<ConfigArgs> {
+): Promise<ConfigOptions> {
   try {
     const configName = "env.config";
     let configPath = getFilePath(`${configName}.js`, dir);
@@ -38,9 +38,9 @@ export default async function load(
         `Unable to locate a '${env}' configuration within '${configName}.(m)js'!`
       );
 
-    return config[env] as ConfigArgs;
+    return config[env] as ConfigOptions;
   } catch (error) {
     logWarning(error.toString());
-    return {} as ConfigArgs;
+    return {} as ConfigOptions;
   }
 }

@@ -11,6 +11,7 @@
     "node_modules",
     "tests",
     "types",
+    "__tests__",
     "**/__tests__",
     "*.spec.ts",
     "utils"

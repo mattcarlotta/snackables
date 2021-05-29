@@ -1,6 +1,6 @@
 import { expectType } from "tsd";
 import snackables from "snackables";
-import type { ConfigArgs, Option, ParsedEnvs, ProcessEnv } from "snackables";
+import type { ConfigOptions, ParsedEnvs, ProcessEnv } from "snackables";
 
 const env = snackables.config();
 expectType<string>(env.parsed["ROOT"]);
@@ -17,10 +17,10 @@ expectType<string>(parsed["BASE"]);
 expectType<ParsedEnvs>(extracted);
 expectType<string>(extracted["BASE"]);
 
-expectType<Promise<ConfigArgs>>(snackables.load("test"));
+expectType<Promise<ConfigOptions>>(snackables.load("test"));
 const envConfig = await snackables.load("test");
-expectType<ConfigArgs>(envConfig);
-expectType<Option>(envConfig["ENV_DEBUG"]);
+expectType<ConfigOptions>(envConfig);
+expectType<string>(envConfig["dir"] as string);
 
 expectType<ParsedEnvs>(snackables.parse("NODE_ENV=production\nDB_HOST=a.b.c"));
 

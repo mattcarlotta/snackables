@@ -12,5 +12,6 @@ export default async function importModule(module: string): Promise<any> {
       const { default: defaultExport } = await import(module);
       return defaultExport;
     }
+    throw err;
   }
 }

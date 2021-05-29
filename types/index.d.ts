@@ -11,14 +11,6 @@ export declare type Option = boolean | string | undefined;
 
 export declare type Path = string | string[];
 
-export interface ConfigArgs {
-  ENV_DIR?: string;
-  ENV_LOAD?: Path;
-  ENV_ENCODING?: BufferEncoding;
-  ENV_OVERRIDE?: Option;
-  ENV_DEBUG?: Option;
-}
-
 export interface ConfigOptions {
   dir?: string;
   paths?: Path;
@@ -50,7 +42,7 @@ export declare function config(options?: ConfigOptions): ConfigOutput;
  * @returns a promise that resolves a config file as { key: value } pairs to be used with the `config` function
  * @example load("development")
  */
- export declare function load(env: string, dir?: string): Promise<ConfigArgs>;
+ export declare function load(env: string, dir?: string): Promise<ConfigOptions>;
 
 /**
  * Parses a string or buffer of Envs into an object.

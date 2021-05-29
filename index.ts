@@ -29,7 +29,7 @@
 import config from "./config";
 import parse from "./parse";
 import load from "./load";
-import assignEnvs from "./assignEnvs";
+import type { ConfigOptions } from "./types/index";
 
 /**
  * Immediately loads a single or multiple `.env` file contents into {@link https://nodejs.org/api/process.html#process_process_env | `process.env`} when the package is preloaded or imported.
@@ -38,11 +38,23 @@ import assignEnvs from "./assignEnvs";
   const { env } = process;
   const { LOAD_CONFIG } = env;
 
+  let dir: ConfigOptions["dir"];
+  let paths: ConfigOptions["paths"];
+  let debug: ConfigOptions["debug"];
+  let encoding: ConfigOptions["encoding"];
+  let override: ConfigOptions["override"];
+
   // checks if LOAD_CONFIG is defined and assigns process with Env variables
   if (LOAD_CONFIG) {
-    const config = await load(LOAD_CONFIG);
+    const envConfig = await load(LOAD_CONFIG);
 
-    assignEnvs(config);
+    if (Object.keys(envConfig).length) {
+      dir = envConfig.dir;
+      paths = envConfig.paths;
+      debug = envConfig.debug;
+      encoding = envConfig.encoding;
+      override = envConfig.override;
+    }
 
     // prevents the IFFE from reloading the config file
     delete process.env.LOAD_CONFIG;
@@ -51,13 +63,13 @@ import assignEnvs from "./assignEnvs";
   const { ENV_DIR, ENV_LOAD, ENV_DEBUG, ENV_ENCODE, ENV_OVERRIDE } = env;
 
   // checks if ENV_LOAD is defined and automatically calls config with Env variables
-  if (ENV_LOAD) {
+  if (ENV_LOAD || paths) {
     config({
-      dir: ENV_DIR,
-      paths: ENV_LOAD,
-      debug: ENV_DEBUG,
-      encoding: ENV_ENCODE as BufferEncoding,
-      override: ENV_OVERRIDE
+      dir: ENV_DIR || dir,
+      paths: ENV_LOAD || paths,
+      debug: ENV_DEBUG || debug,
+      encoding: (ENV_ENCODE || encoding) as BufferEncoding,
+      override: ENV_OVERRIDE || override
     });
 
     // prevents the IFFE from reloading the .env files

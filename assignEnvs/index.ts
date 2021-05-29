@@ -1,12 +1,10 @@
-import type { ConfigArgs, ParsedEnvs, ProcessEnv } from "../types/index";
+import type { ParsedEnvs, ProcessEnv } from "../types/index";
 
 /**
  * A utility function to assign Envs to `process.env`.
  *
- * @param {ParsedEnvs | ConfigArgs} config - filename
+ * @param {ParsedEnvs} config - filename
  */
-export default function assignEnvs(
-  config: ParsedEnvs | ConfigArgs
-): ProcessEnv {
+export default function assignEnvs(config: ParsedEnvs): ProcessEnv {
   return Object.assign(process.env, config) as ProcessEnv;
 }
