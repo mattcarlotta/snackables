@@ -15,7 +15,7 @@ export interface ConfigArgs {
   ENV_DIR?: string;
   ENV_LOAD?: Path;
   ENV_ENCODING?: BufferEncoding;
-  ENV_OVERRIDE?: boolean;
+  ENV_OVERRIDE?: Option;
   ENV_DEBUG?: Option;
 }
 
