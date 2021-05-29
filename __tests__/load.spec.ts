@@ -1,7 +1,7 @@
 import load from "../load/index";
 import { logWarning } from "../log";
 
-jest.mock("../../log", () => ({
+jest.mock("../log", () => ({
   __esModule: true,
   logMessage: jest.fn(),
   logWarning: jest.fn()
