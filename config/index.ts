@@ -16,8 +16,9 @@ import type {
  * Extracts and interpolates one or multiple `.env` files into an object and assigns them to {@link https://nodejs.org/api/process.html#process_process_env | `process.env`}.
  * Example: 'KEY=value' becomes { KEY: "value" }
  *
- * @param {object} options - accepts: { `dir`: string, `paths`: string | string[], `encoding`: BufferEncoding, `override`: boolean | string, `debug`: boolean | string }
- * @returns {object} a single object with `parsed` and `extracted` Envs as { KEY: "value" } pairs
+ * @param options - accepts: { `dir`: string, `paths`: string | string[], `encoding`: BufferEncoding, `override`: boolean | string, `debug`: boolean | string }
+ * @returns a single object with `parsed` and `extracted` Envs as { KEY: "value" } pairs
+ * @example config({ dir: "example", paths: ".env" })
  */
 export default function config(options?: ConfigOptions): ConfigOutput {
   // default config options

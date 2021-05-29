@@ -8,6 +8,7 @@
   "transformIgnorePatterns": ["^.+\\.js$"],
   "testPathIgnorePatterns": [
     "<rootDir>/coverage",
+    "<rootDir>/esm",
     "<rootDir>/node_modules",
     "<rootDir>/types",
     "<rootDir>/utils"

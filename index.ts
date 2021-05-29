@@ -30,7 +30,6 @@ import config from "./config";
 import parse from "./parse";
 import load from "./load";
 import assignEnvs from "./assignEnvs";
-import type { ConfigArgs } from "./types/index";
 
 /**
  * Immediately loads a single or multiple `.env` file contents into {@link https://nodejs.org/api/process.html#process_process_env | `process.env`} when the package is preloaded or imported.
@@ -43,7 +42,7 @@ import type { ConfigArgs } from "./types/index";
   if (LOAD_CONFIG) {
     const config = await load(LOAD_CONFIG);
 
-    assignEnvs(config as ConfigArgs);
+    assignEnvs(config);
 
     // prevents the IFFE from reloading the config file
     delete process.env.LOAD_CONFIG;

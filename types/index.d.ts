@@ -15,7 +15,7 @@ export interface ConfigArgs {
   ENV_LOAD?: Path;
   ENV_ENCODING?: BufferEncoding;
   ENV_OVERRIDE?: boolean;
-  ENV_DEBUG?: Option
+  ENV_DEBUG?: Option;
 }
 
 export interface ConfigOptions {
@@ -32,31 +32,32 @@ export interface ConfigOutput {
 }
 
 /**
-* Extracts and interpolates one or multiple `.env` files into an object and assigns them to {@link https://nodejs.org/api/process.html#process_process_env | `process.env`}.
-* Example: 'KEY=value' becomes { KEY: "value" }
-*
-* @param {object} options - accepts: { `dir`: string, `paths`: string | string[], `encoding`: BufferEncoding, `override`: boolean | string, `debug`: boolean | string }
-* @returns {object} a single object with `parsed` and `extracted` Envs as { KEY: "value" } pairs
-*/
+ * Extracts and interpolates one or multiple `.env` files into an object and assigns them to {@link https://nodejs.org/api/process.html#process_process_env | `process.env`}.
+ * Example: 'KEY=value' becomes { KEY: "value" }
+ *
+ * @param options - accepts: { `dir`: string, `paths`: string | string[], `encoding`: BufferEncoding, `override`: boolean | string, `debug`: boolean | string }
+ * @returns a single object with `parsed` and `extracted` Envs as { KEY: "value" } pairs
+ * @example config({ dir: "example", paths: ".env" })
+ */
 export declare function config(options?: ConfigOptions): ConfigOutput;
-
 
 /**
  * Loads a config object from the `env.config.(m)js` file based upon `LOAD_ENV`.
  *
- * @param {string} env - the environment to be loaded
- * @returns {Promise<ConfigArgs | void>} a promise that resolves a config file as { key: value } pairs to be used with the `config` function
+ * @param env - the environment to be loaded
+ * @returns a promise that resolves a config file as { key: value } pairs to be used with the `config` function
  * @example load("development")
  */
- export default function load(env: string): Promise<ConfigArgs | void>;
+ export declare function load(env: string): Promise<ConfigArgs>;
 
 /**
-* Parses a string or buffer of Envs into an object.
-*
-* @param {string | Buffer} src - contents to be parsed (string | Buffer)
-* @param {boolean | string} override - allows extracted Envs to be parsed regardless if `process.env` has the properties defined (boolean | string)
-* @returns {object} a single object of all { key: value } pairs from `src`
-*/
+ * Parses a string or buffer of Envs into an object.
+ *
+ * @param src - contents to be parsed (string | Buffer)
+ * @param override - allows extracted Envs to be parsed regardless if `process.env` has the properties defined (boolean | string)
+ * @returns a single object of all { key: value } pairs from `src`
+ * @example parse(Buffer.from("JUSTICE=league\n"))
+ */
 export declare function parse(src: string | Buffer, override?: Option): ParsedEnvs;
 
 /** Default import library interface */

@@ -5,9 +5,10 @@ import type { Option, ParsedEnvs } from "../types/index";
 /**
  * Parses a string or buffer of Envs into an object.
  *
- * @param {string | Buffer} src - contents to be parsed (string | Buffer)
- * @param {boolean | string} override - allows extracted Envs to be parsed regardless if `process.env` has the properties defined (boolean | string)
- * @returns {object} a single object of all { key: value } pairs from `src`
+ * @param src - contents to be parsed (string | Buffer)
+ * @param override - allows extracted Envs to be parsed regardless if `process.env` has the properties defined (boolean | string)
+ * @returns a single object of all { key: value } pairs from `src`
+ * @example parse(Buffer.from("JUSTICE=league\n"))
  */
 export default function parse(
   src: string | Buffer,
