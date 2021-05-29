@@ -21,8 +21,9 @@
   ],
   "types": "types/index.d.ts",
   "scripts": {
-    "b": "rimraf ./**/*.js index.js && tsc --p ./tsconfig.cjs.json && ts-node ./utils/compressCJS.ts",
+    "b": " npm run c && tsc --p ./tsconfig.cjs.json && ts-node ./utils/compressCJS.ts",
     "b:esm": "rimraf esm && tsc --p ./tsconfig.esm.json && ts-node ./utils/compressESM.ts",
+    "c": "rimraf assignEnvs/index.js config/index.js fileExists/index.js getFilePath/index.js importFile/index.js load/index.js log/index.js parse/index.js index.js",
     "l": "eslint ./ --ext .ts,.js",
     "l:type": "tsd",
     "t": "jest --config ./jest.json",
