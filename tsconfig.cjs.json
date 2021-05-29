@@ -7,7 +7,7 @@
     "tests",
     "types",
     "**/__tests__",
-    "**/*.spec.ts",
+    "*.spec.ts",
     "utils"
   ]
 }
