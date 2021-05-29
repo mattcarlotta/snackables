@@ -1,3 +1,4 @@
+// TypeScript Version: 4.0
 /// <reference types="node" />
 
 export interface ParsedEnvs {

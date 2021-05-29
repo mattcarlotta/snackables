@@ -2,7 +2,8 @@
   "name": "snackables",
   "version": "3.0.0",
   "description": "Loading byte sized ENVs made simple.",
-  "main": "lib/index.js",
+  "main": "index.js",
+  "browser": "esm/index.js",
   "sideEffects": false,
   "homepage": "https://github.com/mattcarlotta/snackables",
   "files": [
