@@ -13,13 +13,14 @@ import type { ConfigArgs } from "../types/index";
  */
 export default async function load(env: string): Promise<ConfigArgs | void> {
   try {
-    let configPath = getFilePath("env.config.js");
+    const configName = "env.config";
+    let configPath = getFilePath(`${configName}.js`);
 
     if (!fileExists(configPath)) {
-      configPath = getFilePath("env.config.mjs");
+      configPath = getFilePath(`${configName}.mjs`);
       if (!fileExists(configPath))
         throw String(
-          "Unable to locate an 'env.config.(m)js' file in the root directory!"
+          `Unable to locate an '${configName}.(m)js' file in the root directory!`
         );
     }
 
@@ -28,7 +29,7 @@ export default async function load(env: string): Promise<ConfigArgs | void> {
     const configArgs = config[env];
     if (!configArgs)
       throw String(
-        `Unable to locate a '${env}' configuration within 'env.config.(m)js'!`
+        `Unable to locate a '${env}' configuration within '${configName}.(m)js'!`
       );
 
     return configArgs as ConfigArgs;

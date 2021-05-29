@@ -15,6 +15,7 @@
   "types": "types/index.d.ts",
   "scripts": {
     "b": "tsc --p ./tsconfig.cjs.json && ts-node ./utils/compress.ts",
+    "b:esm": "tsc --p ./tsconfig.esm.json",
     "l": "eslint ./ --ext .ts,.js",
     "t": "rimraf index.js && jest --config ./jest.json",
     "t:cov": "rimraf index.js && jest --config ./jest.json --coverage",
