@@ -21,7 +21,7 @@
   ],
   "types": "types/index.d.ts",
   "scripts": {
-    "b": "rimraf **/*.js index.js && npm run c && tsc --p ./tsconfig.cjs.json && ts-node ./utils/compressCJS.ts",
+    "b": "rimraf ./**/*.js index.js && tsc --p ./tsconfig.cjs.json && ts-node ./utils/compressCJS.ts",
     "b:esm": "rimraf esm && tsc --p ./tsconfig.esm.json && ts-node ./utils/compressESM.ts",
     "l": "eslint ./ --ext .ts,.js",
     "l:type": "tsd",
