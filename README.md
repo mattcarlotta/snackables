@@ -760,7 +760,7 @@ assign(parsed); // assigns parse Envs to process.env
 
 ### Are the Env variables required?
 
-To be as flexible as possible, the Env variable are not required to set Envs to `process.env`. However, you will then be required to use this package similarly to how you would use dotenv.
+To be as flexible as possible, the Env variables are not required to set Envs to `process.env`. However, you will then be required to use this package similarly to how you would use dotenv.
 
 ```js
 const { config } = require("snackables");
