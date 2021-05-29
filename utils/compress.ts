@@ -32,7 +32,7 @@ const compress = async (dir?: string): Promise<void> => {
     ];
 
     for (let i = 0; i < dirs.length; i += 1) {
-      const file = `${dir}${dirs[i]}/index.js`;
+      const file = `${dir ? `${dir}/` : ""}${dirs[i]}/index.js`;
 
       const filePath = join(process.cwd(), file);
 
