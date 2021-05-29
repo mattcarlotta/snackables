@@ -1,3 +1,4 @@
 *.md
 *.js
 *d.ts
+index.ts
