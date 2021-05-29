@@ -114,8 +114,8 @@ For example, `.env.*` files can loaded by an [Env Configuration File](#env-confi
 ```json
 {
   "scripts": {
-    "dev": "LOAD_COFNIG=development node test.js",
-    "staging": "LOAD_COFNIG=staging node app.js"
+    "dev": "LOAD_CONFIG=development node test.js",
+    "staging": "LOAD_CONFIG=staging node app.js"
   },
   "dependencies": {
     "snackables": "^x.x.x"
