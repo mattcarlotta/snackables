@@ -7,9 +7,9 @@ export interface ParsedEnvs {
 
 export type ProcessEnv = ParsedEnvs;
 
-export declare type Option = boolean | string | undefined;
+export type Option = boolean | string | undefined;
 
-export declare type Path = string | string[];
+export type Path = string | string[];
 
 export interface ConfigOptions {
   dir?: string;
@@ -35,7 +35,7 @@ export interface ConfigOutput {
 export declare function config(options?: ConfigOptions): ConfigOutput;
 
 /**
- * Loads a config object from the `env.config.(m)js` file based upon `LOAD_ENV`.
+ * Loads a configuration object from the `env.config.(m)js` file based upon `LOAD_ENV`.
  *
  * @param env - the environment to be loaded
  * @param dir - the directory where the config is located
@@ -54,7 +54,7 @@ export declare function config(options?: ConfigOptions): ConfigOutput;
  */
 export declare function parse(src: string | Buffer, override?: Option): ParsedEnvs;
 
-/** Default import library interface */
+/** Default import library declarations */
 declare const snackables: {
   config: typeof config;
   load: typeof load;

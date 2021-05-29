@@ -1,5 +1,5 @@
 /**
- * Logs a debug message.
+ * A utility function that logs a debug message.
  *
  * @param message
  */
@@ -8,7 +8,7 @@ export function logMessage(message: string): void {
 }
 
 /**
- * Logs a warning message.
+ * A utility function that logs a warning message.
  *
  * @param message
  */

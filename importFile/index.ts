@@ -1,5 +1,5 @@
 /**
- * Attempts to `import`/`require` a JavaScript `env.config.(m)js` file.
+ * A utility function that attempts to `import`/`require` a JavaScript `env.config.(m)js` file.
  *
  * @param {string} module - path to config file
  * @returns {object} an object configuration

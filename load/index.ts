@@ -5,7 +5,7 @@ import importFile from "../importFile";
 import type { ConfigOptions } from "../types/index";
 
 /**
- * Loads a config object from the `env.config.(m)js` file based upon `LOAD_ENV`.
+ * Loads a configuration object from the `env.config.(m)js` file based upon `LOAD_ENV`.
  *
  * @param env - the environment to be loaded
  * @param dir - the directory where the config is located
