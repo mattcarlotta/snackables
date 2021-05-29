@@ -31,7 +31,6 @@ export default async function load(
     const config = await importFile(configPath);
 
     if (
-      !config ||
       typeof config !== "object" ||
       !Object.prototype.hasOwnProperty.call(config, env)
     )
