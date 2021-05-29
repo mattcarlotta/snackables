@@ -36,7 +36,7 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 
 ✔️ Supports loading multiple `.env` files at once
 
-✔️ Supports [Env interpolations](#interpolation)
+✔️ Supports Env [interpolations](#interpolation)
 
 ✔️ Supports [preloading](#preload)
 
@@ -106,7 +106,7 @@ yarn add snackables
 
 ## Usage
 
-In a CLI or within your package.json, under the `scripts` property, define [Env variables](#cli-options) before running a process. Snackables loads `.env` files according to their defined order (left to right), where the last imported file will take precedence over any previously imported files.
+In a CLI or within your package.json, under the `scripts` property, define [ENV variables](#cli-options) before running a process. Snackables loads `.env` files according to their defined order (left to right), where the last imported file will take precedence over any previously imported files.
 
 For example, `.env.*` files can loaded by an [Env Configuration File](#env-configuration-file) file via [LOAD_CONFIG](#load_config):
 
@@ -701,11 +701,11 @@ B=$example
 
 ### Should I commit my `.env` files?
 
-No. It's **strongly** recommended not to commit your `.env` files to version control. It should only include environment-specific values such as database passwords or API keys. Your production database should have a different password than your development database.
+No. It's **strongly** recommended not to commit your `.env` files to version control. They'll include environment-specific values such as database passwords and API keys that should not be public. On the same note, most CI (continous integration) services like Github Actions and CircleCI offer Env configuration options for CI actions.
 
 ### How does snackables work and will it override already set or predefined variables?
 
-By default, snackables will look for the `.env.*` file(s) defined within the `ENV_LOAD` variable and append them to `process.env`.
+By default, snackables will look for the `.env.*` file(s) defined within the `LOAD_CONFIG` variable and append them to `process.env`.
 
 For example, `LOAD_CONFIG=development` loads two files `.env.base` and `.env.dev`:
 
@@ -746,11 +746,11 @@ In short, `parse` can not automatically assign Envs as they're extracted.
 
 Why?
 
-Under the hood, the `config` method utilizes the `parse` method to extract one or multiple `.env` files as it loops over the `config` [paths](#config-paths) argument. The `config` method expects `parse` to return a single `Object` of `extracted` Envs that will be accumulated with other files' extracted/sanitized Envs. The result of these accumulated Envs is then assigned to `process.env` **once** -- this approach has the added benefit of prioritizing Envs  without using **any** additional logic since the last set of extracted Envs automatically override any previous Envs (thanks to [Object.assign](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign#Merging_objects_with_same_properties)). While allowing Envs to be assigned multiple times to `process.env` doesn't appear to be much different in terms of performance, it requires a bit more additional overhead logic to determine which `.env` has priority and whether or not to *conditionally* apply them (including times when you might want to parse Envs, but not neccesarily assign them). A workaround to this limitation is to simply apply them yourself:
+Under the hood, the `config` method utilizes the `parse` method to extract one or multiple `.env` files as it loops over the `config` [paths](#config-paths) argument. The `config` method expects `parse` to return a single `Object` of extracted Envs that will be accumulated with other files' extracted Envs. The result of these accumulated Envs is then assigned to `process.env` **once** -- this approach has the added benefit of prioritizing Envs  without using **any** additional logic since the last set of extracted Envs automatically override any previous Envs (by leveraging [Object.assign](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign#Merging_objects_with_same_properties)). While allowing Envs to be assigned multiple times to `process.env` doesn't appear to be much different in terms of performance, it unforuntately requires a lot more additional overhead logic to determine which `.env` has priority and whether or not to *conditionally* apply them (including times when you might want to parse Envs, but not neccesarily assign them). A workaround to this limitation is to simply apply them yourself:
 
 ```js
 const { assign, parse } = require("snackables");
-// import { assignEnvs, parse } from "snackables";
+// import { assign, parse } from "snackables";
 
 const parsed = parse(Buffer.from("BASIC=basic")); // parse/interpolate Envs not defined in process.env
 // const parsed = parse(Buffer.from("BASIC=basic"), true); // parse/interpolate and override any Envs in process.env
@@ -760,7 +760,7 @@ assign(parsed) // assigns parse Envs to process.env;
 
 ### Are the Env variables required?
 
-To be as flexible as possible, the `ENV_LOAD` variable is not required to set Envs to `process.env`. However, you will then be required to use this package similarly to how you would use dotenv.
+To be as flexible as possible, the Env variable are not required to set Envs to `process.env`. However, you will then be required to use this package similarly to how you would use dotenv.
 
 ```js
 const { config } = require("snackables");
