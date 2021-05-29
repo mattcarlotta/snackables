@@ -28,7 +28,7 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 
 ✔️ Zero dependencies
 
-✔️ Compiled and minified CommonJS ES5
+✔️ Compiled and minified ES5 CommonJS
 
 ✔️ Experimental ES module support (beta)
 
