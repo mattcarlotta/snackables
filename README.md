@@ -755,7 +755,7 @@ const { assign, parse } = require("snackables");
 const parsed = parse(Buffer.from("BASIC=basic")); // parse/interpolate Envs not defined in process.env
 // const parsed = parse(Buffer.from("BASIC=basic"), true); // parse/interpolate and override any Envs in process.env
 
-assign(parsed) // assigns parse Envs to process.env;
+assign(parsed); // assigns parse Envs to process.env
 ```
 
 ### Are the Env variables required?
