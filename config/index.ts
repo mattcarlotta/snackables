@@ -1,5 +1,5 @@
 import { readFileSync } from "fs";
-import parse from "parse";
+import parse from "../parse";
 import assign from "../assign";
 import getFilePath from "../getFilePath";
 import fileExists from "../fileExists";
