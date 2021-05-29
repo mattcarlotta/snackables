@@ -17,8 +17,8 @@ expectType<string>(parsed["BASE"]);
 expectType<ParsedEnvs>(extracted);
 expectType<string>(extracted["BASE"]);
 
-expectType<Promise<ConfigOptions>>(snackables.load("test"));
-const envConfig = await snackables.load("test");
+expectType<ConfigOptions>(snackables.load("test"));
+const envConfig = snackables.load("test");
 expectType<ConfigOptions>(envConfig);
 expectType<string>(envConfig["dir"] as string);
 

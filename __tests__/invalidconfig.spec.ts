@@ -15,7 +15,7 @@ describe("Invalid Config", () => {
 
     await waitFor(() => {
       expect(logWarning).toHaveBeenCalledWith(
-        "Unable to locate a 'development' configuration within 'env.config.(m)js'!"
+        "Unable to locate a 'development' configuration within 'env.config.json'!"
       );
     });
   });

@@ -17,8 +17,8 @@ expectType<string>(parsed["BASE"]);
 expectType<ParsedEnvs>(extracted);
 expectType<string>(extracted["BASE"]);
 
-expectType<Promise<ConfigOptions>>(load("test"));
-const envConfig = await load("test");
+expectType<ConfigOptions>(load("test"));
+const envConfig = load("test");
 expectType<ConfigOptions>(envConfig);
 expectType<string>(envConfig["dir"] as string);
 

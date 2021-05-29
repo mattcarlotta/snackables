@@ -2,6 +2,13 @@
 
 All notable updates to this project will be documented in this file. See [SemVer 2.0](https://semver.org/) for commit guidelines.
 
+## [3.0.3] - 2021-29-05
+
+### Changed
+
+- Make `load` synchronous due to `import`/`require` racing condition
+- Remove support for importing a `.(m)js` config
+
 ## [3.0.2] - 2021-29-05
 
 ### Changed
