@@ -40,7 +40,7 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 
 ✔️ Supports Env [interpolations](#interpolation)
 
-✔️ Supports [preloading](#preload)
+✔️ Supports Env [preloading](#preload)
 
 ✔️ Supports loading Envs via an [Env Configuration File](#env-configuration-file) or by an [ENV_LOAD](#env_load) variable
 
