@@ -16,7 +16,6 @@
     "noUnusedParameters": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "sourceMap": false,
     "strict": true,
     "target": "es5"
   },

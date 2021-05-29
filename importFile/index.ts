@@ -9,6 +9,7 @@ export default async function importModule(module: string): Promise<any> {
     return require(module);
   } catch (err) {
     if (err.code === "ERR_REQUIRE_ESM") {
+      console.log("triggered");
       const { default: defaultExport } = await import(module);
       return defaultExport;
     }
