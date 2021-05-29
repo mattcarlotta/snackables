@@ -30,7 +30,7 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 
 ✔️ Compiled and minified ES5 CommonJS
 
-✔️ Experimental ES module support (beta)
+✔️ Experimental [ESM](#how-do-i-use-es-modules) support (beta)
 
 ✔️ Unopinionated about `.env` naming
 
