@@ -36,6 +36,8 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 
 ✔️ Supports loading multiple `.env` files at once
 
+✔️ Supports overriding Envs in `process.env`
+
 ✔️ Supports Env [interpolations](#interpolation)
 
 ✔️ Supports [preloading](#preload)
