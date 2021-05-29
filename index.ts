@@ -36,7 +36,8 @@ import type { ConfigArgs } from "./types/index";
  * Immediately loads a single or multiple `.env` file contents into {@link https://nodejs.org/api/process.html#process_process_env | `process.env`} when the package is preloaded or imported.
  */
 (async function (): Promise<void> {
-  const { LOAD_CONFIG } = process.env;
+  const { env } = process;
+  const { LOAD_CONFIG } = env;
 
   // checks if LOAD_CONFIG is defined and assigns process with Env variables
   if (LOAD_CONFIG) {
@@ -48,13 +49,7 @@ import type { ConfigArgs } from "./types/index";
     delete process.env.LOAD_CONFIG;
   }
 
-  const {
-    ENV_DIR,
-    ENV_LOAD,
-    ENV_DEBUG,
-    ENV_ENCODE,
-    ENV_OVERRIDE
-  } = process.env;
+  const { ENV_DIR, ENV_LOAD, ENV_DEBUG, ENV_ENCODE, ENV_OVERRIDE } = env;
 
   // checks if ENV_LOAD is defined and automatically calls config with Env variables
   if (ENV_LOAD) {
