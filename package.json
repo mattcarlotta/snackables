@@ -21,12 +21,12 @@
   ],
   "types": "types/index.d.ts",
   "scripts": {
-    "b": " npm run c && tsc --p ./tsconfig.cjs.json && ts-node ./utils/compressCJS.ts",
-    "b:esm": "npm run c:esm && tsc --p ./tsconfig.esm.json && ts-node ./utils/compressESM.ts",
-    "c": "rimraf assignEnvs/index.js config/index.js fileExists/index.js getFilePath/index.js importFile/index.js load/index.js log/index.js parse/index.js index.js",
-    "c:esm": "rimraf esm",
+    "b": " npm run r && tsc --p ./tsconfig.cjs.json && ts-node ./utils/compressCJS.ts",
+    "b:esm": "npm run r:esm && tsc --p ./tsconfig.esm.json && ts-node ./utils/compressESM.ts",
     "l": "eslint ./ --ext .ts,.js",
     "l:type": "tsd",
+    "r": "rimraf assignEnvs/index.js config/index.js fileExists/index.js getFilePath/index.js importFile/index.js load/index.js log/index.js parse/index.js index.js",
+    "r:esm": "rimraf esm",
     "t": "jest --config ./jest.json",
     "t:cov": "jest --config ./jest.json --coverage",
     "t:watch": "jest --config ./jest.json --watchAll"
