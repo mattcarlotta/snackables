@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "diagnostics": true,
-    "declaration": true,
+    "declaration": false,
     "noEmitOnError": true,
     "allowJs": true,
     "alwaysStrict": true,

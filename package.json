@@ -21,8 +21,8 @@
   ],
   "types": "types/index.d.ts",
   "scripts": {
-    "b": "tsc --p ./tsconfig.cjs.json && ts-node ./utils/compressCJS.ts",
-    "b:esm": "tsc --p ./tsconfig.esm.json && ts-node ./utils/compressESM.ts",
+    "b": "rimraf **/*.js && npm run c && tsc --p ./tsconfig.cjs.json && ts-node ./utils/compressCJS.ts",
+    "b:esm": "rimraf esm && tsc --p ./tsconfig.esm.json && ts-node ./utils/compressESM.ts",
     "l": "eslint ./ --ext .ts,.js",
     "l:type": "tsd",
     "t": "jest --config ./jest.json",
