@@ -89,6 +89,7 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
   - [How does snackables work and will it override already set or predefined variables?](#how-does-snackables-work-and-will-it-override-already-set-or-predefined-variables)
   - [Why doesn't the parse method automatically assign Envs?](#why-doesnt-the-parse-method-automatically-assign-envs)
   - [Are the Env variables required?](#are-the-env-variables-required)
+  - [How do I use ES modules?](#how-do-i-use-es-modules)
 
 [Contributing Guide](#contributing-guide)
 
@@ -767,6 +768,15 @@ const { config } = require("snackables");
 // import { config } from "snackables";
 
 config({ ... });
+```
+
+### How do I use ES modules?
+
+As of Node v12.17.0+, node removed the experimental flag for ES modules. Unfortunately, most of development world has yet to adopt ESM as the standard. Therefore, until there's more widespread support, this documentation will caution against using ESM and instead opt for CJS. That said, snackables offers **experimental** support for ESM. You can try it out by importing from the `esm` directory of the package:
+
+```mjs
+import snackables from "snackables/esm";
+// import { assign, config, load, parse } from "snackables/esm";
 ```
 
 ## Contributing Guide
