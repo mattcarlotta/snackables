@@ -62,8 +62,10 @@ export declare function config(options?: ConfigOptions): ConfigOutput;
 export declare function parse(src: string | Buffer, override?: Option): ParsedEnvs;
 
 /** Default import library interface */
-export interface Snackables {
+declare const snackables: {
   config: typeof config;
   load: typeof load;
   parse: typeof parse;
-}
+};
+
+export default snackables;

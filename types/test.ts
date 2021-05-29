@@ -1,5 +1,5 @@
 import { expectType } from "tsd";
-import * as snackables from "snackables";
+import snackables from "snackables";
 import type { ConfigArgs, ParsedEnvs, ProcessEnv } from "snackables";
 
 const env = snackables.config();

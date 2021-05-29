@@ -5,6 +5,7 @@
     "coverage",
     "node_modules",
     "tests",
+    "types",
     "**/__tests__",
     "**/*.spec.ts",
     "utils"
