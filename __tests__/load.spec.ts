@@ -16,7 +16,7 @@ describe("Load Method", () => {
     await load("dev", "invalid");
 
     expect(logWarning).toHaveBeenCalledWith(
-      "Unable to locate an 'env.config.(m)js' file in the root directory!"
+      "Unable to locate an 'env.config.(m)js' file in the specified directory!"
     );
   });
 

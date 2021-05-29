@@ -20,5 +20,5 @@
     "target": "es5"
   },
   "include": ["**/*.ts", "./types/index.d.ts"],
-  "exclude": [".github", "coverage", "node_modules", "tests", "utils"]
+  "exclude": [".github", "coverage", "node_modules"]
 }

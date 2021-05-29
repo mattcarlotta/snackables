@@ -24,7 +24,7 @@ export default async function load(
       configPath = getFilePath(`${configName}.mjs`, dir);
       if (!fileExists(configPath))
         throw String(
-          `Unable to locate an '${configName}.(m)js' file in the root directory!`
+          `Unable to locate an '${configName}.(m)js' file in the specified directory!`
         );
     }
 
