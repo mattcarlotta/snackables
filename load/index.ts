@@ -1,4 +1,4 @@
-import { logWarning } from "log";
+import { logWarning } from "../log";
 import getFilePath from "../getFilePath";
 import fileExists from "../fileExists";
 import importFile from "../importFile";
