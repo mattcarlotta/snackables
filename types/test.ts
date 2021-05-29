@@ -1,23 +1,22 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { config, parse, load } from "snackables";
+import { expectType } from "tsd";
+import * as snackables from "snackables";
+import type { ConfigArgs, ParsedEnvs, ProcessEnv } from "snackables";
 
-const env = config();
-const dbUrl = !env.parsed ? null : env.parsed["BASIC"];
+const env = snackables.config();
+expectType<string>(env.parsed["BASIC"]);
 
-config({
+const { parsed, extracted } = snackables.config({
   paths: ".env-example",
   encoding: "utf8",
   debug: true
 });
 
-(async () => {
-  const loaded = await load("test");
+expectType<ProcessEnv>(parsed);
+expectType<ParsedEnvs>(extracted);
 
-  const loadedENVDEBUG = loaded["ENV_DEBUG"];
-})();
+expectType<Promise<ConfigArgs>>(snackables.load("test"));
+expectType<ConfigArgs>(await snackables.load("test"));
 
-const parsed = parse("NODE_ENV=production\nDB_HOST=a.b.c");
-const dbHost = parsed["DB_HOST"];
+expectType<ParsedEnvs>(snackables.parse("NODE_ENV=production\nDB_HOST=a.b.c"));
 
-const parsedFromBuffer = parse(Buffer.from("JUSTICE=league\n"));
-const justice = parsedFromBuffer["JUSTICE"];
+expectType<ParsedEnvs>(snackables.parse(Buffer.from("JUSTICE=league\n")));

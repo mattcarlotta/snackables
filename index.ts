@@ -66,3 +66,11 @@ import assignEnvs from "./assignEnvs";
 })();
 
 export { config, load, parse };
+
+const snackables = {
+  config,
+  load,
+  parse
+};
+
+export default snackables;
