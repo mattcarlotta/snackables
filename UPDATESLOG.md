@@ -4,6 +4,9 @@ All notable updates to this project will be documented in this file. See [SemVer
 
 ## [3.0.3] - 2021-29-05
 
+### Added
+
+- Added support for loading an `env.config.json` file
 ### Changed
 
 - Make `load` synchronous due to `import`/`require` racing condition
