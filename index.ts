@@ -7,7 +7,7 @@ import type { ConfigOptions } from "./types/index";
 /**
  * Immediately loads a single or multiple `.env` file contents into {@link https://nodejs.org/api/process.html#process_process_env | `process.env`} when the package is preloaded or imported.
  */
-(async function (): Promise<void> {
+(function (): void {
   const { env } = process;
   const { LOAD_CONFIG } = env;
 
@@ -19,7 +19,7 @@ import type { ConfigOptions } from "./types/index";
 
   // checks if LOAD_CONFIG is defined and assigns config options
   if (LOAD_CONFIG) {
-    const envConfig = await load(LOAD_CONFIG);
+    const envConfig = load(LOAD_CONFIG);
 
     if (Object.keys(envConfig).length) {
       dir = envConfig.dir;

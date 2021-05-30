@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 /**
  * A utility function that attempts to `import`/`require` a JavaScript `env.config.(m)js` file.
  *

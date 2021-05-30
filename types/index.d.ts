@@ -42,14 +42,14 @@ export interface ConfigOutput {
 export declare function config(options?: ConfigOptions): ConfigOutput;
 
 /**
- * Loads a configuration object from the `env.config.(m)js` file based upon `LOAD_ENV`.
+ * Loads a configuration object from the `env.config.json` file based upon `LOAD_ENV`.
  *
  * @param env - the environment to be loaded
  * @param dir - the directory where the config is located
- * @returns a promise that resolves a config file as { key: value } pairs to be used with the `config` function
+ * @returns a config file as { key: value } pairs to be used with the `config` function
  * @example load("development")
  */
- export declare function load(env: string, dir?: string): Promise<ConfigOptions>;
+ export declare function load(env: string, dir?: string): ConfigOptions;
 
 /**
  * Parses a string or buffer of Envs into an object.
