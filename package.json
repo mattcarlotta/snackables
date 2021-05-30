@@ -45,14 +45,15 @@
     "./esm/parse": "./esm/parse/index.js"
   },
   "scripts": {
-    "b": " npm run r && tsc --p ./tsconfig.cjs.json && ts-node ./utils/compress.ts",
+    "b": " npm run r:b && tsc --p ./tsconfig.cjs.json && ts-node ./utils/compress.ts",
     "b:esm": "npm run r:esm && rollup -c",
     "b:types": "npm run r:types && tsc --p ./tsconfig.types.json",
     "l": "eslint ./ --ext .ts,.js",
     "l:types": "tsd",
     "r": "rimraf assign/index.js config/index.js fileExists/index.js getFilePath/index.js importFile/index.js load/index.js log/index.js parse/index.js index.js",
+    "r:b": "npm run r && npm run r:types",
     "r:esm": "rimraf esm",
-    "r:types": "rimraf types/assign types/config types/fileExists types/getFilePath types/load types/log types/parse types/index.d.ts",
+    "r:types": "rimraf assign/index.d.ts config/index.d.ts fileExists/index.d.ts getFilePath/index.d.ts load/index.d.ts log/index.d.ts parse/index.d.ts index.d.ts",
     "t": "jest --config ./jest.json",
     "t:cov": "jest --config ./jest.json --coverage",
     "t:watch": "jest --config ./jest.json --watchAll"
