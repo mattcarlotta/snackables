@@ -27,7 +27,7 @@
     "b:esm": "npm run r:esm && rollup -c",
     "b:types": "npm run r:types && tsc --p ./tsconfig.types.json",
     "l": "eslint ./ --ext .ts,.js",
-    "l:type": "tsd",
+    "l:types": "tsd",
     "r": "rimraf assign/index.js config/index.js fileExists/index.js getFilePath/index.js importFile/index.js load/index.js log/index.js parse/index.js index.js",
     "r:esm": "rimraf esm",
     "r:types": "rimraf types/assign types/config types/fileExists types/getFilePath types/load types/log types/parse types/index.d.ts",

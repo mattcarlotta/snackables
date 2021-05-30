@@ -43,19 +43,19 @@ jobs:
         id: types
         run: yarn b:types
 
-      - name: Run Lint Source
+      - name: Lint Source
         id: lint
         if: steps.types.exit_code == 0
         run: yarn l
 
-      - name: Run Lint Type
-        id: linttype
+      - name: Lint Types
+        id: linttypes
         if: steps.lint.exit_code == 0
-        run: yarn l:type
+        run: yarn l:types
 
       - name: Run Tests
         id: tests
-        if: steps.linttype.exit_code == 0
+        if: steps.linttypes.exit_code == 0
         run: yarn t
 
       - name: Create CJS Build
