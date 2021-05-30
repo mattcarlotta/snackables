@@ -51,6 +51,7 @@
     "l": "eslint ./ --ext .ts,.js",
     "l:types": "tsd",
     "r": "rimraf assign/index.js config/index.js fileExists/index.js getFilePath/index.js importFile/index.js load/index.js log/index.js parse/index.js index.js",
+    "r:all": "npm run r:b && npm run r:esm",
     "r:b": "npm run r && npm run r:types",
     "r:esm": "rimraf esm",
     "r:types": "rimraf assign/index.d.ts config/index.d.ts fileExists/index.d.ts getFilePath/index.d.ts load/index.d.ts log/index.d.ts parse/index.d.ts index.d.ts",
