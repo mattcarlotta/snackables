@@ -1,6 +1,6 @@
 {
   "name": "snackables",
-  "version": "3.0.9",
+  "version": "3.0.10",
   "description": "Loading byte sized ENVs made simple.",
   "main": "index.js",
   "module": "esm/index.mjs",
@@ -36,13 +36,13 @@
     "./log": "./log/index.js",
     "./parse": "./parse/index.js",
     "./esm": "./esm/index.mjs",
-    "./esm/assign": "./esm/assign/index.js",
-    "./esm/config": "./esm/config/index.js",
-    "./esm/fileExists": "./esm/fileExists/index.js",
-    "./esm/getFilePath": "./esm/getFilePath/index.js",
-    "./esm/load": "./esm/load/index.js",
-    "./esm/log": "./esm/log/index.js",
-    "./esm/parse": "./esm/parse/index.js"
+    "./esm/assign": "./esm/assign/index.mjs",
+    "./esm/config": "./esm/config/index.mjs",
+    "./esm/fileExists": "./esm/fileExists/index.mjs",
+    "./esm/getFilePath": "./esm/getFilePath/index.mjs",
+    "./esm/load": "./esm/load/index.mjs",
+    "./esm/log": "./esm/log/index.mjs",
+    "./esm/parse": "./esm/parse/index.mjs"
   },
   "scripts": {
     "b": " npm run r:b && tsc --p ./ts/tsconfig.cjs.json && ts-node ./utils/compress.ts",
