@@ -1,18 +1,19 @@
 {
+  "extends": "../tsconfig.json",
   "compilerOptions": {
-    "emitDeclarationOnly": true,
-    "declaration": true,
-    "declarationDir": "types"
+    "module": "esnext",
+    "target": "esnext",
+    "outDir": "./esm"
   },
+  "include": ["../*.ts"],
   "exclude": [
     "__tests__",
     ".github",
     "coverage",
     "importFile",
     "node_modules",
-    "esm",
     "tests",
-    "types",
+    "ts",
     "utils"
   ]
 }

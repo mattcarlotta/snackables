@@ -2,6 +2,12 @@
 
 All notable updates to this project will be documented in this file. See [SemVer 2.0](https://semver.org/) for commit guidelines.
 
+## [3.0.9] - 2021-30-05
+
+### Changed
+
+- Adjust source for submodule imports: `snackables/parse`
+
 ## [3.0.8] - 2021-30-05
 
 ### Changed

@@ -10,7 +10,7 @@
     "noEmit": true,
     "baseUrl": ".",
     "paths": {
-      "snackables": ["."]
+      "snackables": ["../"]
     }
   }
 }

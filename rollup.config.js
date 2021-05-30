@@ -9,7 +9,7 @@ export default [
     output: [{ dir: "esm", format: "esm", entryFileNames: "[name].mjs" }],
     external: ["fs", "child_process", "path"],
     plugins: [
-      typescript({ tsconfig: "./tsconfig.esm.json" }),
+      typescript({ tsconfig: "./ts/tsconfig.esm.json" }),
       copy({
         targets: [{ src: "types", dest: "esm" }]
       }),
