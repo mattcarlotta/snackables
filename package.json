@@ -1,6 +1,6 @@
 {
   "name": "snackables",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "description": "Loading byte sized ENVs made simple.",
   "main": "index.js",
   "module": "esm/index.mjs",
