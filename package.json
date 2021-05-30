@@ -1,6 +1,6 @@
 {
   "name": "snackables",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "description": "Loading byte sized ENVs made simple.",
   "main": "index.js",
   "module": "esm/index.mjs",
@@ -82,6 +82,7 @@
     "prettier": "^2.3.0",
     "rimraf": "^3.0.2",
     "rollup": "^2.50.4",
+    "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript2": "^0.30.0",
     "terser": "^5.7.0",
