@@ -4,6 +4,10 @@ All notable updates to this project will be documented in this file. See [SemVer
 
 ## [3.0.7] - 2021-30-05
 
+### Added
+
+- Added `exports` to `package.json`
+
 ### Changed
 
 - Adjust types to be auto generated
