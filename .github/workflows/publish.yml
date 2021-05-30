@@ -39,8 +39,13 @@ jobs:
           steps.cache-yarn-cache.outputs.cache-hit != 'true' ||
           steps.cache-node-modules.outputs.cache-hit != 'true'
 
+      - name: Build Types
+        id: types
+        run: yarn b:types
+
       - name: Run Lint Source
         id: lint
+        if: steps.types.exit_code == 0
         run: yarn l
 
       - name: Run Lint Type
