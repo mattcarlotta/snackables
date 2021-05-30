@@ -17,7 +17,7 @@ const options = {
   }
 };
 
-const compress = async (dir?: string): Promise<void> => {
+(async (): Promise<void> => {
   try {
     const dirs = [
       "assign",
@@ -32,7 +32,7 @@ const compress = async (dir?: string): Promise<void> => {
     ];
 
     for (let i = 0; i < dirs.length; i += 1) {
-      const file = `${dir ? `${dir}/` : ""}${dirs[i]}/index.js`;
+      const file = `${dirs[i]}/index.js`;
 
       const filePath = join(process.cwd(), file);
 
@@ -48,6 +48,4 @@ const compress = async (dir?: string): Promise<void> => {
     console.error(error);
     process.exit(1);
   }
-};
-
-export default compress;
+})();

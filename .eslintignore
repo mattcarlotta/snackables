@@ -1,4 +1,5 @@
 **/coverage
 *.json
 *.js
+esm
 node_modules

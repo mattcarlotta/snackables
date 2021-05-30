@@ -1,6 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    "declaration": true,
     "module": "esnext",
     "target": "esnext",
     "outDir": "./esm"
@@ -9,6 +10,7 @@
     "__tests__",
     ".github",
     "coverage",
+    "importFile",
     "node_modules",
     "tests",
     "types",
