@@ -6,7 +6,7 @@ All notable updates to this project will be documented in this file. See [SemVer
 
 ### Changed
 
-- Adjust source for submodule imports, for example `snackables/parse`
+- Adjust source for submodule imports: `snackables/parse`
 
 ## [3.0.8] - 2021-30-05
 
