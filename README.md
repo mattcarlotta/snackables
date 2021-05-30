@@ -22,7 +22,7 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 
 ## Why snackables?
 
-✔️ Loads `.env` files between **40%-70%** faster than dotenv and dotenv config: [demo](https://github.com/mattcarlotta/snackables-v-dotenv-v-next)
+✔️ Loads `.env` files between **40%-70%** faster than dotenv and dotenv-expand: [demo](https://github.com/mattcarlotta/snackables-v-dotenv-v-next)
 
 ✔️ Typescript source with included type declarations
 
