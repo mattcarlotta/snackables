@@ -2,6 +2,12 @@
 
 All notable updates to this project will be documented in this file. See [SemVer 2.0](https://semver.org/) for commit guidelines.
 
+## [3.0.6] - 2021-30-05
+
+### Changed
+
+- Removes individual types from esm build
+
 ## [3.0.5] - 2021-30-05
 
 ### Changed
