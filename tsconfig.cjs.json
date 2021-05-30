@@ -4,6 +4,7 @@
     "__tests__",
     ".github",
     "coverage",
+    "importFile",
     "node_modules",
     "tests",
     "types",

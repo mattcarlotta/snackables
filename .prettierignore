@@ -1,3 +1,5 @@
 *.md
 *.js
 *d.ts
+esm
+!rollup.config.js
