@@ -2,6 +2,12 @@
 
 All notable updates to this project will be documented in this file. See [SemVer 2.0](https://semver.org/) for commit guidelines.
 
+## [3.0.7] - 2021-30-05
+
+### Changed
+
+- Adjust types to be auto generated
+
 ## [3.0.6] - 2021-30-05
 
 ### Changed
