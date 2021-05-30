@@ -7,7 +7,6 @@
     "importFile",
     "node_modules",
     "tests",
-    "types",
     "utils"
   ]
 }

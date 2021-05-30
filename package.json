@@ -1,6 +1,6 @@
 {
   "name": "snackables",
-  "version": "3.0.8",
+  "version": "3.0.9",
   "description": "Loading byte sized ENVs made simple.",
   "main": "index.js",
   "module": "esm/index.mjs",
@@ -8,20 +8,41 @@
   "homepage": "https://github.com/mattcarlotta/snackables",
   "files": [
     "index.js",
+    "index.d.ts",
     "assign/index.js",
+    "assign/index.d.ts",
     "config/index.js",
+    "config/index.d.ts",
     "fileExists/index.js",
+    "fileExists/index.d.ts",
     "getFilePath/index.js",
+    "getFilePath/index.d.ts",
     "load/index.js",
+    "load/index.d.ts",
     "log/index.js",
+    "log/index.d.ts",
     "parse/index.js",
-    "types",
+    "parse/index.d.ts",
     "esm"
   ],
   "types": "types/index.d.ts",
   "exports": {
     ".": "./index.js",
-    "./esm": "./esm/index.mjs"
+    "./assign": "./assign/index.js",
+    "./config": "./config/index.js",
+    "./fileExists": "./fileExists/index.js",
+    "./getFilePath": "./getFilePath/index.js",
+    "./load": "./load/index.js",
+    "./log": "./log/index.js",
+    "./parse": "./parse/index.js",
+    "./esm": "./esm/index.mjs",
+    "./esm/assign": "./esm/assign/index.js",
+    "./esm/config": "./esm/config/index.js",
+    "./esm/fileExists": "./esm/fileExists/index.js",
+    "./esm/getFilePath": "./esm/getFilePath/index.js",
+    "./esm/load": "./esm/load/index.js",
+    "./esm/log": "./esm/log/index.js",
+    "./esm/parse": "./esm/parse/index.js"
   },
   "scripts": {
     "b": " npm run r && tsc --p ./tsconfig.cjs.json && ts-node ./utils/compress.ts",
@@ -37,7 +58,7 @@
     "t:watch": "jest --config ./jest.json --watchAll"
   },
   "tsd": {
-    "directory": "types",
+    "directory": "tests",
     "compilerOptions": {
       "module": "esnext",
       "target": "esnext",
