@@ -25,7 +25,7 @@
     "parse/index.d.ts",
     "esm"
   ],
-  "types": "types/index.d.ts",
+  "types": "./index.d.ts",
   "exports": {
     ".": "./index.js",
     "./assign": "./assign/index.js",
@@ -45,9 +45,9 @@
     "./esm/parse": "./esm/parse/index.js"
   },
   "scripts": {
-    "b": " npm run r:b && tsc --p ./tsconfig.cjs.json && ts-node ./utils/compress.ts",
+    "b": " npm run r:b && tsc --p ./ts/tsconfig.cjs.json && ts-node ./utils/compress.ts",
     "b:esm": "npm run r:esm && rollup -c",
-    "b:types": "npm run r:types && tsc --p ./tsconfig.types.json",
+    "b:types": "npm run r:types && tsc --p ./ts/tsconfig.types.json",
     "l": "eslint ./ --ext .ts,.js",
     "l:types": "tsd",
     "r": "rimraf assign/index.js config/index.js fileExists/index.js getFilePath/index.js importFile/index.js load/index.js log/index.js parse/index.js index.js",

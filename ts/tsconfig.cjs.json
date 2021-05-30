@@ -1,5 +1,5 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "../tsconfig.json",
   "exclude": [
     "__tests__",
     ".github",
@@ -7,6 +7,7 @@
     "importFile",
     "node_modules",
     "tests",
+    "ts",
     "utils"
   ]
 }

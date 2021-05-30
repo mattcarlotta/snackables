@@ -1,9 +1,7 @@
 {
-  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "module": "esnext",
-    "target": "esnext",
-    "outDir": "./esm"
+    "emitDeclarationOnly": true,
+    "declaration": true
   },
   "exclude": [
     "__tests__",
@@ -11,7 +9,9 @@
     "coverage",
     "importFile",
     "node_modules",
+    "esm",
     "tests",
+    "ts",
     "utils"
   ]
 }
