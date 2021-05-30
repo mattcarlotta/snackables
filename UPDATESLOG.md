@@ -2,6 +2,12 @@
 
 All notable updates to this project will be documented in this file. See [SemVer 2.0](https://semver.org/) for commit guidelines.
 
+## [3.0.8] - 2021-30-05
+
+### Changed
+
+- Add main index to `exports` in `package.json`
+
 ## [3.0.7] - 2021-30-05
 
 ### Added
