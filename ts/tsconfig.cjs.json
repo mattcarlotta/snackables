@@ -1,5 +1,6 @@
 {
   "extends": "../tsconfig.json",
+  "include": ["../*.ts"],
   "exclude": [
     "__tests__",
     ".github",

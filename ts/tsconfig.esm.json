@@ -5,6 +5,7 @@
     "target": "esnext",
     "outDir": "./esm"
   },
+  "include": ["../*.ts"],
   "exclude": [
     "__tests__",
     ".github",
