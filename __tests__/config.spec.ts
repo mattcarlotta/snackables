@@ -1,6 +1,6 @@
 import config from "../config/index";
 import { logMessage, logWarning } from "../log";
-import type { ParsedEnvs } from "../types/index";
+import type { ParsedEnvs } from "../index";
 
 jest.mock("../log", () => ({
   __esModule: true,

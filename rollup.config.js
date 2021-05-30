@@ -11,7 +11,7 @@ export default [
     plugins: [
       typescript({ tsconfig: "./tsconfig.esm.json" }),
       copy({
-        targets: [{ src: "types/index.d.ts", dest: "esm/types" }]
+        targets: [{ src: "types", dest: "esm/types" }]
       }),
       terser({
         compress: {

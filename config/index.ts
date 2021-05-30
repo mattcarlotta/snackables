@@ -4,7 +4,7 @@ import assign from "../assign";
 import getFilePath from "../getFilePath";
 import fileExists from "../fileExists";
 import { logMessage, logWarning } from "../log";
-import type { ConfigOptions, ConfigOutput, ParsedEnvs } from "../types/index";
+import type { ConfigOptions, ConfigOutput, ParsedEnvs } from "../index";
 
 /**
  * Extracts and interpolates one or multiple `.env` files into an object and assigns them to {@link https://nodejs.org/api/process.html#process_process_env | `process.env`}.

@@ -763,8 +763,8 @@ config({ ... });
 As of Node v12.17.0+, node removed the experimental flag for ES modules. Unfortunately, most of development world has yet to adopt ESM as the standard. Therefore, until there's more widespread support, this documentation will caution against using ESM and instead opt for CJS. In addition, node doesn't support [preloading](#preload) ESM, since it utilizes Node's `require` function. That said, snackables offers **experimental** support for ESM. You can try it out by importing from the `esm` directory of the package:
 
 ```mjs
-import snackables from "snackables/esm/index.mjs";
-// import { assign, config, load, parse } from "snackables/esm/index.mjs";
+import snackables from "snackables/esm";
+// import { assign, config, load, parse } from "snackables/esm";
 ```
 
 ## Contributing Guide
