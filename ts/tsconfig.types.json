@@ -3,6 +3,7 @@
     "emitDeclarationOnly": true,
     "declaration": true
   },
+  "include": ["../*.ts"],
   "exclude": [
     "__tests__",
     ".github",
