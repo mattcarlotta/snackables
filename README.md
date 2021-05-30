@@ -18,11 +18,11 @@
   </a>
 </p>
 
-Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-expand](https://github.com/motdotla/dotenv-expand), snackables is a simple to use [zero-dependency](https://bundlephobia.com/result?p=snackables@) package module that automatically loads environment variables from a predefined Env variable. When it comes to `.env` file naming, snackables is unopinionated, so you can name them anything you'd like or you can follow the [The Twelve-Factor App](https://12factor.net/config) methodology.
+Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-expand](https://github.com/motdotla/dotenv-expand), snackables is a simple to use [zero-dependency](https://bundlephobia.com/result?p=snackables@) package module that automatically loads environment variables from a predefined Env variable. When it comes to `.env.*` file naming, snackables is unopinionated, so you can name them anything you'd like or you can follow the [The Twelve-Factor App](https://12factor.net/config) methodology.
 
 ## Why snackables?
 
-✔️ Loads `.env` files between **40%-70%** faster than dotenv and dotenv-expand: [demo](https://github.com/mattcarlotta/snackables-v-dotenv-v-next), [metrics](https://github.com/mattcarlotta/snackables-v-dotenv-v-next#metrics)
+✔️ Loads `.env.*` files between **40%-70%** faster than dotenv and dotenv-expand: [demo](https://github.com/mattcarlotta/snackables-v-dotenv-v-next), [metrics](https://github.com/mattcarlotta/snackables-v-dotenv-v-next#metrics)
 
 ✔️ Typescript source with included type declarations
 
@@ -32,13 +32,15 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 
 ✔️ Experimental [ESM](#how-do-i-use-es-modules) support (beta)
 
-✔️ Unopinionated about `.env` naming
+✔️ Unopinionated about `.env.*` naming
 
-✔️ Supports loading multiple `.env` files at once
+✔️ Supports loading multiple `.env.*` files at once
 
-✔️ Supports overriding Envs in `process.env`
+✔️ Supports manually [importing](#config-method) or [parsing](#parse-method) `.env.*` files
 
-✔️ Supports Env [interpolations](#interpolation)
+✔️ Supports overriding Envs in [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env)
+
+✔️ Supports Env [interpolation](#interpolation)
 
 ✔️ Supports Env [preloading](#preload)
 
@@ -109,7 +111,7 @@ yarn add snackables
 
 ## Usage
 
-In a CLI or within your package.json, under the `scripts` property, define [ENV variables](#cli-options) before running a process. Snackables loads `.env` files according to their defined order (left to right), where the last imported file will take precedence over any previously imported files.
+In a CLI or within your package.json, under the `scripts` property, define [ENV variables](#cli-options) before running a process. Snackables loads `.env.*` files according to their defined order (left to right), where the last imported file will take precedence over any previously imported files.
 
 For example, `.env.*` files can loaded by an [Env Configuration File](#env-configuration-file) file via [LOAD_CONFIG](#load_config):
 
@@ -146,11 +148,11 @@ require("snackables");
 // import 'snackables';
 ```
 
-Optionally, you can [preload](#preload) your `.env` files instead!
+Optionally, you can [preload](#preload) your `.env.*` files instead!
 
 ## Env Configuration File
 
-The easiest and cleanest way to load `.env` files is to create an **env.config.json** configuration file located at the **project's root directory** that is a JSON object which follows the [config argument options](#config-argument-options) pattern. The environment naming is unopinionated -- they can be named anything you'd like (for example: `dev`, `staging`, `prepublish`, etc):
+The easiest and cleanest way to load `.env.*` files is to create an **env.config.json** configuration file located at the **project's root directory**. The configuration file will be a JSON object that follows the [config argument options](#config-argument-options) pattern. The environment configuration naming is unopinionated -- they can be named anything you'd like (for example: `dev`, `staging`, `prepublish`, `testing`, and so on):
 
 **env.config.json**
 ```json
@@ -198,7 +200,7 @@ Then, either [preload](#preload) or import the `snackables` package as early as 
 
 #### LOAD_CONFIG
 
-By defining a `LOAD_CONFIG` variable, this will let snackables know you'd like to load an **env.config.json** configuration file according to a defined environment name. The environment naming is unopinionated -- they can be named anything you'd like (for example: `dev`, `staging`, `prepublish`, etc) -- however, the environment name must match one of environments specified in the configuration file.
+By defining a `LOAD_CONFIG` variable, this will let snackables know you'd like to load an **env.config.json** configuration file according to a specific environment name. The environment naming is unopinionated -- they can be named anything you'd like (for example: `dev`, `staging`, `prepublish`, `testing` and so on); however, the environment name **must** match one of environments specified in the configuration file.
 
 ```json
 {
@@ -245,7 +247,7 @@ Note: Defining any of the Env variables below **WILL NOT** change the default be
 
 #### ENV_LOAD
 
-By defining an `ENV_LOAD` variable, this will let snackables know you'd like to immediately load some `.env` files when the package is imported. You can pass a single file name or a list of file names separated by commas. By default, snackables attempts to load them from within the project's **root** directory.
+By defining an `ENV_LOAD` variable, this will let snackables know you'd like to immediately load some `.env.*` files when the package is imported. You can pass a single file name or a list of file names separated by commas. By default, snackables attempts to load them from within the project's **root** directory.
 
 For example:
 
@@ -263,7 +265,7 @@ For example:
 
 #### ENV_DIR
 
-By defining an `ENV_DIR` variable, this will let snackables know you'd like to load `.env` files from a custom directory.
+By defining an `ENV_DIR` variable, this will let snackables know you'd like to load `.env.*` files from a custom directory.
 
 ```json
 {
@@ -278,7 +280,7 @@ By defining an `ENV_DIR` variable, this will let snackables know you'd like to l
 
 #### ENV_ENCODE
 
-By defining an `ENV_ENCODE` variable, this will let snackables know you'd like to set the encoding type of the `.env` file(s). The following file encode types are supported:
+By defining an `ENV_ENCODE` variable, this will let snackables know you'd like to set the encoding type of the `.env.*` file(s). The following file encode types are supported:
 
 ```
 ascii
@@ -308,7 +310,7 @@ For example:
 
 #### ENV_OVERRIDE
 
-By defining an `ENV_OVERRIDE` variable, this will let snackables know you'd like to override Envs in `process.env`.
+By defining an `ENV_OVERRIDE` variable, this will let snackables know you'd like to override Envs in [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env).
 
 For example:
 
@@ -342,7 +344,7 @@ For example:
 
 ## Preload
 
-You can use the `--require` (`-r`) [command line option](https://nodejs.org/api/cli.html#cli_r_require_module) with `snackables` to preload your `.env` files! By doing so, you do not need to `require`/`import` the snackables package within your project.
+You can use the `--require` (`-r`) [command line option](https://nodejs.org/api/cli.html#cli_r_require_module) with `snackables` to preload your `.env.*` files! By doing so, you do not need to `require`/`import` the snackables package within your project.
 
 CLI:
 ```bash
@@ -363,7 +365,7 @@ Package.json:
 
 ## Config Method
 
-If you wish to manaully import `.env` files, then the config method will read your `.env` files, parse the contents, assign them to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env), and return an `Object` with `parsed` and `extracted` Envs:
+If you wish to manaully import `.env.*` files, then the config method will read your `.env.*` files, parse the contents, assign them to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env), and return an `Object` with `parsed` and `extracted` Envs:
 
 ```js
 const result = snackables.config();
@@ -376,7 +378,7 @@ Additionally, you can pass [argument options](#config-argument-options) to `conf
 
 ### Config Argument Options
 
-config accepts a single `Object` argument with the following properties: 
+The `config` method accepts a single `Object` argument with the following properties: 
 ```js
 { 
   dir?: string, 
@@ -389,7 +391,7 @@ config accepts a single `Object` argument with the following properties:
 
 #### Config dir
 
-Default: `process.cwd()` (project root directory)
+**Default:** `process.cwd()` (project root directory)
 
 You may specify a single directory path if your files are located elsewhere.
 
@@ -404,7 +406,7 @@ require("snackables").config({ dir: "custom/path/to/directory" });
 
 #### Config paths
 
-Default: `[".env"]`
+**Default:** `[".env"]`
 
 You may specify custom paths if your files are located elsewhere (recommended to use **absolute** path(s) from your root directory).
 
@@ -449,7 +451,7 @@ require("snackables").config({ dir: "custom/path/to/directory", paths: [".env", 
 
 #### Config encoding
 
-Default: `utf-8`
+**Default:** `utf-8`
 
 You may specify the encoding [type](https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings) of your file containing environment variables.
 
@@ -462,9 +464,9 @@ require("snackables").config({ encoding: "latin1" });
 
 #### Config override
 
-Default: `false`
+**Default:** `false`
 
-You may specify whether or not to override Envs in `process.env`. 
+You may specify whether or not to override Envs in [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env). 
 
 ```js
 require("snackables").config({ override: true });
@@ -475,7 +477,7 @@ require("snackables").config({ override: true });
 
 #### Config debug
 
-Default: `undefined`
+**Default:** `undefined`
 
 You may turn on logging to help debug file loading.
 
@@ -492,7 +494,7 @@ If you wish to manually parse Envs, then you can utilize `parse` to read a strin
 
 ### Parse Argument Options
 
-parse accepts two arguments in the following order: 
+The `parse` method accepts two arguments in the following order: 
 ```
 src: string | Buffer, 
 override: boolean | string | undefined
@@ -500,7 +502,7 @@ override: boolean | string | undefined
 
 #### Parse src
 
-For some use cases, you may want to pass parse a `string` or `Buffer` which returns parsed `extracted` keys/values as a single `Object`. These will **NOT** be assigned to `process.env`. [Why not?](#why-doesnt-the-parse-method-automatically-assign-envs)
+For some use cases, you may want to pass parse a `string` or `Buffer` which returns parsed `extracted` keys/values as a single `Object`. These will **NOT** be assigned to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env). [Why not?](#why-doesnt-the-parse-method-automatically-assign-envs)
 
 ```js
 const { readFileSync } = require("fs");
@@ -515,11 +517,11 @@ const results = parse(readFileSync("path/to/.env.file", { encoding: "utf8" })); 
 console.log(typeof results, results); // object { KEY : 'value' }
 ```
 
-Note: If you're attempting to parse Envs that have already been defined within `process.env`, then you must pass `parse` an [override](#parse-override) argument.
+Note: If you're attempting to parse Envs that have already been defined within [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env), then you must pass `parse` an [override](#parse-override) argument.
 
 #### Parse override
 
-If you wish to extract and potentially override Envs in `process.env`, then you can pass a `boolean` or `string` (passing `"false"` will still be truthy) as a second argument to parse. These will **NOT** be assigned to `process.env`. [Why not?](#why-doesnt-the-parse-method-automatically-assign-envs)
+If you wish to extract and potentially override Envs in [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env), then you can pass a `boolean` or `string` (passing `"false"` will still be truthy) as a second argument to parse. These will **NOT** be assigned to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env). [Why not?](#why-doesnt-the-parse-method-automatically-assign-envs)
 
 ```js
 const { readFileSync } = require("fs");
@@ -554,11 +556,11 @@ line'}
 
 ## Load Method
 
-If you wish to manually load the **env.config.json** configuration file, then you can utilize the `load` method. Please note that this **synchronously** retrieves the environment configuration from the configuration file, but will not automatically assign any Envs; instead, you'll have to manually pass its returned environment configuration to the [config method](#config-method).
+If you wish to manually load the **env.config.json** configuration file, then you can utilize the `load` method. Please note that this **synchronously** retrieves the environment configuration from the **env.config.json** configuration file, but will not automatically assign any Envs; instead, you'll have to manually pass its returned environment configuration to the [config method](#config-method).
 
 ### Load Argument Options
 
-load accepts two arguments in the following order: 
+The `load` method accepts two arguments in the following order: 
 ```
 env: string, 
 dir: string | undefined
@@ -579,7 +581,7 @@ config(configArgs) // parses .env.dev and assigns it to process.env
 
 #### Load dir
 
-For some use cases, you may want to manually load an **env.config.json** configuration file that is **not** located at the project's root directory and pass its returned environment configuration to the [config method](#config-method). To do so, pass `load` an environment name as the first argument and an directory absolute path as a second argument:
+For some use cases, you may want to manually load an **env.config.json** configuration file that is **not** located at the project's root directory and pass its returned environment configuration to the [config method](#config-method). To do so, pass `load` an environment name as the first argument and an absolute directory path as a second argument:
 
 ```js
 const { config, load } = require("snackables");
@@ -592,9 +594,9 @@ config(configArgs) // parses .env.dev and assigns it to process.env
 
 ## Interpolation
 
-Env values can be interpolated based upon a `process.env` value, a `KEY` within the `.env` file, a command line substitution and/or a fallback value. 
+Env values can be interpolated based upon a [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env) value, a `KEY` within the `.env.*` file, a command line substitution and/or a fallback value. 
 
-To interpolate a value from `process.env` or `.env`, simply define it with either `$KEY` or within brackets `${KEY}`, for example:
+To interpolate a value from [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env) or `.env.*`, simply define it with either `$KEY` or within brackets `${KEY}`, for example:
 
 Input:
 ```dosini
@@ -650,12 +652,12 @@ MULTICOMMAND=IWHBYD
 
 ### Interpolation Rules
 
-- Values can be interpolated based upon a `process.env` value: `BASIC=$NODE_ENV` || `BASIC=${NODE_ENV}`
-- Values in `process.env` take precedence over interpolated values in `.env` files
-- Interpolated values can't be referenced across multiple `.env`s, instead they must only be referenced within the same file
+- Values can be interpolated based upon a [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env) value: `BASIC=$NODE_ENV` || `BASIC=${NODE_ENV}`
+- Values in [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env) take precedence over interpolated values in `.env.*` files
+- Interpolated values can't be referenced across multiple `.env.*`s, instead they must only be referenced within the same file
 - Command line substitutions can **NOT** contain bash commands that use parentheses: `EX=$(info=$(uname -a); echo $info;)`, instead its recommended to use `.sh` files instead:  `EX=$(bash ./path/to/info.sh)`
 - Fallback values can **NOT** be used with command line substitutions
-- The `$` character **must** be escaped when it doesn't refer to another key within the `.env` file: `\$1234`
+- The `$` character **must** be escaped when it doesn't refer to another key within the `.env.*` file: `\$1234`
 - Do not use escaped `\$` within a value when it's key is referenced by another key: 
 
 Input:
@@ -684,15 +686,17 @@ B=$example
 
 ## FAQ
 
-### Should I commit my `.env` files?
+### Should I commit my `.env.*` files?
 
-No. It's **strongly** recommended not to commit your `.env` files to version control. They'll include environment-specific values such as database passwords and API keys that should not be public. On the same note, most CI (continous integration) services like Github Actions and CircleCI offer Env configuration options for CI actions.
+No. It's **strongly** recommended not to commit your `.env.*` files to version control. They'll include environment-specific values such as database passwords and API keys that should not be public. Commiting the `env.config.json` file is OK, as it won't/shouldn't contain any secrets.
+
+On the same note, most CI (continous integration) services like Github Actions and CircleCI offer their own Env configuration options for CI actions, so commiting `.env.*` files is unnecessary.
 
 ### How does snackables work and will it override already set or predefined variables?
 
-By default, snackables will look for the `.env.*` file(s) defined within the `LOAD_CONFIG` variable and append them to `process.env`.
+By default, snackables will look for the `.env.*` file(s) defined within a `LOAD_CONFIG` environment variable and append them to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env).
 
-For example, `LOAD_CONFIG=development` loads two files `.env.base` and `.env.dev`:
+For example, `LOAD_CONFIG=development` loads two files `.env.base` and `.env.dev` from [env.config.json](#env-configuration-file):
 
 ```json
 {
@@ -721,9 +725,9 @@ HOST=http://localhost
 PORT=3000
 ```
 
-snackables will parse the files and append the Envs in the order of how they were defined in [paths](#config-paths). In the example above, the `DB_PASS` variable within `.env.base` would be overidden by `.env.dev` because `.env.dev` file was imported last and, as a result, its `DB_PASS` will be assigned to `process.env`.
+snackables will parse the files and append the Envs in the order of how they were defined in [paths](#config-paths). In the example above, the `DB_PASS` variable within `.env.base` would be overidden by `.env.dev` because `.env.dev` file was imported last and, as a result, its `DB_PASS` will be assigned to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env).
 
-By default, Envs that are **pre-set** or **defined** within `process.env` **WILL NOT be overidden**. If you wish to override variables in `process.env` see [ENV_OVERRIDE](#env_override) or [Config Override](#config-override) or [Parse Override](#parse-override).
+By default, Envs that are **pre-set** or **defined** within [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env) **WILL NOT be overidden**. If you wish to override variables in [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env) see [ENV_OVERRIDE](#env_override) or [Config Override](#config-override) or [Parse Override](#parse-override).
 
 ### Why doesn't the parse method automatically assign Envs?
 
@@ -731,7 +735,7 @@ In short, `parse` can not automatically assign Envs as they're extracted.
 
 Why?
 
-Under the hood, the `config` method utilizes the `parse` method to extract one or multiple `.env` files as it loops over the `config` [paths](#config-paths) argument. The `config` method expects `parse` to return a single `Object` of extracted Envs that will be accumulated with other files' extracted Envs. The result of these accumulated Envs is then assigned to `process.env` **once** -- this approach has the added benefit of prioritizing Envs  without using **any** additional logic since the last set of extracted Envs automatically override any previous Envs (by leveraging [Object.assign](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign#Merging_objects_with_same_properties)). While allowing Envs to be assigned multiple times to `process.env` doesn't appear to be much different in terms of performance, it unforuntately requires a lot more additional overhead logic to determine which `.env` has priority and whether or not to *conditionally* apply them (including times when you might want to parse Envs, but not neccesarily assign them). A workaround to this limitation is to simply apply them yourself:
+Under the hood, the `config` method utilizes the `parse` method to extract one or multiple `.env.*` files as it loops over the `config` [paths](#config-paths) argument. The `config` method expects `parse` to return a single `Object` of extracted Envs that will be accumulated with other files' extracted Envs. The result of these accumulated Envs is then assigned to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env) **once** -- this approach has the added benefit of prioritizing Envs  without using **any** additional logic since the last set of extracted Envs automatically override any previous Envs (by leveraging [Object.assign](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign#Merging_objects_with_same_properties)). While allowing Envs to be assigned multiple times to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env) doesn't appear to be much different in terms of performance, it unforuntately requires quite a bit more additional overhead logic to determine which `.env.*` has priority and whether or not to *conditionally* assign them (including times when you might want to parse Envs, but not neccesarily assign them). A workaround to this limitation is to simply assign them yourself:
 
 ```js
 const { assign, parse } = require("snackables");
@@ -740,12 +744,12 @@ const { assign, parse } = require("snackables");
 const parsed = parse(Buffer.from("BASIC=basic")); // parse/interpolate Envs not defined in process.env
 // const parsed = parse(Buffer.from("BASIC=basic"), true); // parse/interpolate and override any Envs in process.env
 
-assign(parsed); // assigns parse Envs to process.env
+assign(parsed); // assigns parsed Envs to process.env
 ```
 
 ### Are the Env variables required?
 
-To be as flexible as possible, the Env variables are not required to set Envs to `process.env`. However, you will then be required to use this package similarly to how you would use dotenv. See [Config Method](#config-method):
+To be as flexible as possible, the Env variables are not required to set Envs to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env). However, you will then be required to use this package similarly to how you would use dotenv. See [Config Method](#config-method):
 
 ```js
 const { config } = require("snackables");
@@ -756,7 +760,7 @@ config({ ... });
 
 ### How do I use ES modules?
 
-As of Node v12.17.0+, node removed the experimental flag for ES modules. Unfortunately, most of development world has yet to adopt ESM as the standard. Therefore, until there's more widespread support, this documentation will caution against using ESM and instead opt for CJS. That said, snackables offers **experimental** support for ESM. You can try it out by importing from the `esm` directory of the package:
+As of Node v12.17.0+, node removed the experimental flag for ES modules. Unfortunately, most of development world has yet to adopt ESM as the standard. Therefore, until there's more widespread support, this documentation will caution against using ESM and instead opt for CJS. In addition, node doesn't support [preloading](#preload) ESM, since it utilizes Node's `require` function. That said, snackables offers **experimental** support for ESM. You can try it out by importing from the `esm` directory of the package:
 
 ```mjs
 import snackables from "snackables/esm";
