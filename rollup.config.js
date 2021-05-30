@@ -19,7 +19,8 @@ export default [
           safari10: true
         },
         output: {
-          comments: false
+          comments: false,
+          ascii_only: true
         }
       })
     ]
