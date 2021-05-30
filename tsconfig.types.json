@@ -1,5 +1,4 @@
 {
-  "extends": "./tsconfig.json",
   "compilerOptions": {
     "emitDeclarationOnly": true,
     "declaration": true,
@@ -11,6 +10,7 @@
     "coverage",
     "importFile",
     "node_modules",
+    "esm",
     "tests",
     "types",
     "utils"
