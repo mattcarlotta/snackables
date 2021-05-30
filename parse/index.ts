@@ -28,7 +28,7 @@
  */
 import { execSync } from "child_process";
 import { logWarning } from "../log";
-import type { Option, ParsedEnvs } from "../types/index";
+import type { Option, ParsedEnvs } from "../index";
 
 /**
  * Parses a string or buffer of Envs into an object.

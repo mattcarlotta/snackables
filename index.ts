@@ -2,7 +2,29 @@ import config from "./config";
 import parse from "./parse";
 import load from "./load";
 import assign from "./assign";
-import type { ConfigOptions } from "./types/index";
+
+export interface ParsedEnvs {
+  [name: string]: string;
+}
+
+export type ProcessEnv = ParsedEnvs;
+
+export type Option = boolean | string | undefined;
+
+export type Path = string | string[];
+
+export interface ConfigOptions {
+  dir?: string;
+  paths?: Path;
+  encoding?: BufferEncoding;
+  override?: Option;
+  debug?: Option;
+}
+
+export interface ConfigOutput {
+  parsed: ProcessEnv;
+  extracted: ParsedEnvs;
+}
 
 /**
  * Immediately loads a single or multiple `.env` file contents into {@link https://nodejs.org/api/process.html#process_process_env | `process.env`} when the package is preloaded or imported.

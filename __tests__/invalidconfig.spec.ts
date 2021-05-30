@@ -1,5 +1,4 @@
 import { logWarning } from "../log";
-import waitFor from "../utils/waitFor";
 
 jest.mock("../log", () => ({
   __esModule: true,
@@ -8,15 +7,13 @@ jest.mock("../log", () => ({
 }));
 
 describe("Invalid Config", () => {
-  it("displays a warning when an invalid config is loaded", async () => {
+  it("displays a warning when an invalid config is loaded", () => {
     process.env.LOAD_CONFIG = "development";
 
-    import("../index");
+    require("../index");
 
-    await waitFor(() => {
-      expect(logWarning).toHaveBeenCalledWith(
-        "Unable to locate a 'development' configuration within 'env.config.json'!"
-      );
-    });
+    expect(logWarning).toHaveBeenCalledWith(
+      "Unable to locate a 'development' configuration within 'env.config.json'!"
+    );
   });
 });

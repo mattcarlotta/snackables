@@ -4,3 +4,11 @@ coverage
 .cc_token
 esm
 index.js
+types/assign
+types/config
+types/fileExists
+types/getFilePath
+types/load
+types/log
+types/parse
+types/index.d.ts

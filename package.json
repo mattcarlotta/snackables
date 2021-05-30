@@ -1,6 +1,6 @@
 {
   "name": "snackables",
-  "version": "3.0.6",
+  "version": "3.0.7",
   "description": "Loading byte sized ENVs made simple.",
   "main": "index.js",
   "module": "esm/index.mjs",
@@ -15,17 +15,22 @@
     "load/index.js",
     "log/index.js",
     "parse/index.js",
-    "types/index.d.ts",
+    "types",
     "esm"
   ],
   "types": "types/index.d.ts",
+  "exports": {
+    "./esm": "./esm/index.mjs"
+  },
   "scripts": {
     "b": " npm run r && tsc --p ./tsconfig.cjs.json && ts-node ./utils/compress.ts",
     "b:esm": "npm run r:esm && rollup -c",
+    "b:types": "npm run r:types && tsc --p ./tsconfig.types.json",
     "l": "eslint ./ --ext .ts,.js",
-    "l:type": "tsd",
+    "l:types": "tsd",
     "r": "rimraf assign/index.js config/index.js fileExists/index.js getFilePath/index.js importFile/index.js load/index.js log/index.js parse/index.js index.js",
     "r:esm": "rimraf esm",
+    "r:types": "rimraf types/assign types/config types/fileExists types/getFilePath types/load types/log types/parse types/index.d.ts",
     "t": "jest --config ./jest.json",
     "t:cov": "jest --config ./jest.json --coverage",
     "t:watch": "jest --config ./jest.json --watchAll"

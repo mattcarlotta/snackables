@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "declarationDir": "types"
+  },
+  "exclude": [
+    "__tests__",
+    ".github",
+    "coverage",
+    "importFile",
+    "node_modules",
+    "esm",
+    "tests",
+    "types",
+    "utils"
+  ]
+}

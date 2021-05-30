@@ -1,4 +1,4 @@
-import type { ParsedEnvs, ProcessEnv } from "../types/index";
+import type { ParsedEnvs, ProcessEnv } from "../index";
 
 /**
  * A utility function to assign Envs to `process.env`.

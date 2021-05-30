@@ -3,7 +3,7 @@ import { logWarning } from "../log";
 import getFilePath from "../getFilePath";
 import fileExists from "../fileExists";
 // import importFile from "../importFile";
-import type { ConfigOptions } from "../types/index";
+import type { ConfigOptions } from "../index";
 
 /**
  * Loads a configuration object from the `env.config.json` file based upon `LOAD_ENV`.
