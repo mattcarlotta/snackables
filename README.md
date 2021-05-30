@@ -22,7 +22,7 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 
 ## Why snackables?
 
-✔️ Loads `.env` files between **40%-70%** faster than dotenv and dotenv-expand: [demo](https://github.com/mattcarlotta/snackables-v-dotenv-v-next)
+✔️ Loads `.env` files between **40%-70%** faster than dotenv and dotenv-expand: [demo](https://github.com/mattcarlotta/snackables-v-dotenv-v-next), [metrics](https://github.com/mattcarlotta/snackables-v-dotenv-v-next#metrics)
 
 ✔️ Typescript source with included type declarations
 
@@ -150,7 +150,7 @@ Optionally, you can [preload](#preload) your `.env` files instead!
 
 ## Env Configuration File
 
-The easiest and cleanest way to load `.env` files is to create an **env.config.json** file located at the **project's current working root directory** that is an object which follows the [config argument options](#config-argument-options) pattern. The environment naming is unopinionated -- they can be named anything you'd like (for example: `dev`, `staging`, `prepublish`, etc) -- however, the name must match one of environments specified in the configuration file:
+The easiest and cleanest way to load `.env` files is to create an **env.config.json** configuration file located at the **project's root directory** that is a JSON object which follows the [config argument options](#config-argument-options) pattern. The environment naming is unopinionated -- they can be named anything you'd like (for example: `dev`, `staging`, `prepublish`, etc):
 
 **env.config.json**
 ```json
@@ -170,7 +170,7 @@ The easiest and cleanest way to load `.env` files is to create an **env.config.j
 }
 ```
 
-Then in your `package.json`, add a [LOAD_CONFIG](#load_config) variable to load one of the configurations by an environment name:
+Then in your `package.json`, add a [LOAD_CONFIG](#load_config) variable to load one of the configurations by an environment name (the environment name must match one of environments specified in the configuration file above):
 ```json
 {
   "scripts": {
@@ -198,7 +198,7 @@ Then, either [preload](#preload) or import the `snackables` package as early as 
 
 #### LOAD_CONFIG
 
-By defining a `LOAD_CONFIG` variable, this will let snackables know you'ld like to load an **env.config.json** file according to a defined environment name. The environment naming is unopinionated -- they can be named anything you'd like (for example: `dev`, `staging`, `prepublish`, etc) -- however, the name must match one of environments specified in the configuration file.
+By defining a `LOAD_CONFIG` variable, this will let snackables know you'd like to load an **env.config.json** configuration file according to a defined environment name. The environment naming is unopinionated -- they can be named anything you'd like (for example: `dev`, `staging`, `prepublish`, etc) -- however, the environment name must match one of environments specified in the configuration file.
 
 ```json
 {
@@ -554,7 +554,7 @@ line'}
 
 ## Load Method
 
-If you wish to manually load the **env.config.json** file, then you can utilize the `load` method. Please note that this **synchronously** loads the configuration file and will not automatically assign Envs; instead, you'll have to manually pass its arguments to the [config method](#config-method).
+If you wish to manually load the **env.config.json** configuration file, then you can utilize the `load` method. Please note that this **synchronously** retrieves the environment configuration from the configuration file, but will not automatically assign any Envs; instead, you'll have to manually pass its returned environment configuration to the [config method](#config-method).
 
 ### Load Argument Options
 
@@ -566,7 +566,7 @@ dir: string | undefined
 
 #### Load env
 
-For some use cases, you may want to manually load the **env.config.json** file and pass its arguments to the [config method](#config-method). To do so, pass `load` an environment name as the first argument:
+For some use cases, you may want to manually load the **env.config.json** configuration file and pass its returned environment configuration to the [config method](#config-method). To do so, pass `load` an environment name as the first argument:
 
 ```js
 const { config, load } = require("snackables");
@@ -579,7 +579,7 @@ config(configArgs) // parses .env.dev and assigns it to process.env
 
 #### Load dir
 
-For some use cases, you may want to manually load an **env.config.json** file **not** located at the project's root directory and pass its arguments to the [config method](#config-method). To do so, pass `load` an environment name as the first argument and a directory name as a second argument:
+For some use cases, you may want to manually load an **env.config.json** configuration file that is **not** located at the project's root directory and pass its returned environment configuration to the [config method](#config-method). To do so, pass `load` an environment name as the first argument and an directory absolute path as a second argument:
 
 ```js
 const { config, load } = require("snackables");
