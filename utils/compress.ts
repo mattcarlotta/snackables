@@ -24,7 +24,7 @@ const options = {
       "config",
       "fileExists",
       "getFilePath",
-      "importFile",
+      // "importFile",
       "load",
       "log",
       "parse",

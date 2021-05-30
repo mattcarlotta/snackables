@@ -2,6 +2,14 @@
 
 All notable updates to this project will be documented in this file. See [SemVer 2.0](https://semver.org/) for commit guidelines.
 
+## [3.0.4] - 2021-30-05
+
+### Changed
+
+- Switched to rollup for the esm build
+- Compiled esm to `.mjs` files
+- Included individual file type declarations to `esm` directory
+
 ## [3.0.3] - 2021-29-05
 
 ### Added
