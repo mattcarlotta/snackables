@@ -1,21 +1,7 @@
 import fs from "fs";
 import { join } from "path";
 import { minify } from "terser";
-
-const options = {
-  compress: {
-    warnings: false,
-    comparisons: false,
-    inline: 2
-  },
-  mangle: {
-    safari10: true
-  },
-  output: {
-    comments: false,
-    ascii_only: true
-  }
-};
+import terserOptions from "../terser.config.json";
 
 (async (): Promise<void> => {
   try {
@@ -39,7 +25,7 @@ const options = {
       /* eslint-disable no-await-in-loop */
       const { code } = await minify(
         fs.readFileSync(filePath, { encoding: "utf-8" }),
-        options
+        terserOptions
       );
 
       if (code) fs.writeFileSync(filePath, code, { encoding: "utf-8" });
