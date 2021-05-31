@@ -1,5 +1,4 @@
 import typescript from "rollup-plugin-typescript2";
-import copy from "rollup-plugin-copy";
 import { terser } from "rollup-plugin-terser";
 
 export default [
@@ -10,9 +9,6 @@ export default [
     external: ["fs", "child_process", "path"],
     plugins: [
       typescript({ tsconfig: "./ts/tsconfig.esm.json" }),
-      copy({
-        targets: [{ src: "types", dest: "esm" }]
-      }),
       terser({
         compress: {
           warnings: false,
