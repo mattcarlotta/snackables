@@ -20,7 +20,7 @@ describe("Load Method", () => {
     );
   });
 
-  it("fails to load a config file from an 'LOAD_ENV' environment", async () => {
+  it("fails to load a config file from an undefined environment", async () => {
     load("dev", "tests");
 
     expect(logWarning).toHaveBeenCalledWith(
@@ -28,7 +28,7 @@ describe("Load Method", () => {
     );
   });
 
-  it("loads a config file and returns an config arguments", async () => {
+  it("loads the config file and returns an environment of config arguments", async () => {
     const config = load("test");
 
     expect(config).toEqual({
